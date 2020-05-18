@@ -32,8 +32,8 @@ namespace SerializatorApp
                 } 
             };
 
-            ICsonConverter csonConverter = new CsonItemConverter();
-            Console.WriteLine(csonConverter.To(simplePerson));
+            ICsonConverter converter = new MainConverter();
+            Console.WriteLine(converter.To(simplePerson));
 
             Console.Read();
         }

@@ -65,10 +65,10 @@
     <Compile Include="Serialization\Converters\CsonStringConverter.cs" />
     <Compile Include="Serialization\Converters\CsonItemConverter.cs" />
     <Compile Include="Serialization\Converters\ICsonConverter.cs" />
+    <Compile Include="Serialization\Converters\MainConverter.cs" />
     <Compile Include="Serialization\Models\CsonPrimitive.cs" />
     <Compile Include="Serialization\Models\CsonItem.cs" />
     <Compile Include="Serialization\Models\CsonItemBase.cs" />
-    <Compile Include="Serialization\Serializator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
