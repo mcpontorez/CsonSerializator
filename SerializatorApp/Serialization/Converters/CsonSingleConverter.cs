@@ -13,6 +13,6 @@ namespace SerializatorApp.Serialization.Converters
             throw new NotImplementedException();
         }
 
-        public string To(object source) =>  $"{source.ToString()}F";
+        public CsonData To(object source) => new CsonData(new HashSet<Type> { typeof(float) }, $"{source.ToString()}F");
     }
 }

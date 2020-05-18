@@ -33,7 +33,7 @@ namespace SerializatorApp
             };
 
             ICsonConverter converter = new MainConverter();
-            Console.WriteLine(converter.To(simplePerson));
+            Console.WriteLine(converter.To(simplePerson).Cson);
 
             Console.Read();
         }

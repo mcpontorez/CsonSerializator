@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,11 +16,22 @@ namespace SerializatorApp.Serialization.Converters
             throw new NotImplementedException();
         }
 
-        public string To(object source)
+        public CsonData To(object source)
         {
-            string cson = $"{_converter.To(source)};";
+            CsonData csonData = _converter.To(source);
+            string cson = $"{GetUsingText(csonData.Types)}{csonData.Cson};";
 
-            return cson;
+
+            return new CsonData(csonData.Types, cson);
+        }
+
+        private string GetUsingText(IEnumerable<Type> types)
+        {
+            HashSet<string> namespaces = new HashSet<string>(types.Select(t => t.Namespace));
+            string result = string.Empty;
+            foreach (var item in namespaces)
+                result += $"using {item}; {Environment.NewLine}";
+            return result;
         }
     }
 }

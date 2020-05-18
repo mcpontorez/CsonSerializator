@@ -1,4 +1,5 @@
 ﻿using SerializatorApp.Serialization.Models;
+using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,27 +27,30 @@ namespace SerializatorApp.Serialization.Converters
             throw new NotImplementedException();
         }
 
-        public string To(object source)
+        public CsonData To(object source)
         {
             if (source == null)
-                return "null";
+                return new CsonData(new HashSet<Type>(), "null");
             TypeInfo sourceType = source.GetType().GetTypeInfo();
 
             ICsonConverter converter = GetConverter(sourceType);
             if (converter != null)
                 return converter.To(source);
 
-            string result = $"new {sourceType.FullName} {{";
+            HashSet<Type> types = new HashSet<Type> { sourceType };
+            string cson = $"new {sourceType.FullName} {{";
             var sourceFields = sourceType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToArray();
             for (int i = 0; i < sourceFields.Length; i++)
             {
-                if (i > 0) result += ", ";
+                if (i > 0) cson += ", ";
                 FieldInfo field = sourceFields[i];
                 object fieldValue = field.GetValue(source);
-                result += $"{field.Name} = {To(fieldValue)}";
+                CsonData fieldData = To(fieldValue);
+                cson += $"{field.Name} = {fieldData.Cson}";
+                types.AddRange(fieldData.Types);
             }
-            result += "}";
-            return result;
+            cson += "}";
+            return new CsonData(types, cson);
         }
     }
 }
