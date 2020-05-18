@@ -9,14 +9,14 @@ namespace SerializatorApp.Serialization.Converters
 {
     public class CsonItemConverter : ICsonConverter
     {
-        private readonly Dictionary<Type, ICsonConverter> _converters = new Dictionary<Type, ICsonConverter>
+        private readonly Dictionary<Type, ICsonConverterBase> _converters = new Dictionary<Type, ICsonConverterBase>
         {
             { typeof(int), new CsonInt32Converter() },
             { typeof(float), new CsonSingleConverter() },
             { typeof(string), new CsonStringConverter() },
         };
 
-        private ICsonConverter GetConverter(Type type)
+        private ICsonConverterBase GetConverter(Type type)
         {
             _converters.TryGetValue(type, out var _converter);
             return _converter;
@@ -63,10 +63,11 @@ namespace SerializatorApp.Serialization.Converters
             if (converter != null)
                 return converter.To(csData.Source);
 
-            
+            HashSet<Type> types = csData.Types;
+            types.Add(sourceType);
+            csData = new CsData(csData.Source, types, csData.NestedLevel);
 
-            HashSet<Type> types = new HashSet<Type> { sourceType };
-            string cson = $"new {sourceType.FullName}{Environment.NewLine}{GetNestedLevelTabulation(csData.NestedLevel)}{{";
+            string cson = $"new {GetTypeName(csData)}{Environment.NewLine}{GetNestedLevelTabulation(csData.NestedLevel)}{{";
             var sourceFields = sourceType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToArray();
 
             uint fieldNestedLevel = csData.NestedLevel + 1;
@@ -89,6 +90,16 @@ namespace SerializatorApp.Serialization.Converters
             for (uint i = 0; i < level; i++)
                 result += '\t';
             return result;
+        }
+
+        private string GetTypeName(CsData csData)
+        {
+            Type sourceType = csData.Source.GetType();
+            var typeNames = csData.Types.Where(t => t.Name == sourceType.Name).Select(t => t.FullName).ToList();
+            if (typeNames.IndexOf(sourceType.FullName) > 0)
+                return sourceType.FullName;
+            else
+                return sourceType.Name;
         }
     }
 }

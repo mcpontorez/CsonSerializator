@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization
 {
-    public ref struct CsData
+    public struct CsData
     {
         public readonly object Source;
         public readonly HashSet<Type> Types;
