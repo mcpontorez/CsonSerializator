@@ -32,7 +32,7 @@ namespace SerializatorApp
                 } 
             };
 
-            ICsonConverter converter = new MainConverter();
+            ICsonConverterBase converter = new MainConverter();
             Console.WriteLine(converter.To(simplePerson).Cson);
 
             Console.Read();

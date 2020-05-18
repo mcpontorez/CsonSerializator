@@ -15,5 +15,11 @@ namespace SerializatorApp.Serialization
             Types = types;
             Cson = cson;
         }
+
+        public CsonData(Type type, string cson)
+        {
+            Types = new HashSet<Type> { type };
+            Cson = cson;
+        }
     }
 }

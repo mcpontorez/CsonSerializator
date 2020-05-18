@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Converters
 {
-    public class MainConverter : ICsonConverter
+    public class MainConverter : ICsonConverterBase
     {
         private readonly ICsonConverter _converter = new CsonItemConverter();
         public T From<T>(string cson)
@@ -18,7 +18,7 @@ namespace SerializatorApp.Serialization.Converters
 
         public CsonData To(object source)
         {
-            CsonData csonData = _converter.To(source);
+            CsonData csonData = _converter.To(new CsData(source, new HashSet<Type>(), 0));
             string cson = $"{GetUsingText(csonData.Types)}{csonData.Cson};";
 
 

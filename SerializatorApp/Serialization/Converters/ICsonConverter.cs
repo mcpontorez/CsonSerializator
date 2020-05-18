@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace SerializatorApp.Serialization.Converters
 {
-    public interface ICsonConverter
+    public interface ICsonConverterBase
     {
         T From<T>(string cson);
         CsonData To(object source);
     }
 
-    public interface ICsonConverter<TCsonItem> : ICsonConverter
+    public interface ICsonConverter : ICsonConverterBase
     {
-
+        CsonData To(CsData csData);
     }
 }

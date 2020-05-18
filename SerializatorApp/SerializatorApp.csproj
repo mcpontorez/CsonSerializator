@@ -66,6 +66,7 @@
     <Compile Include="Serialization\Converters\CsonItemConverter.cs" />
     <Compile Include="Serialization\Converters\ICsonConverter.cs" />
     <Compile Include="Serialization\Converters\MainConverter.cs" />
+    <Compile Include="Serialization\CsData.cs" />
     <Compile Include="Serialization\CsonData.cs" />
     <Compile Include="Serialization\Models\CsonPrimitive.cs" />
     <Compile Include="Serialization\Models\CsonItem.cs" />
