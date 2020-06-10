@@ -1,4 +1,5 @@
 ﻿using SerializatorApp.Serialization.Converters;
+using SerializatorApp.Serialization.Deserializators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,11 +49,11 @@ namespace SerializatorApp
             DoublePerson doublePerson = new DoublePerson { SuperPerson = new Super.Person { SuperId = 99, SuperName = "SuperBoris" }, SimplePerson = simplePerson };
 
             ICsonConverterBase converter = new MainConverter();
-            Console.WriteLine(converter.To(doublePerson).Cson);
+            string cson = converter.To(doublePerson).Cson;
+            Console.WriteLine(cson);
 
-            //StringReader
-            //StreamReader streamReader = new StreamReader()
-         
+            IConverterBase deserializator = new ConverterResolver();
+            DoublePerson desDoublePerson = deserializator.From<DoublePerson>(new Serialization.Deserializators.StringReader(cson));
 
             Console.Read();
         }

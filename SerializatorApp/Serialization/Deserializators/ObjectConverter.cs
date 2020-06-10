@@ -11,7 +11,10 @@ namespace SerializatorApp.Serialization.Deserializators
     public class ObjectConverter : IConverter
     {
         private const string _startString = "new ";
-        private readonly IConverter _converterResolver = new ConverterResolver();
+
+        private readonly IConverter _converterResolver;
+
+        public ObjectConverter(IConverter converterResolver) => _converterResolver = converterResolver;
 
         public T From<T>(StringReader cson)
         {
@@ -24,7 +27,7 @@ namespace SerializatorApp.Serialization.Deserializators
 
             object resultValue = Activator.CreateInstance(resultType);
 
-            cson.SkipWhile(c => c != '{');
+            cson.SkipWhileSeparators().SkipWhile(c => c == '{').SkipWhileSeparators();
             while (cson.GetCurrentChar() != '}')
             {
                 cson.SkipUntil(IsMemberNameChar);

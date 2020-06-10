@@ -96,10 +96,10 @@ namespace SerializatorApp.Serialization.Converters
         {
             Type sourceType = csData.Source.GetType();
             var typeNames = csData.Types.Where(t => t.Name == sourceType.Name).Select(t => t.FullName).ToList();
-            if (typeNames.IndexOf(sourceType.FullName) > 0)
+            //if (typeNames.IndexOf(sourceType.FullName) > 0)
                 return sourceType.FullName;
-            else
-                return sourceType.Name;
+            //else
+            //    return sourceType.Name;
         }
     }
 }

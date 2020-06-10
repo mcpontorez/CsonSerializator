@@ -24,6 +24,8 @@ namespace SerializatorApp.Serialization.Deserializators
             Index = index;
         }
 
+        public string Substring(int index, int count) => Target.Substring(Index + index, count);
+
         public string Take(int count)
         {
             string result = Target.Substring(Index, count);
@@ -66,17 +68,7 @@ namespace SerializatorApp.Serialization.Deserializators
 
         public StringReader SkipOne() => Skip(1);
 
-        public StringReader SkipSeparators()
-        {
-            int i = Index;
-            for (; i < Target.Length; i++)
-            {
-                if (!(char.IsSeparator(Target, i) || char.IsControl(Target, i)))
-                    break;
-            }
-            Index = i;
-            return this;
-        }
+        public StringReader SkipWhileSeparators() => SkipWhile(c => char.IsSeparator(c) || char.IsControl(c));
 
         public StringReader SkipUntilSeparator() => SkipUntil(c => char.IsSeparator(c));
 
@@ -118,6 +110,6 @@ namespace SerializatorApp.Serialization.Deserializators
         public int IndexOf(string value) => Target.IndexOf(value, Index);
         public int IndexOf(string value, int startIndex) => Target.IndexOf(value, Index + startIndex);
 
-        //public StringBuilder Get(int lenght) => new StringBuilder()
+        public override string ToString() => Substring(0, Lenght);
     }
 }

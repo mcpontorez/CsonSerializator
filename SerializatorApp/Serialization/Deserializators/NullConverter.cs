@@ -4,7 +4,7 @@ namespace SerializatorApp.Serialization.Deserializators
 {
     public class NullConverter : IConverter
     {
-        private const string _startString = "null";
+        private const string _startString = "null;";
 
         public T From<T>(StringReader cson)
         {

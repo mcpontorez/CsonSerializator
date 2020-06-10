@@ -27,11 +27,12 @@ namespace SerializatorApp.Serialization.Converters
 
         private string GetUsingText(IEnumerable<Type> types)
         {
-            HashSet<string> namespaces = new HashSet<string>(types.Select(t => t.Namespace));
-            string result = string.Empty;
-            foreach (var item in namespaces)
-                result += $"using {item}; {Environment.NewLine}";
-            return result;
+            //HashSet<string> namespaces = new HashSet<string>(types.Select(t => t.Namespace));
+            //string result = string.Empty;
+            //foreach (var item in namespaces)
+            //    result += $"using {item}; {Environment.NewLine}";
+            //return result;
+            return string.Empty;
         }
     }
 }
