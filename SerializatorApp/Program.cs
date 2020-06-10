@@ -1,6 +1,7 @@
 ﻿using SerializatorApp.Serialization.Converters;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace SerializatorApp.Super
     {
         public float SuperId;
         public string SuperName;
+
+        public object @object = "lalala";
     }
 }
 
@@ -46,6 +49,10 @@ namespace SerializatorApp
 
             ICsonConverterBase converter = new MainConverter();
             Console.WriteLine(converter.To(doublePerson).Cson);
+
+            //StringReader
+            //StreamReader streamReader = new StreamReader()
+         
 
             Console.Read();
         }

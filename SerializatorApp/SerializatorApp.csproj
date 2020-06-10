@@ -68,6 +68,16 @@
     <Compile Include="Serialization\Converters\MainConverter.cs" />
     <Compile Include="Serialization\CsData.cs" />
     <Compile Include="Serialization\CsonData.cs" />
+    <Compile Include="Serialization\Deserializators\ConverterResolver.cs" />
+    <Compile Include="Serialization\Deserializators\IConverterCollection.cs" />
+    <Compile Include="Serialization\Deserializators\ConverterCollection.cs" />
+    <Compile Include="Serialization\Deserializators\IConverter.cs" />
+    <Compile Include="Serialization\Deserializators\Numerics\Int32Converter.cs" />
+    <Compile Include="Serialization\Deserializators\Numerics\NumericConverter.cs" />
+    <Compile Include="Serialization\Deserializators\NullConverter.cs" />
+    <Compile Include="Serialization\Deserializators\ObjectConverter.cs" />
+    <Compile Include="Serialization\Deserializators\IConverterBase.cs" />
+    <Compile Include="Serialization\Deserializators\StringReader.cs" />
     <Compile Include="Serialization\Models\CsonPrimitive.cs" />
     <Compile Include="Serialization\Models\CsonItem.cs" />
     <Compile Include="Serialization\Models\CsonItemBase.cs" />
@@ -88,5 +98,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
