@@ -43,6 +43,8 @@ namespace SerializatorApp.Serialization.Deserializators
             Index = endIndex;
             return Target.Substring(startIndex, endIndex - startIndex);
         }
+
+        public string TakeUntil(char value) => TakeUntil(c => c != value);
         public string TakeUntil(Func<char, bool> predicate)
         {
             int startIndex = Index, endIndex = startIndex;
@@ -56,18 +58,29 @@ namespace SerializatorApp.Serialization.Deserializators
             return Target.Substring(startIndex, endIndex - startIndex);
         }
 
-        public void Skip(int count) => Index += count;
+        public StringReader Skip(int count)
+        {
+            Index += count;
+            return this;
+        }
 
-        public void SkipWhiteSpaces()
+        public StringReader SkipOne() => Skip(1);
+
+        public StringReader SkipSeparators()
         {
             int i = Index;
             for (; i < Target.Length; i++)
             {
-                if (!(char.IsWhiteSpace(Target, i) || char.IsControl(Target, i)))
+                if (!(char.IsSeparator(Target, i) || char.IsControl(Target, i)))
                     break;
             }
             Index = i;
+            return this;
         }
+
+        public StringReader SkipUntilSeparator() => SkipUntil(c => char.IsSeparator(c));
+
+        public StringReader SkipUntil(Func<char, bool> predicate) => SkipWhile(c => !predicate(c));
 
         public StringReader SkipWhile(Func<char, bool> predicate)
         {

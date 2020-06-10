@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Deserializators.Numerics
 {
@@ -12,8 +8,9 @@ namespace SerializatorApp.Serialization.Deserializators.Numerics
 
         public T From<T>(StringReader cson)
         {
-            int endIndex = cson.TakeWhile(_endChar);
-            T result = int.Parse();
+            T result = (T)(object)int.Parse(cson.TakeUntil(_endChar));
+            cson.SkipOne();
+            return result;
         }
 
         public bool IsCanConvertable(StringReader cson)
