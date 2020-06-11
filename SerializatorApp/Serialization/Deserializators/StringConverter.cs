@@ -10,7 +10,8 @@ namespace SerializatorApp.Serialization.Deserializators
         {
             cson.SkipOne();
             string result = cson.TakeUntil(_endChar);
-            return (T)(object)result;
+            cson.SkipOne().SkipWhileSeparators().SkipOne();
+            return (T)(object)result; 
 
         }
 

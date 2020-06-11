@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Schema;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
@@ -69,9 +70,37 @@ namespace SerializatorApp.Serialization.Deserializators
         {
             Index += count;
             return this;
-        }
+        }        
 
         public StringReader SkipOne() => Skip(1);
+
+        public StringReader Skip(char value)
+        {
+            if (CurrentChar == value)
+                SkipOne();
+            else
+                throw new Exception($"{value} expected");
+            return this;
+        }
+
+        public StringReader SkipIfNeed(char value)
+        {
+            if (CurrentChar == value)
+                SkipOne();
+            return this;
+        }
+        public StringReader SkipIfNeed(IEnumerable<char> values)
+        {
+            foreach (var item in values)
+            {
+                if (CurrentChar == item)
+                {
+                    SkipOne();
+                    break;
+                }
+            }
+            return this;
+        }
 
         public StringReader SkipWhileSeparators() => SkipWhile(c => char.IsSeparator(c) || char.IsControl(c));
 
@@ -102,7 +131,7 @@ namespace SerializatorApp.Serialization.Deserializators
             return false;  
         }
 
-        public void SkipStartsWith(string value) => Skip(value.Length);
+        public StringReader SkipStartsWith(string value) => Skip(value.Length);
 
         public bool StartsWith(string value) => IndexOf(value) == 0;
 

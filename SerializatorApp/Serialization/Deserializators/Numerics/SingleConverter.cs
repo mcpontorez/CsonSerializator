@@ -12,7 +12,7 @@ namespace SerializatorApp.Serialization.Deserializators.Numerics
             if(value.Length == 0)
                 value = cson.TakeUntil(_endCharLowerCase);
             T result = (T)(object)int.Parse(value);
-            cson.SkipUntilSeparator();
+            cson.SkipOne().SkipWhileSeparators().SkipOne();
             return result;
         }
 

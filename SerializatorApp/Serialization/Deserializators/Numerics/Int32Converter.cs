@@ -9,7 +9,7 @@ namespace SerializatorApp.Serialization.Deserializators.Numerics
         public T From<T>(StringReader cson)
         {
             T result = (T)(object)int.Parse(cson.TakeUntil(_endChar));
-            cson.SkipOne();
+            cson.SkipWhileSeparators().SkipOne();
             return result;
         }
 

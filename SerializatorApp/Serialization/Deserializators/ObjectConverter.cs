@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
-    public class ObjectConverter : IConverter
+    public class ObjectConverter : ConverterBase
     {
         private const string _startString = "new ";
 
@@ -16,10 +16,9 @@ namespace SerializatorApp.Serialization.Deserializators
 
         public ObjectConverter(IConverter converterResolver) => _converterResolver = converterResolver;
 
-        public T From<T>(StringReader cson)
+        public override T From<T>(StringReader cson)
         {
-            cson.SkipStartsWith(_startString);
-            cson.SkipUntil(IsTypeNameChar);
+            cson.SkipStartsWith(_startString).SkipWhileSeparators().SkipIfNeed('@');
 
             string typeName = cson.TakeWhile(IsTypeNameChar);
             Type resultType = Type.GetType(typeName);
@@ -27,7 +26,7 @@ namespace SerializatorApp.Serialization.Deserializators
 
             object resultValue = Activator.CreateInstance(resultType);
 
-            cson.SkipWhileSeparators().SkipWhile(c => c == '{').SkipWhileSeparators();
+            cson.SkipWhileSeparators().SkipIfNeed('(').SkipWhileSeparators().SkipIfNeed(')').Skip('{').SkipWhileSeparators();
             while (cson.CurrentChar != '}')
             {
                 cson.SkipUntil(IsMemberNameChar);
@@ -35,15 +34,17 @@ namespace SerializatorApp.Serialization.Deserializators
                 FieldInfo fieldInfo = resultFieldInfos.FirstOrDefault(f => f.Name == memberName);
                 if (fieldInfo == null)
                     continue;
-                cson.SkipWhileSeparators().SkipWhile(c => c == '=').SkipWhileSeparators();
+                cson.SkipWhileSeparators().Skip('=').SkipWhileSeparators();
                 object fieldValue = _converterResolver.From<object>(cson);
                 fieldInfo.SetValue(resultValue, fieldValue);
+
+                cson.SkipWhileSeparators().SkipIfNeed(_endChar).SkipWhileSeparators();
             }
-            cson.SkipOne();
+            cson.SkipOne().SkipWhileSeparators();
             return (T)resultValue;
         }
 
-        public bool IsCanConvertable(StringReader cson) => cson.StartsWith(_startString);
+        public override bool IsCanConvertable(StringReader cson) => cson.StartsWith(_startString);
 
         private static bool IsTypeNameChar(char value) => char.IsLetter(value) || value == '.' || value == '_';
         private static bool IsMemberNameChar(char value) => char.IsLetter(value) || value == '_';
