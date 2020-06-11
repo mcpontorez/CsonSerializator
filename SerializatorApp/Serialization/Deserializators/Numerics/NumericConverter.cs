@@ -9,6 +9,6 @@ namespace SerializatorApp.Serialization.Deserializators.Numerics
 
         public T From<T>(StringReader cson) => _converterCollection.Get(cson).From<T>(cson);
 
-        public bool IsCanConvertable(StringReader cson) => char.IsDigit(cson.GetCurrentChar());
+        public bool IsCanConvertable(StringReader cson) => char.IsDigit(cson.CurrentChar);
     }
 }

@@ -13,6 +13,10 @@ namespace SerializatorApp.Serialization.Deserializators
         public char this[int index] => Target[Index + index];
 
         public int Lenght => Target.Length - Index;
+
+        public char CurrentChar => this[0];
+
+        public string Buffer => Substring(0);
         public StringReader(string target)
         {
             Target = target;
@@ -24,6 +28,7 @@ namespace SerializatorApp.Serialization.Deserializators
             Index = index;
         }
 
+        public string Substring(int index) => Substring(0, Lenght);
         public string Substring(int index, int count) => Target.Substring(Index + index, count);
 
         public string Take(int count)
@@ -99,17 +104,16 @@ namespace SerializatorApp.Serialization.Deserializators
 
         public void SkipStartsWith(string value) => Skip(value.Length);
 
-        public char GetCurrentChar() => Target[Index];
-
         public bool StartsWith(string value) => IndexOf(value) == 0;
+
         public bool StartsWith(char value) => IndexOf(value) == 0;
 
-        public int IndexOf(char value) => Target.IndexOf(value, Index);
-        public int IndexOf(char value, int startIndex) => Target.IndexOf(value, Index + startIndex);
+        public int IndexOf(char value) => IndexOf(value, 0);
+        public int IndexOf(char value, int startIndex) => Target.IndexOf(value, Index + startIndex) - Index;
 
-        public int IndexOf(string value) => Target.IndexOf(value, Index);
-        public int IndexOf(string value, int startIndex) => Target.IndexOf(value, Index + startIndex);
+        public int IndexOf(string value) => IndexOf(value, 0);
+        public int IndexOf(string value, int startIndex) => Target.IndexOf(value, Index + startIndex) - Index;
 
-        public override string ToString() => Substring(0, Lenght);
+        public override string ToString() => Buffer;
     }
 }

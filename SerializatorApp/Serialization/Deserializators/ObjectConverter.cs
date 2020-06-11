@@ -28,18 +28,18 @@ namespace SerializatorApp.Serialization.Deserializators
             object resultValue = Activator.CreateInstance(resultType);
 
             cson.SkipWhileSeparators().SkipWhile(c => c == '{').SkipWhileSeparators();
-            while (cson.GetCurrentChar() != '}')
+            while (cson.CurrentChar != '}')
             {
                 cson.SkipUntil(IsMemberNameChar);
                 string memberName = cson.TakeWhile(IsMemberNameChar);
                 FieldInfo fieldInfo = resultFieldInfos.FirstOrDefault(f => f.Name == memberName);
                 if (fieldInfo == null)
                     continue;
-                cson.SkipWhile(c => char.IsSeparator(c) || c == '=');
+                cson.SkipWhileSeparators().SkipWhile(c => c == '=').SkipWhileSeparators();
                 object fieldValue = _converterResolver.From<object>(cson);
                 fieldInfo.SetValue(resultValue, fieldValue);
             }
-            cson.Skip(1);
+            cson.SkipOne();
             return (T)resultValue;
         }
 
