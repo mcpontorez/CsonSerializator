@@ -22,11 +22,6 @@ namespace SerializatorApp.Serialization.Serializators
             return _converter;
         }
 
-        public T From<T>(string cson)
-        {
-            throw new NotImplementedException();
-        }
-
         public CsonData To(object source)
         {
             if (source == null)

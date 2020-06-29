@@ -8,11 +8,6 @@ namespace SerializatorApp.Serialization.Serializators
 {
     public class CsonSingleConverter : ICsonConverter
     {
-        public T From<T>(string cson)
-        {
-            throw new NotImplementedException();
-        }
-
         public CsonData To(object source) => new CsonData(typeof(float), $"{source}F");
 
         public CsonData To(CsData csData) => To(csData.Source);

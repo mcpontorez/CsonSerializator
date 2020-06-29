@@ -6,7 +6,6 @@ namespace SerializatorApp.Serialization.Serializators
 {
     public interface ICsonConverterBase
     {
-        T From<T>(string cson);
         CsonData To(object source);
     }
 

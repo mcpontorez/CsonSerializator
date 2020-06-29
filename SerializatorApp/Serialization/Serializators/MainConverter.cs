@@ -11,10 +11,6 @@ namespace SerializatorApp.Serialization.Serializators
     public class MainConverter : ICsonConverterBase
     {
         private readonly ICsonConverter _converter = new CsonItemConverter();
-        public T From<T>(string cson)
-        {
-            throw new NotImplementedException();
-        }
 
         public CsonData To(object source)
         {
