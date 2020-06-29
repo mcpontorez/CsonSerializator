@@ -2,21 +2,23 @@
 
 namespace SerializatorApp.Serialization.Deserializators.Numerics
 {
-    public class Int32Converter : IConverter
+    public class Int32Converter : ConverterBase
     {
-        private const char _endChar = ';';
-
-        public T From<T>(StringReader cson)
+        public override T From<T>(StringReader cson)
         {
-            T result = (T)(object)int.Parse(cson.TakeUntil(_endChar));
-            cson.SkipWhileSeparators().SkipOne();
+            string value = cson.TakeWhile(c => char.IsDigit(c) || c == '-');
+            T result = (T)(object)int.Parse(value);
             return result;
         }
 
-        public bool IsCanConvertable(StringReader cson)
+        public override bool IsCanConvertable(StringReader cson)
         {
-            int endIndex = cson.IndexOf(_endChar);
-            for (int i = 0; i < endIndex; i++)
+            if (!(char.IsDigit(cson.CurrentChar) || cson.CurrentChar == '-'))
+                return false;
+            int endIndex = cson.IndexOfAny(_endChars);
+            if (endIndex > 12)
+                return false;
+            for (int i = 1; i < endIndex; i++)
             {
                 if (!char.IsDigit(cson[i]))
                     return false;

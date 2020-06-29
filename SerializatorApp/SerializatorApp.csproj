@@ -69,7 +69,7 @@
     <Compile Include="Serialization\CsData.cs" />
     <Compile Include="Serialization\CsonData.cs" />
     <Compile Include="Serialization\Deserializators\ConverterBase.cs" />
-    <Compile Include="Serialization\Deserializators\ConverterResolver.cs" />
+    <Compile Include="Serialization\Deserializators\MainConverterResolver.cs" />
     <Compile Include="Serialization\Deserializators\IConverterCollection.cs" />
     <Compile Include="Serialization\Deserializators\ConverterCollection.cs" />
     <Compile Include="Serialization\Deserializators\IConverter.cs" />

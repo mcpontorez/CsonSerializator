@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
     public class MainConverter : ConverterBase
     {
-        private IConverterResolver
+        private IConverter _converterResolver = new MainConverterResolver();
         public override T From<T>(StringReader cson)
         {
-            throw new NotImplementedException();
+            cson.SkipWhileSeparators();
+            return _converterResolver.From<T>(cson);
         }
 
-        public override bool IsCanConvertable(StringReader cson)
-        {
-            throw new NotImplementedException();
-        }
+        public override bool IsCanConvertable(StringReader cson) => _converterResolver.IsCanConvertable(cson.SkipWhileSeparators());
     }
 }
