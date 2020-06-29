@@ -1,4 +1,4 @@
-﻿using SerializatorApp.Serialization.Converters;
+﻿using SerializatorApp.Serializators.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SerializatorApp.Serialization.Converters
+namespace SerializatorApp.Serialization.Serializators
 {
     public class MainConverter : ICsonConverterBase
     {

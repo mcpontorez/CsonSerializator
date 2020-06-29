@@ -1,11 +1,11 @@
-﻿using SerializatorApp.Serialization.Models;
-using SerializatorApp.Serialization.Utils;
+﻿using SerializatorApp.Serialization.Utils;
+using SerializatorApp.Serializators.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SerializatorApp.Serialization.Converters
+namespace SerializatorApp.Serialization.Serializators
 {
     public class CsonItemConverter : ICsonConverter
     {

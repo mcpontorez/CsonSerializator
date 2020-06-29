@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SerializatorApp.Serialization
+namespace SerializatorApp.Serializators.Models
 {
     public ref struct CsonData
     {

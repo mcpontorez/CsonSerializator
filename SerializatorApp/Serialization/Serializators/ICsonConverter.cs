@@ -1,7 +1,8 @@
-﻿using System;
+﻿using SerializatorApp.Serializators.Models;
+using System;
 using System.Collections.Generic;
 
-namespace SerializatorApp.Serialization.Converters
+namespace SerializatorApp.Serialization.Serializators
 {
     public interface ICsonConverterBase
     {
