@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\Deserializators\TypeResolver.cs" />
     <Compile Include="Serialization\Serializators\CsonSingleConverter.cs" />
     <Compile Include="Serialization\Serializators\CsonInt32Converter.cs" />
     <Compile Include="Serialization\Serializators\CsonStringConverter.cs" />
