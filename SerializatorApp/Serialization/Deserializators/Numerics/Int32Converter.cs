@@ -1,14 +1,16 @@
-﻿using System;
+﻿using SerializatorApp.Serialization.Utils;
+using System;
 
 namespace SerializatorApp.Serialization.Deserializators.Numerics
 {
-    public class Int32Converter : ConverterBase
+    public class Int32Converter : ConverterBase, IConcreteConverter<int>
     {
-        public override T From<T>(StringReader cson)
+        public override TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
+
+        public int ConvertToConcrete(StringReader cson)
         {
             string value = cson.TakeWhile(c => char.IsDigit(c) || c == '-');
-            T result = (T)(object)int.Parse(value);
-            return result;
+            return int.Parse(value);
         }
 
         public override bool IsCanConvertable(StringReader cson)
@@ -24,6 +26,11 @@ namespace SerializatorApp.Serialization.Deserializators.Numerics
                     return false;
             }
             return true;
+        }
+
+        public bool IsCanConvertable(Type type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

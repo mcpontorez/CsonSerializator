@@ -6,15 +6,12 @@ using System.Text;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
-    public sealed class TypeResolver
+    public sealed class TypeNameResolver : ITypeNameResolver
     {
         public HashSet<string> _usings;
         private Dictionary<string, Type> _types = new Dictionary<string, Type>();
 
-        public TypeResolver(HashSet<string> usings)
-        {
-            _usings = usings;
-        }
+        public TypeNameResolver(HashSet<string> usings) => _usings = usings;
 
         public Type Get(string typeName)
         {

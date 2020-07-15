@@ -7,7 +7,7 @@ namespace SerializatorApp.Serialization.Deserializators
     {
         private const string _startString = "null";
 
-        public override T From<T>(StringReader cson)
+        public override T Convert<T>(StringReader cson, ITypeNameResolver typeNameResolver)
         {
             cson.SkipStartsWith(_startString);
             return default;
