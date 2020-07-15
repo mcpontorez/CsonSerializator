@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
@@ -13,9 +10,9 @@ namespace SerializatorApp.Serialization.Deserializators
     {
         private const string _startString = "new ";
 
-        private readonly IConverterBase _converterResolver;
+        private readonly IConverter _converterResolver;
 
-        public ObjectConverter(IConverterBase converterResolver) => _converterResolver = converterResolver;
+        public ObjectConverter(IConverter converterResolver) => _converterResolver = converterResolver;
 
         public override T Convert<T>(StringReader cson, ITypeNameResolver typeNameResolver)
         {
@@ -26,7 +23,7 @@ namespace SerializatorApp.Serialization.Deserializators
 
             object resultValue = Activator.CreateInstance(resultType);
 
-            cson.SkipWhileSeparators().SkipIfNeeds('(').SkipWhileSeparators().SkipIfNeeds(')').Skip('{').SkipWhileSeparators();
+            cson.SkipWhileSeparators().SkipIfNeeds('(').SkipWhileSeparators().SkipIfNeeds(')').Skip(_startObjectChar).SkipWhileSeparators();
             while (cson.CurrentChar != _endObjectChar)
             {
                 cson.SkipIfNeeds('@');

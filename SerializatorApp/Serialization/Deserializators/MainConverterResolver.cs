@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
-    public sealed class MainConverterResolver : IConverterBase
+    public sealed class MainConverterResolver : ConverterBase
     {
         private readonly IConverterCollection _converterCollection;
 
         public MainConverterResolver() => _converterCollection = new ConverterCollection(new StringConverter(), new ObjectConverter(this), new NullConverter(), new NumericConverterResolver());
 
-        public T Convert<T>(StringReader cson) => _converterCollection.Get(cson).Convert<T>(cson);
+        public override TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => _converterCollection.Get(cson).Convert<TResult>(cson, typeNameResolver);
 
-        public bool IsCanConvertable(StringReader cson) => _converterCollection.Contains(cson);
+        public override bool IsCanConvertable(StringReader cson) => _converterCollection.Contains(cson);
     }
 }

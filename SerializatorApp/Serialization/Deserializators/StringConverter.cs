@@ -3,21 +3,21 @@ using System;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
-    public class StringConverter : IConcreteConverter<string>
+    public class StringConverter : ConverterBase, IConcreteConverter<string>
     {
-        private const char _startChar = '"', _endChar = '"';
+        private const char _valueStartChar = '"', _valueEndChar = '"';
 
-        public TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
+        public override TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
 
         public string ConvertToConcrete(StringReader cson)
         {
             cson.SkipOne();
-            string result = cson.TakeUntil(_endChar);
+            string result = cson.TakeUntil(_valueEndChar);
             cson.SkipOne();
             return result;
         }
 
-        public bool IsCanConvertable(StringReader cson) => cson.StartsWith(_startChar);
+        public override bool IsCanConvertable(StringReader cson) => cson.StartsWith(_valueStartChar);
 
         public bool IsCanConvertable(Type type) => type == typeof(string);
     }

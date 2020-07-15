@@ -8,7 +8,9 @@ namespace SerializatorApp.Serialization.Deserializators
 {
     public sealed class TypeNameResolver : ITypeNameResolver
     {
-        public HashSet<string> _usings;
+        public static readonly TypeNameResolver Empty = new TypeNameResolver(new HashSet<string>());
+
+        private HashSet<string> _usings;
         private Dictionary<string, Type> _types = new Dictionary<string, Type>();
 
         public TypeNameResolver(HashSet<string> usings) => _usings = usings;

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace SerializatorApp.Serialization.Deserializators.Numerics
 {
-    public class SingleConverter : IConcreteConverter<float>
+    public class SingleConverter : ConverterBase, IConcreteConverter<float>
     {
-        private const char _endCharUpperCase = 'F', _endCharLowerCase = 'f';
-        private readonly IReadOnlyList<char> _endChars = new char[] { _endCharUpperCase, _endCharLowerCase };
+        private const char _valueEndCharUpperCase = 'F', _valueEndCharLowerCase = 'f';
+        private readonly IReadOnlyList<char> _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
 
-        public TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
+        public override TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
 
         public float ConvertToConcrete(StringReader cson)
         {
@@ -19,12 +19,12 @@ namespace SerializatorApp.Serialization.Deserializators.Numerics
             return result;
         }
 
-        public bool IsCanConvertable(StringReader cson)
+        public override bool IsCanConvertable(StringReader cson)
         {
             if (!(char.IsDigit(cson.CurrentChar) || cson.CurrentChar == '-'))
                 return false;
 
-            int endIndex = cson.IndexOfAny(_endChars);
+            int endIndex = cson.IndexOfAny(_valueEndChars);
 
             for (int i = 0; i < endIndex; i++)
             {

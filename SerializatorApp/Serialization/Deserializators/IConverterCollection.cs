@@ -8,8 +8,8 @@ namespace SerializatorApp.Serialization.Deserializators
 {
     public interface IConverterCollection
     {
-        IConverterBase Get(StringReader cson);
-        IConverterBase Get(Type type);
+        IConverter Get(StringReader cson);
+        IConverter Get(Type type);
         bool Contains(StringReader cson);
         bool Contains(Type type);
     }

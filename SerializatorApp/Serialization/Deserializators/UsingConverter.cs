@@ -8,20 +8,20 @@ namespace SerializatorApp.Serialization.Deserializators
     {
         private const string _startString = "using";
 
-        public HashSet<string> From(StringReader cson)
+        public HashSet<string> Convert(StringReader cson)
         {
             HashSet<string> result = new HashSet<string>();
 
             do
             {
-                result.Add(GetUsingFrom(cson));
+                result.Add(ConvertUsing(cson));
                 cson.SkipWhileSeparators();
             }
             while (IsCanConvertable(cson));
             return result;
         }
         
-        private string GetUsingFrom(StringReader cson)
+        private string ConvertUsing(StringReader cson)
         {
             string result = cson.SkipStartsWith(_startString).SkipWhileSeparators().TakeWhile(c => char.IsLetterOrDigit(c) || c == '.');
             cson.SkipWhileSeparators().SkipOne();

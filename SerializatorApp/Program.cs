@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,17 +16,23 @@ namespace SerializatorApp.Super
         public string SuperName;
 
         public object @object = "lalala";
+
+        public override bool Equals(object obj) => Equals(obj as Person);
+        public bool Equals(Person obj) => base.Equals(obj) || Equals(SuperId, obj.SuperId) && Equals(SuperName, obj.SuperName) && Equals(@object, obj.@object);
     }
 }
 
 namespace SerializatorApp
 {
-    class Size { public float x, y; }
+    struct Size { public float x, y; }
     class Person
     {
         public int Id;
         public string Name;
         public Size Size;
+
+        public override bool Equals(object obj) => Equals(obj as Person);
+        public bool Equals(Person obj) => base.Equals(obj) || Equals(Id, obj.Id) && Equals(Name, obj.Name) && Size.Equals(obj.Size);
     }
 
     class DoublePerson
@@ -33,6 +40,9 @@ namespace SerializatorApp
         public Super.Person SuperPerson;
         public Person SimplePerson;
         public string Description;
+
+        public override bool Equals(object obj) => Equals(obj as DoublePerson);
+        public bool Equals(DoublePerson obj) => base.Equals(obj) || Equals(SuperPerson, obj.SuperPerson) && Equals(SimplePerson, obj.SimplePerson) && Equals(Description, obj.Description);
     }
 
     class Program
@@ -52,10 +62,16 @@ namespace SerializatorApp
             string cson = converter.To(doublePerson).Cson;
             Console.WriteLine(cson);
 
-            IConverterBase deserializator = new MainConverterResolver();
-            DoublePerson desDoublePerson = deserializator.From<DoublePerson>(new Serialization.Deserializators.StringReader(cson));
+            IConverterBase deserializator = new Serialization.Deserializators.MainConverter();
+            DoublePerson desDoublePerson = deserializator.Convert<DoublePerson>(new Serialization.Deserializators.StringReader(cson));
 
+            string cson2 = converter.To(desDoublePerson).Cson;
+            Console.WriteLine(cson2);
+
+            Console.WriteLine(Equals(doublePerson, desDoublePerson));
+            Console.WriteLine(cson == cson2);
             Console.Read();
+            
         }
     }
 }
