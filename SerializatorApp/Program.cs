@@ -53,7 +53,7 @@ namespace SerializatorApp
             { 
                 Id = 12, 
                 Name = "Boris", 
-                Size = new Size { x = 10F, y = 15F } 
+                Size = new Size { x = 10.2F, y = 15F } 
             };
 
             DoublePerson doublePerson = new DoublePerson { SuperPerson = new Super.Person { SuperId = 99, SuperName = "SuperBoris" }, SimplePerson = simplePerson };
