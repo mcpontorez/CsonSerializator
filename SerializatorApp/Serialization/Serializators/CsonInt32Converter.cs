@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace SerializatorApp.Serialization.Serializators
 {
-    public class CsonInt32Converter : ICsonConverter
+    public class CsonInt32Converter : IConverter
     {
         public CsonData To(object source) => new CsonData(typeof(int), source.ToString());
 

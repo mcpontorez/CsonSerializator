@@ -63,11 +63,13 @@
     <Compile Include="Serialization\Deserializators\ITypeNameResolver.cs" />
     <Compile Include="Serialization\Deserializators\TypeNameResolver.cs" />
     <Compile Include="Serialization\Deserializators\UsingConverter.cs" />
-    <Compile Include="Serialization\Serializators\CsonSingleConverter.cs" />
+    <Compile Include="Serialization\Serializators\ConverterCollection.cs" />
+    <Compile Include="Serialization\Serializators\SingleConverter.cs" />
     <Compile Include="Serialization\Serializators\CsonInt32Converter.cs" />
-    <Compile Include="Serialization\Serializators\CsonStringConverter.cs" />
-    <Compile Include="Serialization\Serializators\CsonItemConverter.cs" />
-    <Compile Include="Serialization\Serializators\ICsonConverter.cs" />
+    <Compile Include="Serialization\Serializators\StringConverter.cs" />
+    <Compile Include="Serialization\Serializators\ConverterResolver.cs" />
+    <Compile Include="Serialization\Serializators\ObjectConverter.cs" />
+    <Compile Include="Serialization\Serializators\IConverterBase.cs" />
     <Compile Include="Serialization\Serializators\MainConverter.cs" />
     <Compile Include="Serialization\Serializators\Models\CsData.cs" />
     <Compile Include="Serialization\Serializators\Models\CsonData.cs" />
@@ -84,8 +86,11 @@
     <Compile Include="Serialization\Deserializators\ObjectConverter.cs" />
     <Compile Include="Serialization\Deserializators\IConverterBase.cs" />
     <Compile Include="Serialization\Deserializators\StringReader.cs" />
+    <Compile Include="Serialization\Serializators\Writing\StringWriter.cs" />
+    <Compile Include="Serialization\Serializators\Writing\TypeService.cs" />
     <Compile Include="Serialization\Utils\HashSetExtensions.cs" />
     <Compile Include="Serialization\Utils\ObjectExtensions.cs" />
+    <Compile Include="Serialization\Utils\TypeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

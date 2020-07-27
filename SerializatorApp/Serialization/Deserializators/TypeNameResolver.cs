@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SerializatorApp.Serialization.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -21,31 +22,18 @@ namespace SerializatorApp.Serialization.Deserializators
             if (_types.TryGetValue(typeName, out result))
                 return result;
 
-            result = Type.GetType(typeName) ?? GetTypeFromAssemblies(typeName);
+            result = TypeHelper.Get(typeName);
             if (result == null)
             {
-                var fullTypeNames = _usings.Select(u => u + typeName);
-                foreach (var item in fullTypeNames)
+                foreach (var item in _usings)
                 {
-                    result = GetTypeFromAssemblies(typeName);
+                    result = TypeHelper.Get($"{item}.{typeName}");
                     if (result != null)
                         break;
                 }
             }
 
             _types.Add(typeName, result);
-            return result;
-        }
-
-        private Type GetTypeFromAssemblies(string typeName)
-        {
-            Type result = null;
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                result = assembly.GetType(typeName);
-                if (result != null)
-                    break;
-            }
             return result;
         }
     }

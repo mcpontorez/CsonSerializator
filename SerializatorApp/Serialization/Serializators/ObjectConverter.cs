@@ -7,16 +7,16 @@ using System.Reflection;
 
 namespace SerializatorApp.Serialization.Serializators
 {
-    public class CsonItemConverter : ICsonConverter
+    public class ObjectConverter : IConverter
     {
-        private readonly Dictionary<Type, ICsonConverterBase> _converters = new Dictionary<Type, ICsonConverterBase>
+        private readonly Dictionary<Type, IConverterBase> _converters = new Dictionary<Type, IConverterBase>
         {
             { typeof(int), new CsonInt32Converter() },
-            { typeof(float), new CsonSingleConverter() },
-            { typeof(string), new CsonStringConverter() },
+            { typeof(float), new SingleConverter() },
+            { typeof(string), new StringConverter() },
         };
 
-        private ICsonConverterBase GetConverter(Type type)
+        private IConverterBase GetConverter(Type type)
         {
             _converters.TryGetValue(type, out var _converter);
             return _converter;
@@ -28,7 +28,7 @@ namespace SerializatorApp.Serialization.Serializators
                 return new CsonData(new HashSet<Type>(), "null");
             TypeInfo sourceType = source.GetType().GetTypeInfo();
 
-            ICsonConverterBase converter = GetConverter(sourceType);
+            IConverterBase converter = GetConverter(sourceType);
             if (converter != null)
                 return converter.To(source);
 
@@ -54,7 +54,7 @@ namespace SerializatorApp.Serialization.Serializators
                 return new CsonData(new HashSet<Type>(), "null");
             TypeInfo sourceType = csData.Source.GetType().GetTypeInfo();
 
-            ICsonConverterBase converter = GetConverter(sourceType);
+            IConverterBase converter = GetConverter(sourceType);
             if (converter != null)
                 return converter.To(csData.Source);
 

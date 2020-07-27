@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Serializators
 {
-    public class MainConverter : ICsonConverterBase
+    public class MainConverter : IConverterBase
     {
-        private readonly ICsonConverter _converter = new CsonItemConverter();
+        private readonly IConverter _converter = new ObjectConverter();
 
         public CsonData To(object source)
         {

@@ -58,11 +58,11 @@ namespace SerializatorApp
 
             DoublePerson doublePerson = new DoublePerson { SuperPerson = new Super.Person { SuperId = 99, SuperName = "SuperBoris" }, SimplePerson = simplePerson };
 
-            ICsonConverterBase converter = new Serialization.Serializators.MainConverter();
+            Serialization.Serializators.IConverterBase converter = new Serialization.Serializators.MainConverter();
             string cson = converter.To(doublePerson).Cson;
             Console.WriteLine(cson);
 
-            IConverterBase deserializator = new Serialization.Deserializators.MainConverter();
+            Serialization.Deserializators.IConverterBase deserializator = new Serialization.Deserializators.MainConverter();
             DoublePerson desDoublePerson = deserializator.Convert<DoublePerson>(new Serialization.Deserializators.StringReader(cson));
 
             string cson2 = converter.To(desDoublePerson).Cson;
