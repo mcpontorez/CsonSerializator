@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerializatorApp.Serializators.Models
 {
-    public struct CsData
+    public struct ConverterData
     {
         public readonly object Source;
-        public readonly HashSet<Type> Types;
         public readonly uint NestedLevel;
-        public CsData(object source, HashSet<Type> types, uint nestedLevel)
+        public ConverterData(object source, uint nestedLevel)
         {
             Source = source;
-            Types = types;
             NestedLevel = nestedLevel;
         }
     }

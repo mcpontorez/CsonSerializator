@@ -1,11 +1,13 @@
 ﻿using System;
+using System.IO;
+using SerializatorApp.Serialization.Serializators.Writing;
 using SerializatorApp.Serializators.Models;
 
 namespace SerializatorApp.Serialization.Serializators
 {
     public interface IConverterBase
     {
-        CsonData To(CsData csData);
+        void Convert(ConverterData data, IStringWriter writer);
     }
 
     public interface IConverter : IConverterBase

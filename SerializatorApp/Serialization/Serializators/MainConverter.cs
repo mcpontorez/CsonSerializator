@@ -14,7 +14,7 @@ namespace SerializatorApp.Serialization.Serializators
 
         public CsonData To(object source)
         {
-            CsonData csonData = _converter.To(new CsData(source, new HashSet<Type>(), 0));
+            CsonData csonData = _converter.To(new ConverterData(source, new HashSet<Type>(), 0));
             string cson = $"{GetUsingsText(csonData.Types)}{csonData.Cson};";
 
 

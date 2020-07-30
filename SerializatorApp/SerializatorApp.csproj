@@ -71,8 +71,7 @@
     <Compile Include="Serialization\Serializators\ObjectConverter.cs" />
     <Compile Include="Serialization\Serializators\IConverterBase.cs" />
     <Compile Include="Serialization\Serializators\MainConverter.cs" />
-    <Compile Include="Serialization\Serializators\Models\CsData.cs" />
-    <Compile Include="Serialization\Serializators\Models\CsonData.cs" />
+    <Compile Include="Serialization\Serializators\Models\ConverterData.cs" />
     <Compile Include="Serialization\Deserializators\ConverterBase.cs" />
     <Compile Include="Serialization\Deserializators\MainConverterResolver.cs" />
     <Compile Include="Serialization\Deserializators\IConverterCollection.cs" />
@@ -86,6 +85,7 @@
     <Compile Include="Serialization\Deserializators\ObjectConverter.cs" />
     <Compile Include="Serialization\Deserializators\IConverterBase.cs" />
     <Compile Include="Serialization\Deserializators\StringReader.cs" />
+    <Compile Include="Serialization\Serializators\Writing\IStringWriter.cs" />
     <Compile Include="Serialization\Serializators\Writing\StringWriter.cs" />
     <Compile Include="Serialization\Serializators\Writing\TypeService.cs" />
     <Compile Include="Serialization\Utils\HashSetExtensions.cs" />

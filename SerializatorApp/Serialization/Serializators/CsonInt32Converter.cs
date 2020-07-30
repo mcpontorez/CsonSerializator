@@ -10,6 +10,6 @@ namespace SerializatorApp.Serialization.Serializators
     {
         public CsonData To(object source) => new CsonData(typeof(int), source.ToString());
 
-        public CsonData To(CsData csData) => To(csData.Source);
+        public CsonData To(ConverterData csData) => To(csData.Source);
     }
 }

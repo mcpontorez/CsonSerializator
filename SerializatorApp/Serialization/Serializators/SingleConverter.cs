@@ -11,7 +11,7 @@ namespace SerializatorApp.Serialization.Serializators
     {
         public CsonData To(object source) => new CsonData(typeof(float), $"{((float)source).ToString(CultureInfo.InvariantCulture)}F");
 
-        public CsonData To(CsData csData) => To(csData.Source);
+        public CsonData To(ConverterData csData) => To(csData.Source);
 
         public bool IsCanConvertable(Type type) => type == typeof(float);
     }

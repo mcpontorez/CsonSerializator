@@ -10,7 +10,7 @@ namespace SerializatorApp.Serialization.Serializators
     {
         public CsonData To(object source) => new CsonData(typeof(string), $"\"{source}\"");
 
-        public CsonData To(CsData csData) => To(csData.Source);
+        public CsonData To(ConverterData csData) => To(csData.Source);
 
         public bool IsCanConvertable(Type type) => type == typeof(string);
     }
