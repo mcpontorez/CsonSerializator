@@ -7,14 +7,22 @@ namespace SerializatorApp.Serialization.Serializators.Writing
     public interface IStringWriter
     {
         IStringWriter Add(string value);
+        IStringWriter AddNull();
+        IStringWriter AddNew();
+        IStringWriter AddBeginedBrace();
+        IStringWriter AddEndedBrace();
+        IStringWriter AddComma();
+        IStringWriter AddEqual();
 
         IStringWriter Add(object value);
 
-        IStringWriter Add(Type type);
+        IStringWriter AddType(Type type);
 
         IStringWriter AddLine();
+        IStringWriter AddSpace();
 
-        IStringWriter AddTabLevel(int value);
+        IStringWriter AddTabLevel();
+        IStringWriter RemoveTabLevel();
 
         string GetString();
     }

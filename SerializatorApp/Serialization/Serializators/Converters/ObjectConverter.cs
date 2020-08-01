@@ -15,41 +15,28 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public void Convert(object source, IStringWriter writer)
         {
-            if (csData.Source == null)
-                return new CsonData(new HashSet<Type>(), "null");
-            TypeInfo sourceType = csData.Source.GetType().GetTypeInfo();
+            if (source == null)
+            {
+                writer.AddNull();
+                return;
+            }
+            TypeInfo sourceType = source.GetType().GetTypeInfo();
 
-            IConverterBase converter = GetConverter(sourceType);
-            if (converter != null)
-                return converter.To(csData.Source);
-
-            HashSet<Type> types = csData.Types;
-            types.Add(sourceType);
-            csData = new ConverterData(csData.Source, types, csData.NestedLevel);
-
-            string cson = $"new {GetTypeName(csData)}{Environment.NewLine}{GetNestedLevelTabulation(csData.NestedLevel)}{{";
+            writer.AddNew().AddType(sourceType).AddLine().AddBeginedBrace().AddTabLevel();
             var sourceFields = sourceType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToArray();
 
-            uint fieldNestedLevel = csData.NestedLevel + 1;
             for (int i = 0; i < sourceFields.Length; i++)
             {
-                if (i > 0) cson += ", ";
+                if (i > 0) writer.AddComma().AddSpace();
                 FieldInfo field = sourceFields[i];
-                object fieldValue = field.GetValue(csData.Source);
-                CsonData fieldData = To(new ConverterData(fieldValue, types, fieldNestedLevel));
-                cson += $"{Environment.NewLine} {GetNestedLevelTabulation(fieldNestedLevel)}{field.Name} = {fieldData.Cson}";
-                types.AddRange(fieldData.Types);
+                object fieldValue = field.GetValue(source);
+
+                writer.AddLine().Add(field.Name).AddSpace().AddEqual().AddSpace();
+                _converterResolver.Convert(fieldValue, writer);
             }
-            cson += $"{Environment.NewLine}{GetNestedLevelTabulation(csData.NestedLevel)}}}";
-            return new CsonData(types, cson);
+            writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
 
-        private string GetNestedLevelTabulation(uint level)
-        {
-            string result = string.Empty;
-            for (uint i = 0; i < level; i++)
-                result += '\t';
-            return result;
-        }
+        public bool IsCanConvertable(Type type) => true;
     }
 }

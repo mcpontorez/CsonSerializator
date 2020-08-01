@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SerializatorApp.Serialization.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +11,10 @@ namespace SerializatorApp.Serialization.Serializators.Writing
     }
     internal class StringContainer : IStringPart
     {
+        public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New),
+            BeginedBrace = new StringContainer(StringConsts.BeginedBrace), EndedBrace = new StringContainer(StringConsts.EndedBrace),
+            Comma = new StringContainer(StringConsts.Comma),
+            Equal = new StringContainer(StringConsts.Equal);
         public readonly string Value;
         public StringContainer(string value) => Value = value;
 
@@ -19,6 +24,8 @@ namespace SerializatorApp.Serialization.Serializators.Writing
     internal class TabLevelContainer : IStringPart
     {
         public static readonly char Tab = '\t';
+
+        public static readonly TabLevelContainer OneTab = new TabLevelContainer(1), MinusOneTab = new TabLevelContainer(-1);
 
         public readonly int Value;
         public TabLevelContainer(int value) => Value = value;
@@ -32,13 +39,12 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         }
     }
 
-    internal class NewLineContainer : IStringPart
+    internal class SecondStringContainer : IStringPart
     {
-        public static readonly string Value = Environment.NewLine;
+        public static readonly SecondStringContainer NewLine = new SecondStringContainer(Environment.NewLine), Space = new SecondStringContainer(StringConsts.Space);
 
-        private NewLineContainer() { }
-
-        public static readonly NewLineContainer Instance = new NewLineContainer();
+        public readonly string Value;
+        private SecondStringContainer(string value) => Value = value;
 
         public override string ToString() => Value;
     }
@@ -61,32 +67,38 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
         private List<IStringPart> _stringParts = new List<IStringPart>();
 
-        public IStringWriter Add(string value)
+        private IStringWriter Add(IStringPart value)
         {
-            _stringParts.Add(new StringContainer(value));
+            _stringParts.Add(value);
             return this;
         }
+
+        public IStringWriter Add(string value) => Add(new StringContainer(value));
+
+        public IStringWriter AddNull() => Add(StringContainer.Null);
+        public IStringWriter AddNew() => Add(StringContainer.New);
+        public IStringWriter AddBeginedBrace() => Add(StringContainer.BeginedBrace);
+        public IStringWriter AddEndedBrace() => Add(StringContainer.EndedBrace);
+        public IStringWriter AddComma() => Add(StringContainer.Comma);
+        public IStringWriter AddEqual() => Add(StringContainer.Equal);
 
         public IStringWriter Add(object value) => Add(value.ToString());
 
-        public IStringWriter Add(Type type)
+        public IStringWriter AddType(Type type)
         {
             _typeService.Add(type);
-            _stringParts.Add(new TypeContainer(type));
+            Add(new TypeContainer(type));
             return this;
         }
 
-        public IStringWriter AddLine()
-        {
-            _stringParts.Add(NewLineContainer.Instance);
-            return this;
-        }
+        public IStringWriter AddLine() => Add(SecondStringContainer.NewLine);
+        public IStringWriter AddSpace() => Add(SecondStringContainer.Space);
 
-        public IStringWriter AddTabLevel(int value)
-        {
-            _stringParts.Add(new TabLevelContainer(value));
-            return this;
-        }
+        public IStringWriter AddTabLevel(int value) => Add(new TabLevelContainer(value));
+
+        public IStringWriter AddTabLevel() => Add(TabLevelContainer.OneTab);
+
+        public IStringWriter RemoveTabLevel() => Add(TabLevelContainer.MinusOneTab);
 
         public string GetString()
         {
@@ -114,10 +126,11 @@ namespace SerializatorApp.Serialization.Serializators.Writing
                     case TabLevelContainer tlc:
                         tabLevel += tlc.Value;
                         break;
-                    case NewLineContainer nlc:
-                        stringBuilder.AppendLine();
-                        for (int i = 0; i < tabLevel; i++)
-                            stringBuilder.Append(TabLevelContainer.Tab);
+                    case SecondStringContainer ssc:
+                        stringBuilder.Append(ssc.Value);
+                        if(ssc == SecondStringContainer.NewLine)
+                            for (int i = 0; i < tabLevel; i++)
+                                stringBuilder.Append(TabLevelContainer.Tab);
                         break;
                     default:
                         throw new ArgumentException();
