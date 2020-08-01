@@ -29,6 +29,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
             for (int i = 0; i < Value; i++)
                 result[i] = Tab;
             return new string(result);
+        }
     }
 
     internal class NewLineContainer : IStringPart

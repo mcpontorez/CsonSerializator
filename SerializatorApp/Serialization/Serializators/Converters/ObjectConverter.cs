@@ -1,29 +1,19 @@
 ﻿using SerializatorApp.Serialization.Serializators.Writing;
 using SerializatorApp.Serialization.Utils;
-using SerializatorApp.Serializators.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SerializatorApp.Serialization.Serializators
+namespace SerializatorApp.Serialization.Serializators.Converters
 {
     public class ObjectConverter : IConverter
     {
-        private readonly Dictionary<Type, IConverterBase> _converters = new Dictionary<Type, IConverterBase>
-        {
-            { typeof(int), new CsonInt32Converter() },
-            { typeof(float), new SingleConverter() },
-            { typeof(string), new StringConverter() },
-        };
+        private readonly IConverterResolver _converterResolver;
 
-        private IConverterBase GetConverter(Type type)
-        {
-            _converters.TryGetValue(type, out var _converter);
-            return _converter;
-        }
+        public ObjectConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
 
-        public void Convert(ConverterData data, IStringWriter writer)
+        public void Convert(object source, IStringWriter writer)
         {
             if (csData.Source == null)
                 return new CsonData(new HashSet<Type>(), "null");

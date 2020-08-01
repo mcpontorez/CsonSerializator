@@ -1,17 +1,20 @@
 ﻿using System;
-using System.IO;
 using SerializatorApp.Serialization.Serializators.Writing;
-using SerializatorApp.Serializators.Models;
 
-namespace SerializatorApp.Serialization.Serializators
+namespace SerializatorApp.Serialization.Serializators.Converters
 {
     public interface IConverterBase
     {
-        void Convert(ConverterData data, IStringWriter writer);
+        void Convert(object source, IStringWriter writer);
     }
 
     public interface IConverter : IConverterBase
     {
         bool IsCanConvertable(Type type);
+    }
+
+    public interface IConcreteConverter : IConverter
+    {
+        Type ConcreteType { get; }
     }
 }

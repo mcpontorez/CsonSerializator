@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace SerializatorApp.Serialization.Deserializators.Numerics
 {
