@@ -9,6 +9,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
     {
         string ToString();
     }
+    internal interface ISecondStringPart : IStringPart { }
     internal class StringContainer : IStringPart
     {
         public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New),
@@ -21,7 +22,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         public override string ToString() => Value;
     }
 
-    internal class TabLevelContainer : IStringPart
+    internal class TabLevelContainer : ISecondStringPart
     {
         public static readonly char Tab = '\t';
 
@@ -39,7 +40,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         }
     }
 
-    internal class SecondStringContainer : IStringPart
+    internal class SecondStringContainer : ISecondStringPart
     {
         public static readonly SecondStringContainer NewLine = new SecondStringContainer(Environment.NewLine), Space = new SecondStringContainer(StringConsts.Space);
 
@@ -67,9 +68,20 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
         private List<IStringPart> _stringParts = new List<IStringPart>();
 
+        public bool IsTiny { get; } = false;
+
+        public StringWriter() { }
+        public StringWriter(bool isTiny) => IsTiny = isTiny;
+
         private IStringWriter Add(IStringPart value)
         {
             _stringParts.Add(value);
+            return this;
+        }
+        private IStringWriter Add(ISecondStringPart value)
+        {
+            if(!IsTiny)
+                _stringParts.Add(value);
             return this;
         }
 
@@ -108,7 +120,9 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
             foreach (var @namespace in typesData.Namespaces)
             {
-                stringBuilder.Append("using ").Append(@namespace).Append(';').AppendLine();
+                stringBuilder.Append(StringConsts.Using).Append(@namespace).Append(StringConsts.Semicolon);
+                if (!IsTiny)
+                    stringBuilder.AppendLine();
             }
 
             int tabLevel = 0;
@@ -136,7 +150,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
                         throw new ArgumentException();
                 }
             }
-
+            stringBuilder.Append(StringConsts.Semicolon);
             return stringBuilder.ToString();
         }
     }
