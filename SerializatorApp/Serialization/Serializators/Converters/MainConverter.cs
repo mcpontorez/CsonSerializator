@@ -7,7 +7,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 {
     public class MainConverter
     {
-        private readonly IConverter _converter = new ObjectConverter();
+        private readonly IConverter _converter = new MainConverterResolver();
 
         public string Convert(object source)
         {

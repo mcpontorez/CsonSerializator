@@ -30,7 +30,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public void Convert(object source, IStringWriter writer)
         {
-            Type type = source.GetType();
+            Type type = source?.GetType() ?? typeof(object);
             (_concreteConverterCollection.Get(type) ?? _converterCollection.Get(type)).Convert(source, writer);
         }
 

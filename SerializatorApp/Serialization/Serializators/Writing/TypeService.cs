@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace SerializatorApp.Serialization.Serializators.Writing
 {
@@ -65,16 +66,13 @@ namespace SerializatorApp.Serialization.Serializators.Writing
                         {
                             if (type.Namespace != @namespace)
                             {
-                                isWritingFullName = TypeHelper.Exists(type.Name);
+                                isWritingFullName = TypeHelper.Exists($"{@namespace}.{type.Name}");
                                 if (isWritingFullName)
                                     break;
                             }
-                            else continue;
                         }
                     }
                 }
-                else
-                    isWritingFullName = false;
 
                 isWritesFullNames.Add(type, isWritingFullName);
             }
