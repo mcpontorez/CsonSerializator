@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using SerializatorApp.Serialization.Serializators.Writing;
 
 namespace SerializatorApp.Serialization.Serializators.Converters
@@ -12,9 +13,9 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public ConverterResolver(params IConverter[] converters) => _converterCollection = new ConverterCollection(converters);
 
-        public virtual void Convert(object source, IStringWriter writer) => _converterCollection.Get(source.GetType());
+        public virtual void Convert(object source, IStringWriter writer) => _converterCollection.Get(source.GetType().GetTypeInfo());
 
-        public virtual bool IsCanConvertable(Type type) => _converterCollection.Contains(type);
+        public virtual bool IsConvertable(TypeInfo type) => _converterCollection.Contains(type);
     }
 
     public sealed class MainConverterResolver : IConverterResolver
@@ -25,15 +26,15 @@ namespace SerializatorApp.Serialization.Serializators.Converters
         public MainConverterResolver()
         {
             _concreteConverterCollection = new ConcreteConverterCollection(new SingleConverter(), new Int32Converter(), new StringConverter());
-            _converterCollection = new ConverterCollection(new ObjectConverter(this));
+            _converterCollection = new ConverterCollection(new CollectionConverter(this), new ObjectConverter(this));
         }
 
         public void Convert(object source, IStringWriter writer)
         {
-            Type type = source?.GetType() ?? typeof(object);
+            TypeInfo type = (source?.GetType() ?? typeof(object)).GetTypeInfo();
             (_concreteConverterCollection.Get(type) ?? _converterCollection.Get(type)).Convert(source, writer);
         }
 
-        public bool IsCanConvertable(Type type) => _concreteConverterCollection.Contains(type) || _converterCollection.Contains(type);
+        public bool IsConvertable(TypeInfo type) => _concreteConverterCollection.Contains(type) || _converterCollection.Contains(type);
     }
 }

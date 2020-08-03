@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace SerializatorApp.Serialization.Serializators.Converters
 {
     public interface IConverterCollection
     {
-        bool Contains(Type type);
+        bool Contains(TypeInfo type);
 
-        IConverter Get(Type type);
+        IConverter Get(TypeInfo type);
     }
 
     public class ConverterCollection : IConverterCollection
@@ -24,14 +25,14 @@ namespace SerializatorApp.Serialization.Serializators.Converters
             _converters = converters;
         }
 
-        public bool Contains(Type type) => _converters.Any(c => c.IsCanConvertable(type));
+        public bool Contains(TypeInfo type) => _converters.Any(c => c.IsConvertable(type));
 
-        public IConverter Get(Type type) => _converters.FirstOrDefault(c => c.IsCanConvertable(type));
+        public IConverter Get(TypeInfo type) => _converters.FirstOrDefault(c => c.IsConvertable(type));
     }
 
     public class ConcreteConverterCollection : IConverterCollection
     {
-        private IDictionary<Type, IConcreteConverter> _converters;
+        private IDictionary<TypeInfo, IConcreteConverter> _converters;
 
         public ConcreteConverterCollection(IEnumerable<IConcreteConverter> converters) => Init(converters);
 
@@ -42,9 +43,9 @@ namespace SerializatorApp.Serialization.Serializators.Converters
             _converters = converters.ToDictionary(c => c.ConcreteType);
         }
 
-        public bool Contains(Type type) => _converters.ContainsKey(type);
+        public bool Contains(TypeInfo type) => _converters.ContainsKey(type);
 
-        public IConverter Get(Type type) => GetConcrete(type);
-        public IConcreteConverter GetConcrete(Type type) => _converters.TryGetValue(type, out var converter) ? converter : null;
+        public IConverter Get(TypeInfo type) => GetConcrete(type);
+        public IConcreteConverter GetConcrete(TypeInfo type) => _converters.TryGetValue(type, out var converter) ? converter : null;
     }
 }

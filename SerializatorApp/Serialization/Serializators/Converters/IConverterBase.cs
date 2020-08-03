@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using SerializatorApp.Serialization.Serializators.Writing;
 
 namespace SerializatorApp.Serialization.Serializators.Converters
@@ -10,11 +11,11 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
     public interface IConverter : IConverterBase
     {
-        bool IsCanConvertable(Type type);
+        bool IsConvertable(TypeInfo type);
     }
 
     public interface IConcreteConverter : IConverter
     {
-        Type ConcreteType { get; }
+        TypeInfo ConcreteType { get; }
     }
 }

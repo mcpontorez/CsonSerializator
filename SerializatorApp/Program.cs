@@ -36,6 +36,8 @@ namespace SerializatorApp
 
     class DoublePerson
     {
+        public Person[] Persons;
+        public List<Person> PersonList;
         public Super.Person SuperPerson;
         public Person SimplePerson;
         public string Description;
@@ -55,7 +57,8 @@ namespace SerializatorApp
                 Size = new Size { x = 10.2F, y = 15F } 
             };
 
-            DoublePerson doublePerson = new DoublePerson { SuperPerson = new Super.Person { SuperId = 99, SuperName = "SuperBoris" }, SimplePerson = simplePerson };
+            DoublePerson doublePerson = new DoublePerson { Persons = new Person[]{ new Person() }, PersonList = new List<Person> { new Person() },
+                SuperPerson = new Super.Person { SuperId = 99, SuperName = "SuperBoris" }, SimplePerson = simplePerson };
 
             Serialization.Serializators.Converters.MainConverter converter = new Serialization.Serializators.Converters.MainConverter();
             string cson = converter.Convert(doublePerson);
@@ -70,7 +73,11 @@ namespace SerializatorApp
             Console.WriteLine(Equals(doublePerson, desDoublePerson));
             Console.WriteLine(cson == cson2);
             Console.Read();
-            
+
+            //System.Array;
+            //List;
+            //HashSet<string>;
+            //Dictionary<string, string>;
         }
     }
 }
