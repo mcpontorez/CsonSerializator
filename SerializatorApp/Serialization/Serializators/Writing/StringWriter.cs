@@ -15,7 +15,8 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New),
             BeginedBrace = new StringContainer(StringConsts.BeginedBrace), EndedBrace = new StringContainer(StringConsts.EndedBrace),
             Comma = new StringContainer(StringConsts.Comma),
-            Equal = new StringContainer(StringConsts.Equal);
+            Equal = new StringContainer(StringConsts.Equal),
+            AtSign = new StringContainer(StringConsts.AtSign);
         public readonly string Value;
         public StringContainer(string value) => Value = value;
 
@@ -86,6 +87,12 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         }
 
         public IStringWriter Add(string value) => Add(new StringContainer(value));
+        public IStringWriter AddMemberName(string value)
+        {
+            if (StringHelper.IsKeyword(value))
+                Add(StringContainer.AtSign);
+            return Add(new StringContainer(value));
+        }
 
         public IStringWriter AddNull() => Add(StringContainer.Null);
         public IStringWriter AddNew() => Add(StringContainer.New);

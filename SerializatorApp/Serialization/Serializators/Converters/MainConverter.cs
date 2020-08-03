@@ -11,7 +11,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public string Convert(object source)
         {
-            IStringWriter stringWriter = new StringWriter(true);
+            IStringWriter stringWriter = new StringWriter();
 
             _converter.Convert(source, stringWriter);
 

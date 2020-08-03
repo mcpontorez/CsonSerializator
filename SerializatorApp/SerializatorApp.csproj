@@ -90,6 +90,7 @@
     <Compile Include="Serialization\Utils\HashSetExtensions.cs" />
     <Compile Include="Serialization\Utils\ObjectExtensions.cs" />
     <Compile Include="Serialization\Utils\StringConsts.cs" />
+    <Compile Include="Serialization\Utils\StringHelper.cs" />
     <Compile Include="Serialization\Utils\TypeHelper.cs" />
   </ItemGroup>
   <ItemGroup>

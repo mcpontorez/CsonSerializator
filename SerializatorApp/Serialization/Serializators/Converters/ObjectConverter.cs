@@ -31,7 +31,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
                 FieldInfo field = sourceFields[i];
                 object fieldValue = field.GetValue(source);
 
-                writer.AddLine().Add(field.Name).AddSpace().AddEqual().AddSpace();
+                writer.AddLine().AddMemberName(field.Name).AddSpace().AddEqual().AddSpace();
                 _converterResolver.Convert(fieldValue, writer);
             }
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
@@ -39,4 +39,6 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public bool IsCanConvertable(Type type) => true;
     }
+
+    class nameof { }
 }

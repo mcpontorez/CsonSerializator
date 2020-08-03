@@ -7,6 +7,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
     public interface IStringWriter
     {
         IStringWriter Add(string value);
+        IStringWriter AddMemberName(string value);
         IStringWriter AddNull();
         IStringWriter AddNew();
         IStringWriter AddBeginedBrace();
