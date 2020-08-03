@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace SerializatorApp.Serialization.Serializators.Writing
@@ -17,7 +18,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
         IStringWriter Add(object value);
 
-        IStringWriter AddType(Type type);
+        IStringWriter AddType(TypeInfo type);
 
         IStringWriter AddLine();
         IStringWriter AddSpace();

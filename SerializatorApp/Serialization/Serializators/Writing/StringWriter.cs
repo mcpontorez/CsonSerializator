@@ -1,6 +1,7 @@
 ﻿using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace SerializatorApp.Serialization.Serializators.Writing
@@ -14,6 +15,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
     {
         public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New),
             BeginedBrace = new StringContainer(StringConsts.BeginedBrace), EndedBrace = new StringContainer(StringConsts.EndedBrace),
+            BeginedAngleBracket = new StringContainer(StringConsts.BeginedAngleBracket), EndedAngleBracket = new StringContainer(StringConsts.EndedAngleBracket),
             Comma = new StringContainer(StringConsts.Comma),
             Equal = new StringContainer(StringConsts.Equal),
             AtSign = new StringContainer(StringConsts.AtSign);
@@ -53,14 +55,19 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
     internal class TypeContainer : IStringPart
     {
-        public readonly Type Target;
-        public TypeContainer(Type type)
-        {
-            Target = type;
-        }
+        public readonly TypeInfo Value;
+        public TypeContainer(TypeInfo value) => Value = value;
 
-        public override string ToString() => Target.ToString();
-        public string ToString(bool isFullTypeName) => isFullTypeName ? Target.FullName : Target.Name;
+        public override string ToString() => Value.ToString();
+        public void ToString(StringBuilder stringBuilder, bool isFullTypeName)
+        {
+            string typeName = isFullTypeName ? Value.FullName : Value.Name;
+            if (!Value.IsGenericType)
+                stringBuilder.Append(typeName);
+
+            for (int i = 0; i < typeName.LastIndexOf('`'); i++)
+                stringBuilder.Append(typeName[i]);
+        }
     }
 
     public sealed class StringWriter : IStringWriter
@@ -98,15 +105,29 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         public IStringWriter AddNew() => Add(StringContainer.New);
         public IStringWriter AddBeginedBrace() => Add(StringContainer.BeginedBrace);
         public IStringWriter AddEndedBrace() => Add(StringContainer.EndedBrace);
+        public IStringWriter AddBeginedAngleBracket() => Add(StringContainer.BeginedAngleBracket);
+        public IStringWriter AddEndedAngleBracket() => Add(StringContainer.EndedAngleBracket);
         public IStringWriter AddComma() => Add(StringContainer.Comma);
         public IStringWriter AddEqual() => Add(StringContainer.Equal);
 
         public IStringWriter Add(object value) => Add(value.ToString());
 
-        public IStringWriter AddType(Type type)
+        public IStringWriter AddType(TypeInfo type)
         {
             _typeService.Add(type);
             Add(new TypeContainer(type));
+            if (!type.IsGenericType)
+                return this;
+
+            AddBeginedAngleBracket();
+            Type[] genericTypeArguments = type.GenericTypeArguments;
+            for (int i = 0; i < genericTypeArguments.Length; i++)
+            {
+                if (i > 0)
+                    AddComma().AddSpace();
+                AddType(genericTypeArguments[i].GetTypeInfo());
+            }
+            AddEndedAngleBracket();
             return this;
         }
 
@@ -142,7 +163,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
                         stringBuilder.Append(s.ToString());
                         break;
                     case TypeContainer tc:
-                        stringBuilder.Append(tc.ToString(typesData.IsWritesFullNames[tc.Target]));
+                        tc.ToString(stringBuilder, typesData.IsWritesFullNames[tc.Value]);
                         break;
                     case TabLevelContainer tlc:
                         tabLevel += tlc.Value;

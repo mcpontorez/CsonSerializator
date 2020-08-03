@@ -9,7 +9,9 @@ namespace SerializatorApp.Serialization.Utils
     public static class StringConsts
     {
         public const string Using = "using ", New = "new ", Null = "null",
-            BeginedBrace = "{", EndedBrace = "}", Comma = ",", Semicolon = ";", Equal = "=", Space = " ",
+            BeginedBrace = "{", EndedBrace = "}",
+            BeginedAngleBracket = "<", EndedAngleBracket = ">",
+            Comma = ",", Semicolon = ";", Equal = "=", Space = " ",
             AtSign = "@";
     }
 }
