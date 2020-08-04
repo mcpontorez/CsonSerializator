@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace SerializatorApp.Serialization.Serializators.Converters
 {
-    public class SingleConverter : IConcreteConverter
+    public class SingleConverter : IConcreteTypeConverter
     {
         public TypeInfo ConcreteType { get; } = typeof(float).GetTypeInfo();
         public bool IsConvertable(TypeInfo type) => type == ConcreteType;

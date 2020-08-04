@@ -9,12 +9,17 @@ namespace SerializatorApp.Serialization.Serializators.Converters
         void Convert(object source, IStringWriter writer);
     }
 
+    public interface IConcreteValueConverter : IConverterBase
+    {
+        bool IsConvertable(object value);
+    }
+
     public interface IConverter : IConverterBase
     {
         bool IsConvertable(TypeInfo type);
     }
 
-    public interface IConcreteConverter : IConverter
+    public interface IConcreteTypeConverter : IConverter
     {
         TypeInfo ConcreteType { get; }
     }

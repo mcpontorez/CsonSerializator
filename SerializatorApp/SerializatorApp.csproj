@@ -65,6 +65,7 @@
     <Compile Include="Serialization\Deserializators\UsingConverter.cs" />
     <Compile Include="Serialization\Serializators\Converters\ConverterCollection.cs" />
     <Compile Include="Serialization\Serializators\Converters\CollectionConverter.cs" />
+    <Compile Include="Serialization\Serializators\Converters\NullConverter.cs" />
     <Compile Include="Serialization\Serializators\Converters\SingleConverter.cs" />
     <Compile Include="Serialization\Serializators\Converters\Int32Converter.cs" />
     <Compile Include="Serialization\Serializators\Converters\StringConverter.cs" />

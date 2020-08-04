@@ -16,11 +16,6 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public void Convert(object source, IStringWriter writer)
         {
-            if (source == null)
-            {
-                writer.AddNull();
-                return;
-            }
             TypeInfo sourceType = source.GetType().GetTypeInfo();
 
             writer.AddNew().AddType(sourceType).AddLine().AddBeginedBrace().AddTabLevel();

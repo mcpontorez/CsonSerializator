@@ -5,36 +5,36 @@ using SerializatorApp.Serialization.Serializators.Writing;
 
 namespace SerializatorApp.Serialization.Serializators.Converters
 {
-    public interface IConverterResolver : IConverter
+    public interface IConverterResolver : IConverter, IConcreteValueConverter
     { }
-    public class ConverterResolver : IConverterResolver
-    {
-        protected readonly IConverterCollection _converterCollection;
-
-        public ConverterResolver(params IConverter[] converters) => _converterCollection = new ConverterCollection(converters);
-
-        public virtual void Convert(object source, IStringWriter writer) => _converterCollection.Get(source.GetType().GetTypeInfo());
-
-        public virtual bool IsConvertable(TypeInfo type) => _converterCollection.Contains(type);
-    }
 
     public sealed class MainConverterResolver : IConverterResolver
     {
-        private readonly IConverterCollection _concreteConverterCollection;
+        private readonly IConcreteValueConverterCollection _concreteValueConverterCollection;
+        private readonly IConverterCollection _concreteTypeConverterCollection;
         private readonly IConverterCollection _converterCollection;
 
         public MainConverterResolver()
         {
-            _concreteConverterCollection = new ConcreteConverterCollection(new SingleConverter(), new Int32Converter(), new StringConverter());
+            _concreteValueConverterCollection = new ConcreteValueConverterCollection(new NullConverter());
+            _concreteTypeConverterCollection = new ConcreteTypeConverterCollection(new SingleConverter(), new Int32Converter(), new StringConverter());
             _converterCollection = new ConverterCollection(new CollectionConverter(this), new ObjectConverter(this));
         }
 
         public void Convert(object source, IStringWriter writer)
         {
-            TypeInfo type = (source?.GetType() ?? typeof(object)).GetTypeInfo();
-            (_concreteConverterCollection.Get(type) ?? _converterCollection.Get(type)).Convert(source, writer);
+            IConverterBase converter = _concreteValueConverterCollection.Get(source);
+            if (converter == null)
+            {
+                TypeInfo type = source.GetType().GetTypeInfo();
+                (_concreteTypeConverterCollection.Get(type) ?? _converterCollection.Get(type)).Convert(source, writer);
+            }
+            else
+                converter.Convert(source, writer);
         }
 
-        public bool IsConvertable(TypeInfo type) => _concreteConverterCollection.Contains(type) || _converterCollection.Contains(type);
+        public bool IsConvertable(TypeInfo type) => _concreteTypeConverterCollection.Contains(type) || _converterCollection.Contains(type);
+
+        public bool IsConvertable(object value) => _concreteValueConverterCollection.Contains(value);
     }
 }

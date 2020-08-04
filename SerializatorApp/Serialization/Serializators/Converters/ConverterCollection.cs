@@ -12,6 +12,13 @@ namespace SerializatorApp.Serialization.Serializators.Converters
         IConverter Get(TypeInfo type);
     }
 
+    public interface IConcreteValueConverterCollection
+    {
+        bool Contains(object value);
+
+        IConcreteValueConverter Get(object value);
+    }
+
     public class ConverterCollection : IConverterCollection
     {
         private IEnumerable<IConverter> _converters;
@@ -30,15 +37,33 @@ namespace SerializatorApp.Serialization.Serializators.Converters
         public IConverter Get(TypeInfo type) => _converters.FirstOrDefault(c => c.IsConvertable(type));
     }
 
-    public class ConcreteConverterCollection : IConverterCollection
+    public class ConcreteValueConverterCollection : IConcreteValueConverterCollection
     {
-        private IDictionary<TypeInfo, IConcreteConverter> _converters;
+        private IEnumerable<IConcreteValueConverter> _converters;
 
-        public ConcreteConverterCollection(IEnumerable<IConcreteConverter> converters) => Init(converters);
+        public ConcreteValueConverterCollection(IEnumerable<IConcreteValueConverter> converters) => Init(converters);
 
-        public ConcreteConverterCollection(params IConcreteConverter[] converters) => Init(converters);
+        public ConcreteValueConverterCollection(params IConcreteValueConverter[] converters) => Init(converters);
 
-        private void Init(IEnumerable<IConcreteConverter> converters)
+        private void Init(IEnumerable<IConcreteValueConverter> converters)
+        {
+            _converters = converters;
+        }
+
+        public bool Contains(object value) => _converters.Any(c => c.IsConvertable(value));
+
+        public IConcreteValueConverter Get(object value) => _converters.FirstOrDefault(c => c.IsConvertable(value));
+    }
+
+    public class ConcreteTypeConverterCollection : IConverterCollection
+    {
+        private IDictionary<TypeInfo, IConcreteTypeConverter> _converters;
+
+        public ConcreteTypeConverterCollection(IEnumerable<IConcreteTypeConverter> converters) => Init(converters);
+
+        public ConcreteTypeConverterCollection(params IConcreteTypeConverter[] converters) => Init(converters);
+
+        private void Init(IEnumerable<IConcreteTypeConverter> converters)
         {
             _converters = converters.ToDictionary(c => c.ConcreteType);
         }
@@ -46,6 +71,6 @@ namespace SerializatorApp.Serialization.Serializators.Converters
         public bool Contains(TypeInfo type) => _converters.ContainsKey(type);
 
         public IConverter Get(TypeInfo type) => GetConcrete(type);
-        public IConcreteConverter GetConcrete(TypeInfo type) => _converters.TryGetValue(type, out var converter) ? converter : null;
+        public IConcreteTypeConverter GetConcrete(TypeInfo type) => _converters.TryGetValue(type, out var converter) ? converter : null;
     }
 }

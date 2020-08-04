@@ -4,7 +4,7 @@ using SerializatorApp.Serialization.Serializators.Writing;
 
 namespace SerializatorApp.Serialization.Serializators.Converters
 {
-    public class Int32Converter : IConcreteConverter
+    public class Int32Converter : IConcreteTypeConverter
     {
         public TypeInfo ConcreteType { get; } = typeof(int).GetTypeInfo();
 
