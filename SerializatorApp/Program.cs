@@ -1,6 +1,7 @@
 ﻿using SerializatorApp.Serialization.Deserializators;
 using SerializatorApp.Serialization.Serializators;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace SerializatorApp
         public Person[] Persons;
         public List<Person> PersonList;
         public List<Super.Person>[] SuperPersonLists = new List<Super.Person>[] { new List<Super.Person>() { new Super.Person() } };
-        public Dictionary<string, Size> SizeDictionary = new Dictionary<string, Size> { ["s"] = new Size() };
+        public Dictionary<string, Size> SizeDictionary = new Dictionary<string, Size> { ["s"] = new Size(), ["a"] = new Size() { x = 999.043F } };
         public Super.Person SuperPerson;
         public Person SimplePerson;
         public string Description;
@@ -54,7 +55,7 @@ namespace SerializatorApp
         {
             Person simplePerson = new Person
             { 
-                Id = 12, 
+                Id = 12,
                 Name = "Boris", 
                 Size = new Size { x = 10.2F, y = 15F } 
             };
@@ -80,6 +81,7 @@ namespace SerializatorApp
             //List;
             //HashSet<string>;
             //Dictionary<string, string>;
+            //SortedDictionary
         }
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="Serialization\Deserializators\ITypeNameResolver.cs" />
     <Compile Include="Serialization\Deserializators\TypeNameResolver.cs" />
     <Compile Include="Serialization\Deserializators\UsingConverter.cs" />
+    <Compile Include="Serialization\Serializators\Converters\DictionaryConverter.cs" />
     <Compile Include="Serialization\Serializators\Converters\ConverterCollection.cs" />
     <Compile Include="Serialization\Serializators\Converters\CollectionConverter.cs" />
     <Compile Include="Serialization\Serializators\Converters\NullConverter.cs" />

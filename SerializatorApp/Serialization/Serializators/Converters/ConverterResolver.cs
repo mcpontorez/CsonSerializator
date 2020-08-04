@@ -18,7 +18,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
         {
             _concreteValueConverterCollection = new ConcreteValueConverterCollection(new NullConverter());
             _concreteTypeConverterCollection = new ConcreteTypeConverterCollection(new SingleConverter(), new Int32Converter(), new StringConverter());
-            _converterCollection = new ConverterCollection(new CollectionConverter(this), new ObjectConverter(this));
+            _converterCollection = new ConverterCollection(new DictionaryConverter(this), new CollectionConverter(this), new ObjectConverter(this));
         }
 
         public void Convert(object source, IStringWriter writer)
