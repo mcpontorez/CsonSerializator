@@ -13,6 +13,10 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         IStringWriter AddNew();
         IStringWriter AddBeginedBrace();
         IStringWriter AddEndedBrace();
+        IStringWriter AddBeginedAngleBracket();
+        IStringWriter AddEndedAngleBracket();
+        IStringWriter AddBeginedSquareBracket();
+        IStringWriter AddEndedSquareBracket();
         IStringWriter AddComma();
         IStringWriter AddEqual();
 

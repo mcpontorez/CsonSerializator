@@ -11,6 +11,7 @@ namespace SerializatorApp.Serialization.Utils
         public const string Using = "using ", New = "new ", Null = "null",
             BeginedBrace = "{", EndedBrace = "}",
             BeginedAngleBracket = "<", EndedAngleBracket = ">",
+            BeginedSquareBracket = "[", EndedSquareBracket = "]",
             Comma = ",", Semicolon = ";", Equal = "=", Space = " ",
             AtSign = "@";
     }

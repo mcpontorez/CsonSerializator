@@ -1,6 +1,7 @@
 ﻿using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -16,6 +17,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New),
             BeginedBrace = new StringContainer(StringConsts.BeginedBrace), EndedBrace = new StringContainer(StringConsts.EndedBrace),
             BeginedAngleBracket = new StringContainer(StringConsts.BeginedAngleBracket), EndedAngleBracket = new StringContainer(StringConsts.EndedAngleBracket),
+            BeginedSquareBracket = new StringContainer(StringConsts.BeginedSquareBracket), EndedSquareBracket = new StringContainer(StringConsts.EndedSquareBracket),
             Comma = new StringContainer(StringConsts.Comma),
             Equal = new StringContainer(StringConsts.Equal),
             AtSign = new StringContainer(StringConsts.AtSign);
@@ -62,10 +64,14 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         public void ToString(StringBuilder stringBuilder, bool isFullTypeName)
         {
             string typeName = isFullTypeName ? Value.FullName : Value.Name;
+            
             if (!Value.IsGenericType)
+            {
                 stringBuilder.Append(typeName);
-
-            for (int i = 0; i < typeName.LastIndexOf('`'); i++)
+                return;
+            }
+            int endIndex = typeName.LastIndexOf('`');
+            for (int i = 0; i < endIndex; i++)
                 stringBuilder.Append(typeName[i]);
         }
     }
@@ -107,6 +113,8 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         public IStringWriter AddEndedBrace() => Add(StringContainer.EndedBrace);
         public IStringWriter AddBeginedAngleBracket() => Add(StringContainer.BeginedAngleBracket);
         public IStringWriter AddEndedAngleBracket() => Add(StringContainer.EndedAngleBracket);
+        public IStringWriter AddBeginedSquareBracket() => Add(StringContainer.BeginedSquareBracket);
+        public IStringWriter AddEndedSquareBracket() => Add(StringContainer.EndedSquareBracket);
         public IStringWriter AddComma() => Add(StringContainer.Comma);
         public IStringWriter AddEqual() => Add(StringContainer.Equal);
 
@@ -114,8 +122,12 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
         public IStringWriter AddType(TypeInfo type)
         {
+            if (type.IsArray)
+                return AddType(type.GetElementType().GetTypeInfo()).AddBeginedSquareBracket().AddEndedSquareBracket();
+
             _typeService.Add(type);
             Add(new TypeContainer(type));
+
             if (!type.IsGenericType)
                 return this;
 

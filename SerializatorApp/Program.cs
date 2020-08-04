@@ -38,6 +38,7 @@ namespace SerializatorApp
     {
         public Person[] Persons;
         public List<Person> PersonList;
+        public List<Super.Person>[] SuperPersonLists = new List<Super.Person>[] { new List<Super.Person>() { new Super.Person() } };
         public Super.Person SuperPerson;
         public Person SimplePerson;
         public string Description;
