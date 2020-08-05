@@ -14,17 +14,26 @@ namespace SerializatorApp.Serialization.Serializators.Writing
     internal interface ISecondStringPart : IStringPart { }
     internal class StringContainer : IStringPart
     {
-        public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New),
-            BeginedBrace = new StringContainer(StringConsts.BeginedBrace), EndedBrace = new StringContainer(StringConsts.EndedBrace),
-            BeginedAngleBracket = new StringContainer(StringConsts.BeginedAngleBracket), EndedAngleBracket = new StringContainer(StringConsts.EndedAngleBracket),
-            BeginedSquareBracket = new StringContainer(StringConsts.BeginedSquareBracket), EndedSquareBracket = new StringContainer(StringConsts.EndedSquareBracket),
-            Comma = new StringContainer(StringConsts.Comma),
-            Equal = new StringContainer(StringConsts.Equal),
-            AtSign = new StringContainer(StringConsts.AtSign);
+        public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New);
         public readonly string Value;
         public StringContainer(string value) => Value = value;
 
         public override string ToString() => Value;
+    }
+
+    internal class CharContainer : IStringPart
+    {
+        public static readonly CharContainer
+            BeginedBrace = new CharContainer(CharConsts.BeginedBrace), EndedBrace = new CharContainer(CharConsts.EndedBrace),
+            BeginedAngleBracket = new CharContainer(CharConsts.BeginedAngleBracket), EndedAngleBracket = new CharContainer(CharConsts.EndedAngleBracket),
+            BeginedSquareBracket = new CharContainer(CharConsts.BeginedSquareBracket), EndedSquareBracket = new CharContainer(CharConsts.EndedSquareBracket),
+            Comma = new CharContainer(CharConsts.Comma),
+            Equal = new CharContainer(CharConsts.Equal),
+            AtSign = new CharContainer(CharConsts.AtSign);
+        public readonly char Value;
+        public CharContainer(char value) => Value = value;
+
+        public override string ToString() => Value.ToString();
     }
 
     internal class TabLevelContainer : ISecondStringPart
@@ -47,7 +56,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
     internal class SecondStringContainer : ISecondStringPart
     {
-        public static readonly SecondStringContainer NewLine = new SecondStringContainer(Environment.NewLine), Space = new SecondStringContainer(StringConsts.Space);
+        public static readonly SecondStringContainer NewLine = new SecondStringContainer(Environment.NewLine), Space = new SecondStringContainer(CharConsts.Space.ToString());
 
         public readonly string Value;
         private SecondStringContainer(string value) => Value = value;
@@ -103,20 +112,20 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         public IStringWriter AddMemberName(string value)
         {
             if (StringHelper.IsKeyword(value))
-                Add(StringContainer.AtSign);
+                Add(CharContainer.AtSign);
             return Add(new StringContainer(value));
         }
 
         public IStringWriter AddNull() => Add(StringContainer.Null);
         public IStringWriter AddNew() => Add(StringContainer.New);
-        public IStringWriter AddBeginedBrace() => Add(StringContainer.BeginedBrace);
-        public IStringWriter AddEndedBrace() => Add(StringContainer.EndedBrace);
-        public IStringWriter AddBeginedAngleBracket() => Add(StringContainer.BeginedAngleBracket);
-        public IStringWriter AddEndedAngleBracket() => Add(StringContainer.EndedAngleBracket);
-        public IStringWriter AddBeginedSquareBracket() => Add(StringContainer.BeginedSquareBracket);
-        public IStringWriter AddEndedSquareBracket() => Add(StringContainer.EndedSquareBracket);
-        public IStringWriter AddComma() => Add(StringContainer.Comma);
-        public IStringWriter AddEqual() => Add(StringContainer.Equal);
+        public IStringWriter AddBeginedBrace() => Add(CharContainer.BeginedBrace);
+        public IStringWriter AddEndedBrace() => Add(CharContainer.EndedBrace);
+        public IStringWriter AddBeginedAngleBracket() => Add(CharContainer.BeginedAngleBracket);
+        public IStringWriter AddEndedAngleBracket() => Add(CharContainer.EndedAngleBracket);
+        public IStringWriter AddBeginedSquareBracket() => Add(CharContainer.BeginedSquareBracket);
+        public IStringWriter AddEndedSquareBracket() => Add(CharContainer.EndedSquareBracket);
+        public IStringWriter AddComma() => Add(CharContainer.Comma);
+        public IStringWriter AddEqual() => Add(CharContainer.Equal);
 
         public IStringWriter Add(object value) => Add(value.ToString());
 
@@ -156,11 +165,11 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         {
             TypesData typesData = _typeService.GetTypesData();
 
-            StringBuilder stringBuilder = new StringBuilder((10 * typesData.Namespaces.Count) + _stringParts.Count);
+            StringBuilder stringBuilder = new StringBuilder((20 * typesData.Namespaces.Count) + _stringParts.Count);
 
             foreach (var @namespace in typesData.Namespaces)
             {
-                stringBuilder.Append(StringConsts.Using).Append(@namespace).Append(StringConsts.Semicolon);
+                stringBuilder.Append(StringConsts.Using).Append(@namespace).Append(CharConsts.Semicolon);
                 if (!IsTiny)
                     stringBuilder.AppendLine();
             }
@@ -171,26 +180,28 @@ namespace SerializatorApp.Serialization.Serializators.Writing
             {
                 switch (item)
                 {
+                    case CharContainer c:
+                        stringBuilder.Append(c.Value);
+                        break;
                     case StringContainer s:
-                        stringBuilder.Append(s.ToString());
+                        stringBuilder.Append(s.Value);
                         break;
                     case TypeContainer tc:
                         tc.ToString(stringBuilder, typesData.IsWritesFullNames[tc.Value]);
                         break;
-                    case TabLevelContainer tlc:
-                        tabLevel += tlc.Value;
-                        break;
                     case SecondStringContainer ssc:
                         stringBuilder.Append(ssc.Value);
                         if(ssc == SecondStringContainer.NewLine)
-                            for (int i = 0; i < tabLevel; i++)
-                                stringBuilder.Append(TabLevelContainer.Tab);
+                            stringBuilder.Append(TabLevelContainer.Tab, tabLevel);
+                        break;
+                    case TabLevelContainer tlc:
+                        tabLevel += tlc.Value;
                         break;
                     default:
                         throw new ArgumentException();
                 }
             }
-            stringBuilder.Append(StringConsts.Semicolon);
+            stringBuilder.Append(CharConsts.Semicolon);
             return stringBuilder.ToString();
         }
     }

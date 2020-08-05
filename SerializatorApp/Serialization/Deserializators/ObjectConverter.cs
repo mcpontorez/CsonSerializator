@@ -3,12 +3,13 @@ using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
+using SerializatorApp.Serialization.Utils;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
     public class ObjectConverter : ConverterBase
     {
-        private const string _startString = "new ";
+        private const string _startString = StringConsts.New;
 
         private readonly IConverter _converterResolver;
 

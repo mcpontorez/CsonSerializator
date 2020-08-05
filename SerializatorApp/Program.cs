@@ -77,11 +77,7 @@ namespace SerializatorApp
             Console.WriteLine(cson == cson2);
             Console.Read();
 
-            //System.Array;
-            //List;
-            //HashSet<string>;
-            //Dictionary<string, string>;
-            //SortedDictionary
+            //string str = "\"\\ \r\n a";
         }
     }
 }

@@ -1,23 +1,21 @@
-﻿using System;
-using System.Text;
+﻿using SerializatorApp.Serialization.Utils;
+using System;
 
 namespace SerializatorApp.Serialization.Deserializators
 {
     public class NullConverter : ConverterBase
     {
-        private const string _startString = "null";
-
         public override T Convert<T>(StringReader cson, ITypeNameResolver typeNameResolver)
         {
-            cson.SkipStartsWith(_startString);
+            cson.SkipStartsWith(StringConsts.Null);
             return default;
         }
 
         public override bool IsCanConvertable(StringReader cson)
         {
-            if (!cson.StartsWith(_startString))
+            if (!cson.StartsWith(StringConsts.Null))
                 return false;
-            char postChar = cson[_startString.Length];
+            char postChar = cson[StringConsts.Null.Length];
             bool result = char.IsSeparator(postChar) || char.IsControl(postChar) || IsAnyEndChar(postChar);
             return result;
         }
