@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Utils
 {
@@ -11,7 +7,7 @@ namespace SerializatorApp.Serialization.Utils
         public const char BeginedBrace = '{', EndedBrace = '}',
             BeginedAngleBracket = '<', EndedAngleBracket = '>',
             BeginedSquareBracket = '[', EndedSquareBracket = ']',
-            Comma = ',', Semicolon = ';', Equal = '=', Space = ' ',
+            Comma = ',', Dot = '.', Semicolon = ';', Equal = '=', Space = ' ',
             AtSign = '@';
     }
 }

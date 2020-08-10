@@ -4,6 +4,6 @@ namespace SerializatorApp.Serialization.Deserializators
 {
     public interface ITypeNameResolver
     {
-        Type Get(string typeName);
+        Type Convert(string typeName);
     }
 }

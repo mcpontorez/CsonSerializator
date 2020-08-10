@@ -5,20 +5,7 @@ namespace SerializatorApp.Serialization.Utils
 {
     public static class StringHelper
     {
-        public static bool IsKeyword(string value)
-        {
-            int index = value.Length - 1;
-            if (index < 1 || index > 9)
-                return false;
-            foreach (var c in value)
-            {
-                if (char.IsUpper(c))
-                    return false;
-            }
-            return keywords[index].Contains(value);
-        }
-
-        private static readonly HashSet<string>[] keywords = new HashSet<string>[] {
+        private static readonly HashSet<string>[] _keywords = new HashSet<string>[] {
             null,           // 1 character
             new HashSet<string> {  // 2 characters
                 "as",
@@ -120,5 +107,42 @@ namespace SerializatorApp.Serialization.Utils
                 "stackalloc",
             },
         };
+        public static bool IsKeyword(string value)
+        {
+            int index = value.Length - 1;
+            if (index < 1 || index > 9)
+                return false;
+            foreach (var c in value)
+            {
+                if (char.IsUpper(c))
+                    return false;
+            }
+            return _keywords[index].Contains(value);
+        }
+
+        //TODO: заинлайнить
+        public static bool IsSeparator(this char c) => char.IsSeparator(c) || char.IsControl(c);
+
+        public static string RemoveSeparators(this string source)
+        {
+            //TODO: навернуть массив в стеке
+            char[] chars = new char[source.Length];
+            int index = 0;
+            foreach (var c in source)
+            {
+                if (!IsSeparator(c))
+                {
+                    chars[index] = c;
+                    index++;
+                }
+            }
+            int count = index;
+            if (count == source.Length)
+                return source;
+            else
+                return new string(chars, 0, count);
+        }
+
+        public static bool LastContains(this string source, char c) => source.LastIndexOf(c) != -1;
     }
 }

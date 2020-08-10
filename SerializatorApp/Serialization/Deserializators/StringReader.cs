@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SerializatorApp.Serialization.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +82,15 @@ namespace SerializatorApp.Serialization.Deserializators
                 SkipOne();
             return this;
         }
+
+        public bool TrySkip(char value)
+        {
+            bool result = CurrentChar == value;
+            if (result)
+                SkipOne();
+            return result;
+        }
+
         public StringReader SkipIfNeeds(IEnumerable<char> values)
         {
             foreach (var item in values)
@@ -94,7 +104,7 @@ namespace SerializatorApp.Serialization.Deserializators
             return this;
         }
 
-        public StringReader SkipWhileSeparators() => SkipWhile(c => char.IsSeparator(c) || char.IsControl(c));
+        public StringReader SkipWhileSeparators() => SkipWhile(StringHelper.IsSeparator);
 
         public StringReader SkipUntil(Func<char, bool> predicate) => SkipWhile(c => !predicate(c));
 

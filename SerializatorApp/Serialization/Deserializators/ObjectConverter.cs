@@ -17,7 +17,7 @@ namespace SerializatorApp.Serialization.Deserializators
 
         public override T Convert<T>(StringReader cson, ITypeNameResolver typeNameResolver)
         {
-            cson.SkipStartsWith(_startString).SkipWhileSeparators().SkipIfNeeds('@');
+            cson.SkipStartsWith(_startString).SkipWhileSeparators().SkipIfNeeds(CharConsts.AtSign);
             string typeName = cson.TakeWhile(IsTypeNameChar);
             Type resultType = typeNameResolver.Get(typeName);
             Dictionary<string, FieldInfo> resultFieldInfos = resultType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToDictionary(f => f.Name);
@@ -45,6 +45,6 @@ namespace SerializatorApp.Serialization.Deserializators
         public override bool IsCanConvertable(StringReader cson) => cson.StartsWith(_startString);
 
         private static bool IsTypeNameChar(char value) => char.IsLetter(value) || value == '.' || value == '_';
-        private static bool IsMemberNameChar(char value) => char.IsLetter(value) || value == '_';
+        private static bool IsMemberNameChar(char value) => char.IsLetterOrDigit(value) || value == '_';
     }
 }
