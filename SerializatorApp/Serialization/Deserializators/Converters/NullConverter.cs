@@ -1,17 +1,18 @@
-﻿using SerializatorApp.Serialization.Utils;
+﻿using SerializatorApp.Serialization.Deserializators.Reading;
+using SerializatorApp.Serialization.Utils;
 using System;
 
-namespace SerializatorApp.Serialization.Deserializators
+namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public class NullConverter : ConverterBase
     {
-        public override T Convert<T>(StringReader cson, ITypeNameResolver typeNameResolver)
+        public override T Convert<T>(CsonReader cson, ITypeNameResolver typeNameResolver)
         {
             cson.SkipStartsWith(StringConsts.Null);
             return default;
         }
 
-        public override bool IsCanConvertable(StringReader cson)
+        public override bool IsCanConvertable(CsonReader cson)
         {
             if (!cson.StartsWith(StringConsts.Null))
                 return false;

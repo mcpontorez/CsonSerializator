@@ -10,7 +10,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public ObjectConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
 
-        public void Convert(object source, IStringWriter writer)
+        public void Convert(object source, ICsonWriter writer)
         {
             TypeInfo sourceType = source.GetType().GetTypeInfo();
 

@@ -4,11 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Schema;
 
-namespace SerializatorApp.Serialization.Deserializators
+namespace SerializatorApp.Serialization.Deserializators.Reading
 {
-    public class StringReader
+    public class CsonReader
     {
         public int Index = 0;
         public readonly string Target = null;
@@ -20,12 +19,12 @@ namespace SerializatorApp.Serialization.Deserializators
         public char CurrentChar => this[0];
 
         public string Buffer => Substring(0);
-        public StringReader(string target)
+        public CsonReader(string target)
         {
             Target = target;
         }
 
-        public StringReader(string target, int index)
+        public CsonReader(string target, int index)
         {
             Target = target;
             Index = index;
@@ -59,15 +58,15 @@ namespace SerializatorApp.Serialization.Deserializators
         public string TakeUntil(Func<char, bool> predicate) => TakeWhile(c => !predicate(c));
         public string TakeUntil(char value) => TakeUntil(c => c == value);
 
-        public StringReader Skip(int count)
+        public CsonReader Skip(int count)
         {
             Index += count;
             return this;
         }        
 
-        public StringReader SkipOne() => Skip(1);
+        public CsonReader SkipOne() => Skip(1);
 
-        public StringReader Skip(char value)
+        public CsonReader Skip(char value)
         {
             if (CurrentChar == value)
                 SkipOne();
@@ -76,7 +75,7 @@ namespace SerializatorApp.Serialization.Deserializators
             return this;
         }
 
-        public StringReader SkipIfNeeds(char value)
+        public CsonReader SkipIfNeeds(char value)
         {
             if (CurrentChar == value)
                 SkipOne();
@@ -91,7 +90,7 @@ namespace SerializatorApp.Serialization.Deserializators
             return result;
         }
 
-        public StringReader SkipIfNeeds(IEnumerable<char> values)
+        public CsonReader SkipIfNeeds(IEnumerable<char> values)
         {
             foreach (var item in values)
             {
@@ -104,11 +103,11 @@ namespace SerializatorApp.Serialization.Deserializators
             return this;
         }
 
-        public StringReader SkipWhileSeparators() => SkipWhile(StringHelper.IsSeparator);
+        public CsonReader SkipWhileSeparators() => SkipWhile(StringHelper.IsSeparator);
 
-        public StringReader SkipUntil(Func<char, bool> predicate) => SkipWhile(c => !predicate(c));
+        public CsonReader SkipUntil(Func<char, bool> predicate) => SkipWhile(c => !predicate(c));
 
-        public StringReader SkipWhile(Func<char, bool> predicate)
+        public CsonReader SkipWhile(Func<char, bool> predicate)
         {
             int endIndex = Index;
             for (; endIndex < Target.Length; endIndex++)
@@ -131,7 +130,7 @@ namespace SerializatorApp.Serialization.Deserializators
             return false;  
         }
 
-        public StringReader SkipStartsWith(string value) => Skip(value.Length);
+        public CsonReader SkipStartsWith(string value) => Skip(value.Length);
 
         public bool StartsWith(string value) => IndexOf(value) == 0;
 

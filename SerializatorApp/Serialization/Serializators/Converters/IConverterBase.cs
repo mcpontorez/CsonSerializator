@@ -6,7 +6,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 {
     public interface IConverterBase
     {
-        void Convert(object source, IStringWriter writer);
+        void Convert(object source, ICsonWriter writer);
     }
 
     public interface IConcreteValueConverter : IConverterBase

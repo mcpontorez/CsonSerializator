@@ -1,18 +1,19 @@
-﻿using SerializatorApp.Serialization.Utils;
+﻿using SerializatorApp.Serialization.Deserializators.Reading;
+using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace SerializatorApp.Serialization.Deserializators.Numerics
+namespace SerializatorApp.Serialization.Deserializators.Converters.Numerics
 {
     public class SingleConverter : ConverterBase, IConcreteConverter<float>
     {
         private const char _valueEndCharUpperCase = 'F', _valueEndCharLowerCase = 'f';
         private static readonly IReadOnlyList<char> _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
 
-        public override TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
+        public override TResult Convert<TResult>(CsonReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
 
-        public float ConvertToConcrete(StringReader cson)
+        public float ConvertToConcrete(CsonReader cson)
         {
             string value = cson.TakeWhile(c => char.IsDigit(c) || c == '-' || c == '.');
             float result = float.Parse(value, CultureInfo.InvariantCulture);
@@ -20,7 +21,7 @@ namespace SerializatorApp.Serialization.Deserializators.Numerics
             return result;
         }
 
-        public override bool IsCanConvertable(StringReader cson)
+        public override bool IsCanConvertable(CsonReader cson)
         {
             if (!(char.IsDigit(cson.CurrentChar) || cson.CurrentChar == '-'))
                 return false;

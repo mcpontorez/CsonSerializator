@@ -21,7 +21,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
             _converterCollection = new ConverterCollection(new DictionaryConverter(this), new CollectionConverter(this), new ObjectConverter(this));
         }
 
-        public void Convert(object source, IStringWriter writer)
+        public void Convert(object source, ICsonWriter writer)
         {
             IConverterBase converter = _concreteValueConverterCollection.Get(source);
             if (converter == null)

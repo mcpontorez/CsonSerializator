@@ -1,16 +1,17 @@
-﻿using System;
+﻿using SerializatorApp.Serialization.Deserializators.Reading;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SerializatorApp.Serialization.Deserializators
+namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public class MainConverter : IConverterBase
     {
         private readonly UsingConverter _usingConverter = new UsingConverter();
         private readonly IConverter _converterResolver = new MainConverterResolver();
 
-        public T Convert<T>(StringReader cson)
+        public T Convert<T>(CsonReader cson)
         {
             cson.SkipWhileSeparators();
 
@@ -20,6 +21,6 @@ namespace SerializatorApp.Serialization.Deserializators
             return _converterResolver.Convert<T>(cson, typeNameResolver);
         }
 
-        public bool IsCanConvertable(StringReader cson) => _converterResolver.IsCanConvertable(cson.SkipWhileSeparators());
+        public bool IsCanConvertable(CsonReader cson) => _converterResolver.IsCanConvertable(cson.SkipWhileSeparators());
     }
 }

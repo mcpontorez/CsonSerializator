@@ -1,19 +1,20 @@
-﻿using SerializatorApp.Serialization.Utils;
+﻿using SerializatorApp.Serialization.Deserializators.Reading;
+using SerializatorApp.Serialization.Utils;
 using System;
 
-namespace SerializatorApp.Serialization.Deserializators.Numerics
+namespace SerializatorApp.Serialization.Deserializators.Converters.Numerics
 {
     public class Int32Converter : ConverterBase, IConcreteConverter<int>
     {
-        public override TResult Convert<TResult>(StringReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
+        public override TResult Convert<TResult>(CsonReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
 
-        public int ConvertToConcrete(StringReader cson)
+        public int ConvertToConcrete(CsonReader cson)
         {
             string value = cson.TakeWhile(c => char.IsDigit(c) || c == '-');
             return int.Parse(value);
         }
 
-        public override bool IsCanConvertable(StringReader cson)
+        public override bool IsCanConvertable(CsonReader cson)
         {
             if (!(char.IsDigit(cson.CurrentChar) || cson.CurrentChar == '-'))
                 return false;

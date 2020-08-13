@@ -8,7 +8,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
     {
         public TypeInfo ConcreteType { get; } = typeof(int).GetTypeInfo();
 
-        public void Convert(object source, IStringWriter writer) => writer.Add(source.ToString());
+        public void Convert(object source, ICsonWriter writer) => writer.Add(source.ToString());
 
         public bool IsConvertable(TypeInfo type) => type == ConcreteType;
     }

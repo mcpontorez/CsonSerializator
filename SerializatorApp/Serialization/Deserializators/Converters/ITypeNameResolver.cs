@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SerializatorApp.Serialization.Deserializators
+namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public interface ITypeNameResolver
     {

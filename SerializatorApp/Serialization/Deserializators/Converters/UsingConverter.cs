@@ -1,14 +1,15 @@
-﻿using System;
+﻿using SerializatorApp.Serialization.Deserializators.Reading;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SerializatorApp.Serialization.Deserializators
+namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public sealed class UsingConverter
     {
         private const string _startString = "using";
 
-        public HashSet<string> Convert(StringReader cson)
+        public HashSet<string> Convert(CsonReader cson)
         {
             HashSet<string> result = new HashSet<string>();
 
@@ -21,14 +22,14 @@ namespace SerializatorApp.Serialization.Deserializators
             return result;
         }
         
-        private string ConvertUsing(StringReader cson)
+        private string ConvertUsing(CsonReader cson)
         {
             string result = cson.SkipStartsWith(_startString).SkipWhileSeparators().TakeWhile(c => char.IsLetterOrDigit(c) || c == '.');
             cson.SkipWhileSeparators().SkipOne();
             return result;
         }
 
-        public bool IsCanConvertable(StringReader cson)
+        public bool IsCanConvertable(CsonReader cson)
         {
             if (!cson.StartsWith(_startString))
                 return false;

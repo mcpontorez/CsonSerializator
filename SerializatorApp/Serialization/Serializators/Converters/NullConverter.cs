@@ -9,7 +9,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 {
     public class NullConverter : IConcreteValueConverter
     {
-        public void Convert(object source, IStringWriter writer)
+        public void Convert(object source, ICsonWriter writer)
         {
             writer.AddNull();
             return;

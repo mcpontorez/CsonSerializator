@@ -4,8 +4,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using SerializatorApp.Serialization.Utils;
+using SerializatorApp.Serialization.Deserializators.Reading;
 
-namespace SerializatorApp.Serialization.Deserializators
+namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public class ObjectConverter : ConverterBase
     {
@@ -15,11 +16,11 @@ namespace SerializatorApp.Serialization.Deserializators
 
         public ObjectConverter(IConverter converterResolver) => _converterResolver = converterResolver;
 
-        public override T Convert<T>(StringReader cson, ITypeNameResolver typeNameResolver)
+        public override T Convert<T>(CsonReader cson, ITypeNameResolver typeNameResolver)
         {
             cson.SkipStartsWith(_startString).SkipWhileSeparators().SkipIfNeeds(CharConsts.AtSign);
             string typeName = cson.TakeWhile(IsTypeNameChar);
-            Type resultType = typeNameResolver.Get(typeName);
+            Type resultType = typeNameResolver.Convert(typeName);
             Dictionary<string, FieldInfo> resultFieldInfos = resultType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToDictionary(f => f.Name);
 
             object resultValue = Activator.CreateInstance(resultType);
@@ -42,7 +43,7 @@ namespace SerializatorApp.Serialization.Deserializators
             return (T)resultValue;
         }
 
-        public override bool IsCanConvertable(StringReader cson) => cson.StartsWith(_startString);
+        public override bool IsCanConvertable(CsonReader cson) => cson.StartsWith(_startString);
 
         private static bool IsTypeNameChar(char value) => char.IsLetter(value) || value == '.' || value == '_';
         private static bool IsMemberNameChar(char value) => char.IsLetterOrDigit(value) || value == '_';

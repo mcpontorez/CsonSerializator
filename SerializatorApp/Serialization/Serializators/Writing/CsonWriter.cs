@@ -85,7 +85,7 @@ namespace SerializatorApp.Serialization.Serializators.Writing
         }
     }
 
-    public sealed class StringWriter : IStringWriter
+    public sealed class CsonWriter : ICsonWriter
     {
         private ITypeService _typeService = new TypeService();
 
@@ -93,43 +93,43 @@ namespace SerializatorApp.Serialization.Serializators.Writing
 
         public bool IsTiny { get; } = false;
 
-        public StringWriter() { }
-        public StringWriter(bool isTiny) => IsTiny = isTiny;
+        public CsonWriter() { }
+        public CsonWriter(bool isTiny) => IsTiny = isTiny;
 
-        private IStringWriter Add(IStringPart value)
+        private ICsonWriter Add(IStringPart value)
         {
             _stringParts.Add(value);
             return this;
         }
-        private IStringWriter Add(ISecondStringPart value)
+        private ICsonWriter Add(ISecondStringPart value)
         {
             if(!IsTiny)
                 _stringParts.Add(value);
             return this;
         }
 
-        public IStringWriter Add(string value) => Add(new StringContainer(value));
-        public IStringWriter AddMemberName(string value)
+        public ICsonWriter Add(string value) => Add(new StringContainer(value));
+        public ICsonWriter AddMemberName(string value)
         {
             if (StringHelper.IsKeyword(value))
                 Add(CharContainer.AtSign);
             return Add(new StringContainer(value));
         }
 
-        public IStringWriter AddNull() => Add(StringContainer.Null);
-        public IStringWriter AddNew() => Add(StringContainer.New);
-        public IStringWriter AddBeginedBrace() => Add(CharContainer.BeginedBrace);
-        public IStringWriter AddEndedBrace() => Add(CharContainer.EndedBrace);
-        public IStringWriter AddBeginedAngleBracket() => Add(CharContainer.BeginedAngleBracket);
-        public IStringWriter AddEndedAngleBracket() => Add(CharContainer.EndedAngleBracket);
-        public IStringWriter AddBeginedSquareBracket() => Add(CharContainer.BeginedSquareBracket);
-        public IStringWriter AddEndedSquareBracket() => Add(CharContainer.EndedSquareBracket);
-        public IStringWriter AddComma() => Add(CharContainer.Comma);
-        public IStringWriter AddEqual() => Add(CharContainer.Equal);
+        public ICsonWriter AddNull() => Add(StringContainer.Null);
+        public ICsonWriter AddNew() => Add(StringContainer.New);
+        public ICsonWriter AddBeginedBrace() => Add(CharContainer.BeginedBrace);
+        public ICsonWriter AddEndedBrace() => Add(CharContainer.EndedBrace);
+        public ICsonWriter AddBeginedAngleBracket() => Add(CharContainer.BeginedAngleBracket);
+        public ICsonWriter AddEndedAngleBracket() => Add(CharContainer.EndedAngleBracket);
+        public ICsonWriter AddBeginedSquareBracket() => Add(CharContainer.BeginedSquareBracket);
+        public ICsonWriter AddEndedSquareBracket() => Add(CharContainer.EndedSquareBracket);
+        public ICsonWriter AddComma() => Add(CharContainer.Comma);
+        public ICsonWriter AddEqual() => Add(CharContainer.Equal);
 
-        public IStringWriter Add(object value) => Add(value.ToString());
+        public ICsonWriter Add(object value) => Add(value.ToString());
 
-        public IStringWriter AddType(TypeInfo type)
+        public ICsonWriter AddType(TypeInfo type)
         {
             if (type.IsArray)
                 return AddType(type.GetElementType().GetTypeInfo()).AddBeginedSquareBracket().AddEndedSquareBracket();
@@ -152,14 +152,14 @@ namespace SerializatorApp.Serialization.Serializators.Writing
             return this;
         }
 
-        public IStringWriter AddLine() => Add(SecondStringContainer.NewLine);
-        public IStringWriter AddSpace() => Add(SecondStringContainer.Space);
+        public ICsonWriter AddLine() => Add(SecondStringContainer.NewLine);
+        public ICsonWriter AddSpace() => Add(SecondStringContainer.Space);
 
-        public IStringWriter AddTabLevel(int value) => Add(new TabLevelContainer(value));
+        public ICsonWriter AddTabLevel(int value) => Add(new TabLevelContainer(value));
 
-        public IStringWriter AddTabLevel() => Add(TabLevelContainer.OneTab);
+        public ICsonWriter AddTabLevel() => Add(TabLevelContainer.OneTab);
 
-        public IStringWriter RemoveTabLevel() => Add(TabLevelContainer.MinusOneTab);
+        public ICsonWriter RemoveTabLevel() => Add(TabLevelContainer.MinusOneTab);
 
         public string GetString()
         {

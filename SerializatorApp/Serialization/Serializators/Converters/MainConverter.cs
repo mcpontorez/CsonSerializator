@@ -11,7 +11,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public string Convert(object source)
         {
-            IStringWriter stringWriter = new StringWriter();
+            ICsonWriter stringWriter = new CsonWriter();
 
             _converter.Convert(source, stringWriter);
 

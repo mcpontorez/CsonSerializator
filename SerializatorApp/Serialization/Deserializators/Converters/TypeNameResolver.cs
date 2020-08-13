@@ -1,4 +1,5 @@
-﻿using SerializatorApp.Serialization.Utils;
+﻿using SerializatorApp.Serialization.Deserializators.Reading;
+using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SerializatorApp.Serialization.Deserializators
+namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public sealed class TypeNameResolver : ITypeNameResolver
     {
@@ -72,7 +73,7 @@ namespace SerializatorApp.Serialization.Deserializators
             char lastChar = typeName[typeName.Length - 1];
             if (lastChar == CharConsts.EndedSquareBracket || lastChar == CharConsts.EndedAngleBracket || lastChar == CharConsts.BeginedSquareBracket || lastChar == CharConsts.BeginedAngleBracket || lastChar == CharConsts.Comma)
             {
-                TypeData typeData = ConvertFromRawName(new StringReader(typeName));
+                TypeData typeData = ConvertFromRawName(new CsonReader(typeName));
                 if(typeData.IsGeneric)
                 {
                     type = GetFromCacheGenericCLRNameTypes(typeData.GetCLRGenericTypeName());
@@ -116,10 +117,10 @@ namespace SerializatorApp.Serialization.Deserializators
             return type;
         }
 
-        private TypeData ConvertFromRawName(StringReader reader)
+        private TypeData ConvertFromRawName(CsonReader cson)
         {
-            string typeName = reader.TakeWhile(IsTypeNameChar);
-            bool isGeneric = reader.CurrentChar == CharConsts.BeginedAngleBracket;
+            string typeName = cson.TakeWhile(IsTypeNameChar);
+            bool isGeneric = cson.CurrentChar == CharConsts.BeginedAngleBracket;
 
             TypeData typeData = new TypeData(typeName, isGeneric);
 
@@ -128,19 +129,19 @@ namespace SerializatorApp.Serialization.Deserializators
                 do
                 {
                     //skip BeginedAngleBracket or Comma
-                    reader.SkipOne();
-                    typeData.AddParam(ConvertFromRawName(reader));
-                } while (reader.CurrentChar == CharConsts.Comma);
+                    cson.SkipOne();
+                    typeData.AddParam(ConvertFromRawName(cson));
+                } while (cson.CurrentChar == CharConsts.Comma);
 
-                reader.Skip(CharConsts.EndedAngleBracket);
+                cson.Skip(CharConsts.EndedAngleBracket);
             }
 
-            while (reader.TrySkip(CharConsts.BeginedSquareBracket))
+            while (cson.TrySkip(CharConsts.BeginedSquareBracket))
             {
                 int dimension = 1;
-                while (reader.TrySkip(CharConsts.Comma))
+                while (cson.TrySkip(CharConsts.Comma))
                     dimension++;
-                reader.Skip(CharConsts.EndedSquareBracket);
+                cson.Skip(CharConsts.EndedSquareBracket);
                 typeData.AddArrayParam(dimension);
             }
 
