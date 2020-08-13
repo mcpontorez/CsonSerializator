@@ -11,11 +11,11 @@ namespace SerializatorApp.Serialization.Serializators.Converters
 
         public string Convert(object source)
         {
-            ICsonWriter stringWriter = new CsonWriter();
+            ICsonWriter csonWriter = new CsonWriter();
 
-            _converter.Convert(source, stringWriter);
+            _converter.Convert(source, csonWriter);
 
-            string cson = stringWriter.GetString();
+            string cson = csonWriter.GetString();
             return cson;
         }
     }

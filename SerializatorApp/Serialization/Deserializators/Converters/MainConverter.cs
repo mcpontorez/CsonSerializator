@@ -6,21 +6,20 @@ using System.Text;
 
 namespace SerializatorApp.Serialization.Deserializators.Converters
 {
-    public class MainConverter : IConverterBase
+    public class MainConverter
     {
         private readonly UsingConverter _usingConverter = new UsingConverter();
         private readonly IConverter _converterResolver = new MainConverterResolver();
 
-        public T Convert<T>(CsonReader cson)
+        public T Convert<T>(string cson)
         {
-            cson.SkipWhileSeparators();
+            CsonReader csonReader = new CsonReader(cson);
+            csonReader.SkipWhileSeparators();
 
-            HashSet<string> usings = _usingConverter.IsCanConvertable(cson) ? _usingConverter.Convert(cson) : new HashSet<string>();
+            HashSet<string> usings = _usingConverter.IsCanConvertable(csonReader) ? _usingConverter.Convert(csonReader) : new HashSet<string>();
             TypeNameResolver typeNameResolver = new TypeNameResolver(usings);
 
-            return _converterResolver.Convert<T>(cson, typeNameResolver);
+            return _converterResolver.Convert<T>(csonReader, typeNameResolver);
         }
-
-        public bool IsCanConvertable(CsonReader cson) => _converterResolver.IsCanConvertable(cson.SkipWhileSeparators());
     }
 }

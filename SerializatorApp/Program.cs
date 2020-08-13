@@ -67,8 +67,8 @@ namespace SerializatorApp
             string cson = converter.Convert(doublePerson);
             Console.WriteLine(cson);
 
-            Serialization.Deserializators.Converters.IConverterBase deserializator = new Serialization.Deserializators.Converters.MainConverter();
-            DoublePerson desDoublePerson = deserializator.Convert<DoublePerson>(new Serialization.Deserializators.Reading.CsonReader(cson));
+            Serialization.Deserializators.Converters.MainConverter deserializator = new Serialization.Deserializators.Converters.MainConverter();
+            DoublePerson desDoublePerson = deserializator.Convert<DoublePerson>(cson);
 
             string cson2 = converter.Convert(desDoublePerson);
             Console.WriteLine(cson2);
