@@ -3,23 +3,22 @@ using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SerializatorApp.Serialization.Deserializators.Converters
+namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
 {
-    public sealed class TypeNameResolver : ITypeNameResolver
+    public sealed class TypeResolver : ITypeResolver
     {
-        public static readonly TypeNameResolver Empty = new TypeNameResolver(new HashSet<string>());
+        public static readonly TypeResolver Empty = new TypeResolver(new HashSet<string>());
 
         private HashSet<string> _usings;
         //TODO: different cache for non-generic and generic types and array
         private Dictionary<string, Type> _cacheTypes = new Dictionary<string, Type>();
         private Dictionary<string, Type> _cacheGenericCLRNameTypes = new Dictionary<string, Type>();
 
-        public TypeNameResolver(HashSet<string> usings) => _usings = usings;
+        public TypeResolver(HashSet<string> usings) => _usings = usings;
 
         private bool TryGetFromCacheTypes(string typeName, out Type type) => _cacheTypes.TryGetValue(typeName, out type);
         private bool TryGetFromCacheGenericCLRNameTypes(string typeName, out Type type) => _cacheGenericCLRNameTypes.TryGetValue(typeName, out type);
@@ -36,8 +35,6 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
                         break;
                 }
             }
-            if(result != null)
-                _cacheTypes.Add(typeName, result);
             return result;
         }
 
@@ -47,7 +44,6 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             if (TryGetFromCacheTypes(typeName, out result))
                 return result;
             else result = GetFromReflection(typeName);
-
             if(result != null)
                 _cacheTypes.Add(typeName, result);
             return result;
@@ -59,7 +55,6 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             if (TryGetFromCacheTypes(typeName, out result))
                 return result;
             else result = GetFromReflection(typeName);
-
             if (result != null)
                 _cacheGenericCLRNameTypes.Add(typeName, result);
             return result;
@@ -74,18 +69,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             if (lastChar == CharConsts.EndedSquareBracket || lastChar == CharConsts.EndedAngleBracket || lastChar == CharConsts.BeginedSquareBracket || lastChar == CharConsts.BeginedAngleBracket || lastChar == CharConsts.Comma)
             {
                 TypeData typeData = ConvertFromRawName(new CsonReader(typeName));
-                if(typeData.IsGeneric)
-                {
-                    type = GetFromCacheGenericCLRNameTypes(typeData.GetCLRGenericTypeName());
-                    type = type.MakeGenericType()
-                }
-                if(typeData.IsArray)
-                {
-                    foreach (var item in typeData.ArrayParams)
-                    {
-                        type = type.MakeArrayType(item.Dimension);
-                    }
-                }
+                type = MakeType(typeData);
             }
             else
                 type = GetFromCacheTypes(typeName);

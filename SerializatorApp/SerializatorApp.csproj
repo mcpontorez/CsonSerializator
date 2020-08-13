@@ -60,11 +60,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\Deserializators\Converters\Customs\CustomTypeConverter.cs" />
     <Compile Include="Serialization\Deserializators\Converters\ConverterBase.cs" />
     <Compile Include="Serialization\Deserializators\Converters\ConverterCollection.cs" />
+    <Compile Include="Serialization\Deserializators\Converters\Customs\ITypeResolver.cs" />
+    <Compile Include="Serialization\Deserializators\Converters\Customs\TypeResolver.cs" />
     <Compile Include="Serialization\Deserializators\Converters\IConverterCollection.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\ITypeNameResolver.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\TypeNameResolver.cs" />
     <Compile Include="Serialization\Deserializators\Converters\UsingConverter.cs" />
     <Compile Include="Serialization\Serializators\Converters\DictionaryConverter.cs" />
     <Compile Include="Serialization\Serializators\Converters\ConverterCollection.cs" />
@@ -84,7 +85,7 @@
     <Compile Include="Serialization\Deserializators\Converters\Numerics\NumericConverterResolver.cs" />
     <Compile Include="Serialization\Deserializators\Converters\NullConverter.cs" />
     <Compile Include="Serialization\Deserializators\Converters\StringConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\ObjectConverter.cs" />
+    <Compile Include="Serialization\Deserializators\Converters\Customs\ObjectConverter.cs" />
     <Compile Include="Serialization\Deserializators\Converters\IConverterBase.cs" />
     <Compile Include="Serialization\Deserializators\Reading\CsonReader.cs" />
     <Compile Include="Serialization\Serializators\Writing\ICsonWriter.cs" />

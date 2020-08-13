@@ -17,9 +17,9 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             csonReader.SkipWhileSeparators();
 
             HashSet<string> usings = _usingConverter.IsCanConvertable(csonReader) ? _usingConverter.Convert(csonReader) : new HashSet<string>();
-            TypeNameResolver typeNameResolver = new TypeNameResolver(usings);
+            TypeResolver typeResolver = new TypeResolver(usings);
 
-            return _converterResolver.Convert<T>(csonReader, typeNameResolver);
+            return _converterResolver.Convert<T>(csonReader, typeResolver);
         }
     }
 }

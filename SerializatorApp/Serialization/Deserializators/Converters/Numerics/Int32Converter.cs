@@ -6,7 +6,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Numerics
 {
     public class Int32Converter : ConverterBase, IConcreteConverter<int>
     {
-        public override TResult Convert<TResult>(CsonReader cson, ITypeNameResolver typeNameResolver) => ConvertToConcrete(cson).Cast<TResult>();
+        public override TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver) => ConvertToConcrete(cson).Cast<TResult>();
 
         public int ConvertToConcrete(CsonReader cson)
         {

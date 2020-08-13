@@ -6,21 +6,21 @@ using System.Reflection;
 using SerializatorApp.Serialization.Utils;
 using SerializatorApp.Serialization.Deserializators.Reading;
 
-namespace SerializatorApp.Serialization.Deserializators.Converters
+namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
 {
-    public class ObjectConverter : ConverterBase
+    public class CustomTypeConverter : ConverterBase
     {
         private const string _startString = StringConsts.New;
 
         private readonly IConverter _converterResolver;
 
-        public ObjectConverter(IConverter converterResolver) => _converterResolver = converterResolver;
+        public CustomTypeConverter(IConverter converterResolver) => _converterResolver = converterResolver;
 
-        public override T Convert<T>(CsonReader cson, ITypeNameResolver typeNameResolver)
+        public override T Convert<T>(CsonReader cson, ITypeResolver typeResolver)
         {
             cson.SkipStartsWith(_startString).SkipWhileSeparators().SkipIfNeeds(CharConsts.AtSign);
             string typeName = cson.TakeWhile(IsTypeNameChar);
-            Type resultType = typeNameResolver.Convert(typeName);
+            Type resultType = typeResolver.Convert(typeName);
             Dictionary<string, FieldInfo> resultFieldInfos = resultType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToDictionary(f => f.Name);
 
             object resultValue = Activator.CreateInstance(resultType);
@@ -34,7 +34,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
                 resultFieldInfos.Remove(memberName);
 
                 cson.SkipWhileSeparators().Skip('=').SkipWhileSeparators();
-                object fieldValue = _converterResolver.Convert<object>(cson, typeNameResolver);
+                object fieldValue = _converterResolver.Convert<object>(cson, typeResolver);
                 fieldInfo.SetValue(resultValue, fieldValue);
 
                 cson.SkipWhileSeparators().SkipIfNeeds(_endChar).SkipWhileSeparators();

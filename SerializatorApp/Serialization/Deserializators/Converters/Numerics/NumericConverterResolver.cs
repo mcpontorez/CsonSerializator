@@ -7,7 +7,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Numerics
     {
         private readonly IConverterCollection _converterCollection = new ConverterCollection(new Int32Converter(), new SingleConverter());
 
-        public override TResult Convert<TResult>(CsonReader cson, ITypeNameResolver typeNameResolver) => _converterCollection.Get(cson).Convert<TResult>(cson, typeNameResolver);
+        public override TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver) => _converterCollection.Get(cson).Convert<TResult>(cson, typeResolver);
 
         public override bool IsCanConvertable(CsonReader cson) => char.IsDigit(cson.CurrentChar);
 

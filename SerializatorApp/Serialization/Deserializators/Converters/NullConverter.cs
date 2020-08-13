@@ -6,7 +6,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public class NullConverter : ConverterBase
     {
-        public override T Convert<T>(CsonReader cson, ITypeNameResolver typeNameResolver)
+        public override T Convert<T>(CsonReader cson, ITypeResolver typeResolver)
         {
             cson.SkipStartsWith(StringConsts.Null);
             return default;

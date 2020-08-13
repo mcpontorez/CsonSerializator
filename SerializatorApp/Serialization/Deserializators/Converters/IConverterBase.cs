@@ -1,4 +1,5 @@
-﻿using SerializatorApp.Serialization.Deserializators.Reading;
+﻿using SerializatorApp.Serialization.Deserializators.Converters.Customs;
+using SerializatorApp.Serialization.Deserializators.Reading;
 using System;
 
 namespace SerializatorApp.Serialization.Deserializators.Converters
@@ -12,7 +13,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
 
     public interface IConverter : IConverterBase
     {
-        TResult Convert<TResult>(CsonReader cson, ITypeNameResolver typeNameResolver);
+        TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver);
     }
 
     public interface IConcreteConverter : IConverter
