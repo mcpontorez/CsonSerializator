@@ -134,7 +134,7 @@ namespace SerializatorApp.Serialization.Deserializators.Reading
 
         public bool StartsWith(string value) => IndexOf(value) == 0;
 
-        public bool StartsWith(char value) => IndexOf(value) == 0;
+        public bool StartsWith(char value) => CurrentChar == value;
 
         public int IndexOf(char value) => IndexOf(value, 0);
         public int IndexOf(char value, int startIndex) => Target.IndexOf(value, Index + startIndex) - Index;

@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Deserializators.Converters
 {
-    public class ConverterCollection : IConverterCollection
+    public interface IConverterResolverCollection
+    {
+
+    }
+
+    public class ConverterResolverCollection : IConverterCollection
     {
         private IEnumerable<IConverter> _converters;
         private IEnumerable<IConcreteTypeConverter> _concreteConverters;

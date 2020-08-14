@@ -119,6 +119,8 @@ namespace SerializatorApp.Serialization.Utils
             }
             return _keywords[index].Contains(value);
         }
+        //TODO: заинлайнить
+        public static bool IsSeparatorOrAnyEndChar(this char c) => IsSeparator(c) || c == CharConsts.Comma || c == CharConsts.EndedBrace || c == CharConsts.Semicolon;
 
         //TODO: заинлайнить
         public static bool IsSeparator(this char c) => char.IsSeparator(c) || char.IsControl(c);

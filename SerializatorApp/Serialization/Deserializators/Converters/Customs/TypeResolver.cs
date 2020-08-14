@@ -9,16 +9,22 @@ using System.Text;
 
 namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
 {
+    public interface ITypeResolver
+    {
+        Type Convert(string typeName);
+    }
+
     public sealed class TypeResolver : ITypeResolver
     {
-        public static readonly TypeResolver Empty = new TypeResolver(new HashSet<string>());
+        public static readonly TypeResolver InstanceWhithoutUsings = new TypeResolver();
 
-        private HashSet<string> _usings;
+        private readonly IEnumerable<string> _usings;
         //TODO: different cache for non-generic and generic types and array
         private Dictionary<string, Type> _cacheTypes = new Dictionary<string, Type>();
         private Dictionary<string, Type> _cacheGenericCLRNameTypes = new Dictionary<string, Type>();
 
         public TypeResolver(HashSet<string> usings) => _usings = usings;
+        private TypeResolver() => _usings = Array.Empty<string>();
 
         private bool TryGetFromCacheTypes(string typeName, out Type type) => _cacheTypes.TryGetValue(typeName, out type);
         private bool TryGetFromCacheGenericCLRNameTypes(string typeName, out Type type) => _cacheGenericCLRNameTypes.TryGetValue(typeName, out type);
@@ -52,7 +58,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
         private Type GetFromCacheGenericCLRNameTypes(string typeName)
         {
             Type result;
-            if (TryGetFromCacheTypes(typeName, out result))
+            if (TryGetFromCacheGenericCLRNameTypes(typeName, out result))
                 return result;
             else result = GetFromReflection(typeName);
             if (result != null)

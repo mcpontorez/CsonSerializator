@@ -4,26 +4,27 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace SerializatorApp.Serialization.Deserializators.Converters.Numerics
+namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numerics
 {
-    public class SingleConverter : ConverterBase, IConcreteConverter<float>
+    public class SingleConverter : IBuiltinTypeConverter
     {
         private const char _valueEndCharUpperCase = 'F', _valueEndCharLowerCase = 'f';
         private static readonly IReadOnlyList<char> _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
 
-        public override TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver) => ConvertToConcrete(cson).Cast<TResult>();
+        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).Cast<TResult>();
 
         public float ConvertToConcrete(CsonReader cson)
         {
-            string value = cson.TakeWhile(c => char.IsDigit(c) || c == '-' || c == '.');
+            string value = cson.TakeWhile(c => char.IsDigit(c) || c == CharConsts.Minus || c == CharConsts.Dot);
             float result = float.Parse(value, CultureInfo.InvariantCulture);
             cson.SkipOne();
             return result;
         }
 
-        public override bool IsCanConvertable(CsonReader cson)
+        public bool IsCanConvertable(CsonReader cson)
         {
-            if (!(char.IsDigit(cson.CurrentChar) || cson.CurrentChar == '-'))
+            char currentChar = cson.CurrentChar;
+            if (!(char.IsDigit(currentChar) || currentChar == CharConsts.Minus || currentChar == CharConsts.Dot))
                 return false;
 
             int endIndex = cson.IndexOfAny(_valueEndChars);
@@ -31,7 +32,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Numerics
             for (int i = 1; i < endIndex; i++)
             {
                 char c = cson[i];
-                if (!(char.IsDigit(c) || c == '.'))
+                if (!(char.IsDigit(c) || c == CharConsts.Dot))
                     return false;
             }
             return true;

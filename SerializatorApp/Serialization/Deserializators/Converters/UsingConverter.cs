@@ -1,4 +1,5 @@
 ﻿using SerializatorApp.Serialization.Deserializators.Reading;
+using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +25,8 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
         
         private string ConvertUsing(CsonReader cson)
         {
-            string result = cson.SkipStartsWith(_startString).SkipWhileSeparators().TakeWhile(c => char.IsLetterOrDigit(c) || c == '.');
-            cson.SkipWhileSeparators().SkipOne();
+            string result = cson.SkipStartsWith(_startString).SkipWhileSeparators().TakeWhile(c => char.IsLetterOrDigit(c) || c == CharConsts.Dot);
+            cson.SkipWhileSeparators().Skip(CharConsts.Semicolon);
             return result;
         }
 
@@ -34,7 +35,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             if (!cson.StartsWith(_startString))
                 return false;
             char postChar = cson[_startString.Length];
-            bool result = char.IsSeparator(postChar) || char.IsControl(postChar);
+            bool result = postChar.IsSeparator();
             return result;
         }
     }

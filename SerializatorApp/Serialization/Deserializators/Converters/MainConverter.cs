@@ -1,4 +1,6 @@
-﻿using SerializatorApp.Serialization.Deserializators.Reading;
+﻿using SerializatorApp.Serialization.Deserializators.Converters.Customs;
+using SerializatorApp.Serialization.Deserializators.Reading;
+using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,22 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
         private readonly UsingConverter _usingConverter = new UsingConverter();
         private readonly IConverter _converterResolver = new MainConverterResolver();
 
-        public T Convert<T>(string cson)
+        public TResult Convert<TResult>(string cson)
         {
             CsonReader csonReader = new CsonReader(cson);
             csonReader.SkipWhileSeparators();
 
-            HashSet<string> usings = _usingConverter.IsCanConvertable(csonReader) ? _usingConverter.Convert(csonReader) : new HashSet<string>();
-            TypeResolver typeResolver = new TypeResolver(usings);
+            ITypeResolver typeResolver;
 
-            return _converterResolver.Convert<T>(csonReader, typeResolver);
+            if (_usingConverter.IsCanConvertable(csonReader))
+                typeResolver = new TypeResolver(_usingConverter.Convert(csonReader));
+            else typeResolver = TypeResolver.InstanceWhithoutUsings;
+
+            TResult result = _converterResolver.Convert<TResult>(csonReader, typeResolver);
+
+            csonReader.Skip(CharConsts.Semicolon);
+
+            return result;
         }
     }
 }

@@ -8,44 +8,38 @@ using SerializatorApp.Serialization.Deserializators.Reading;
 
 namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
 {
-    public class ObjectConverter : ConverterBase
+    public class ObjectConverter : ICustomTypeConverter
     {
-        private const string _startString = StringConsts.New;
+        private readonly IConverter _mainConverterResolver;
 
-        private readonly IConverter _converterResolver;
+        public ObjectConverter(IConverter mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
 
-        public ObjectConverter(IConverter converterResolver) => _converterResolver = converterResolver;
-
-        public override T Convert<T>(CsonReader cson, ITypeResolver typeResolver)
+        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
         {
-            cson.SkipStartsWith(_startString).SkipWhileSeparators().SkipIfNeeds(CharConsts.AtSign);
-            string typeName = cson.TakeWhile(IsTypeNameChar);
-            Type resultType = typeResolver.Convert(typeName);
-            Dictionary<string, FieldInfo> resultFieldInfos = resultType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToDictionary(f => f.Name);
+            Dictionary<string, FieldInfo> resultFieldInfos = type.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToDictionary(f => f.Name);
 
-            object resultValue = Activator.CreateInstance(resultType);
+            object resultValue = Activator.CreateInstance(type);
 
-            cson.SkipWhileSeparators().SkipIfNeeds('(').SkipWhileSeparators().SkipIfNeeds(')').Skip(_startObjectChar).SkipWhileSeparators();
-            while (cson.CurrentChar != _endObjectChar)
+            cson.SkipWhileSeparators().Skip(CharConsts.BeginedBrace).SkipWhileSeparators();
+            while (cson.CurrentChar != CharConsts.EndedBrace)
             {
-                cson.SkipIfNeeds('@');
+                cson.SkipIfNeeds(CharConsts.AtSign);
                 string memberName = cson.TakeWhile(IsMemberNameChar);
                 FieldInfo fieldInfo = resultFieldInfos[memberName];
                 resultFieldInfos.Remove(memberName);
 
-                cson.SkipWhileSeparators().Skip('=').SkipWhileSeparators();
-                object fieldValue = _converterResolver.Convert<object>(cson, typeResolver);
+                cson.SkipWhileSeparators().Skip(CharConsts.Equal).SkipWhileSeparators();
+                object fieldValue = _mainConverterResolver.Convert<object>(cson, typeResolver);
                 fieldInfo.SetValue(resultValue, fieldValue);
 
-                cson.SkipWhileSeparators().SkipIfNeeds(_endChar).SkipWhileSeparators();
+                cson.SkipWhileSeparators().SkipIfNeeds(CharConsts.Comma).SkipWhileSeparators();
             }
             cson.SkipOne().SkipWhileSeparators();
-            return (T)resultValue;
+            return (TResult)resultValue;
         }
 
-        public override bool IsCanConvertable(CsonReader cson) => cson.StartsWith(_startString);
+        public bool IsCanConvertable(Type type) => true;
 
-        private static bool IsTypeNameChar(char value) => char.IsLetter(value) || value == '.' || value == '_';
-        private static bool IsMemberNameChar(char value) => char.IsLetterOrDigit(value) || value == '_';
+        private static bool IsMemberNameChar(char value) => char.IsLetterOrDigit(value) || value == CharConsts.Underscore;
     }
 }

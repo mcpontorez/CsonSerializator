@@ -7,21 +7,26 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
     public interface IConverterBase
     {
         TResult Convert<TResult>(CsonReader cson);
-
-        bool IsCanConvertable(CsonReader cson);
     }
 
     public interface IConverter : IConverterBase
     {
         TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver);
+        bool IsCanConvertable(CsonReader cson);
     }
 
-    public interface IConcreteConverter : IConverter
+    public interface ISomeTypeConverter : IConverter
     {
+        TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver);
         bool IsCanConvertable(Type type);
     }
 
-    public interface IConcreteConverter<TResult> : IConcreteConverter
+    public interface IConcreteTypeConverter : IConverter
+    {
+        Type ConcreteType { get; }
+    }
+
+    public interface IConcreteTypeConverter<TResult> : IConcreteTypeConverter
     {
         TResult ConvertToConcrete(CsonReader cson);
     }
