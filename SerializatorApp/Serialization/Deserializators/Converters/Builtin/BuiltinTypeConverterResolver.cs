@@ -9,7 +9,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin
     {
         private IBuiltinTypeConverterCollection _converters = new BuiltinTypeConverterCollection(new NullConverter(), new StringConverter(), new NumericConverterResolver());
 
-        public bool IsCanConvertable(CsonReader cson) => _converters.Contains(cson);
+        public bool IsCanConvert(CsonReader cson) => _converters.Contains(cson);
 
         public TResult Convert<TResult>(CsonReader cson) => _converters.Get(cson).Convert<TResult>(cson);
 

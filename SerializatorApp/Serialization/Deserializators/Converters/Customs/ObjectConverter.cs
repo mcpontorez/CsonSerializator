@@ -10,9 +10,9 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
 {
     public class ObjectConverter : ICustomTypeConverter
     {
-        private readonly IConverter _mainConverterResolver;
+        private readonly IConverterResolver _mainConverterResolver;
 
-        public ObjectConverter(IConverter mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
+        public ObjectConverter(IConverterResolver mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
 
         public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
         {

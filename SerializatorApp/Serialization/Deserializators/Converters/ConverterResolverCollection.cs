@@ -9,29 +9,20 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
 {
     public interface IConverterResolverCollection
     {
-
+        bool Contains(CsonReader cson);
+        IConverterResolver Get(CsonReader cson);
     }
 
-    public class ConverterResolverCollection : IConverterCollection
+    public class ConverterResolverCollection : IConverterResolverCollection
     {
-        private IEnumerable<IConverter> _converters;
-        private IEnumerable<IConcreteTypeConverter> _concreteConverters;
-        public ConverterCollection(IEnumerable<IConverter> converters) => Init(converters);
+        private IEnumerable<IConverterResolver> _converterResolvers;
 
-        public ConverterCollection(params IConverter[] converters) => Init(converters);
+        public ConverterResolverCollection(IEnumerable<IConverterResolver> converterResolvers) => _converterResolvers = converterResolvers;
 
-        private void Init(IEnumerable<IConverter> converters)
-        {
-            _converters = converters;
-            _concreteConverters = _converters.Where(c => c is IConcreteTypeConverter).Cast<IConcreteTypeConverter>().ToArray();
-        }
+        public ConverterResolverCollection(params IConverterResolver[] converters) : this((IEnumerable<IConverterResolver>)converters) { }
 
-        public bool Contains(CsonReader cson) => _converters.Any(c => c.IsCanConvertable(cson));
+        public bool Contains(CsonReader cson) => _converterResolvers.Any(c => c.IsCanConvert(cson));
 
-        public bool Contains(Type type) => _concreteConverters.Any(c => c.IsCanConvertable(type));
-
-        public IConverter Get(CsonReader cson) => _converters.FirstOrDefault(c => c.IsCanConvertable(cson));
-
-        public IConverter Get(Type type) => _concreteConverters.FirstOrDefault(c => c.IsCanConvertable(type));
+        public IConverterResolver Get(CsonReader cson) => _converterResolvers.FirstOrDefault(c => c.IsCanConvert(cson));
     }
 }

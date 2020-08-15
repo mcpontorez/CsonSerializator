@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin
 {
-    public interface IBuiltinTypeConverter
+    public interface IBuiltinTypeConverter : ICanConvertValue
     {
         TResult Convert<TResult>(CsonReader cson);
-        bool IsCanConvertable(CsonReader cson);
     }
 }

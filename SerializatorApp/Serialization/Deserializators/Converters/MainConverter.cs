@@ -11,7 +11,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
     public class MainConverter
     {
         private readonly UsingConverter _usingConverter = new UsingConverter();
-        private readonly IConverter _converterResolver = new MainConverterResolver();
+        private readonly IConverterResolver _converterResolver = new MainConverterResolver();
 
         public TResult Convert<TResult>(string cson)
         {
@@ -19,7 +19,6 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             csonReader.SkipWhileSeparators();
 
             ITypeResolver typeResolver;
-
             if (_usingConverter.IsCanConvertable(csonReader))
                 typeResolver = new TypeResolver(_usingConverter.Convert(csonReader));
             else typeResolver = TypeResolver.InstanceWhithoutUsings;

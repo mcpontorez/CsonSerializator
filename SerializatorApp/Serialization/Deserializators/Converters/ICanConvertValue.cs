@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace SerializatorApp.Serialization.Deserializators.Converters
 {
-    public interface IConverterCollection
+    public interface ICanConvertValue
     {
-        IConverter Get(CsonReader cson);
-        IConverter Get(Type type);
-        bool Contains(CsonReader cson);
-        bool Contains(Type type);
+        bool IsCanConvert(CsonReader cson);
     }
 }
