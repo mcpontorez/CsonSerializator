@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Linq;
-using System.Collections.Generic;
-using System.Reflection;
 using SerializatorApp.Serialization.Utils;
 using SerializatorApp.Serialization.Deserializators.Reading;
 
@@ -16,7 +12,8 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
         public CustomTypeConverterResolver(IConverterResolver mainConverterResolver)
         {
             _mainConverterResolver = mainConverterResolver;
-            _customTypeConverters = new CustomTypeConverterCollection(new ObjectConverter(_mainConverterResolver));
+            _customTypeConverters = 
+                new CustomTypeConverterCollection(new DictionaryConverter(_mainConverterResolver), new CollectionConverter(_mainConverterResolver), new ObjectConverter(_mainConverterResolver));
         }
 
         public TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver)
