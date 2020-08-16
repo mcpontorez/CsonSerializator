@@ -13,7 +13,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin
             return default;
         }
 
-        public bool IsCanConvertable(CsonReader cson)
+        public bool IsCanConvert(CsonReader cson)
         {
             if (!cson.StartsWith(StringConsts.Null))
                 return false;

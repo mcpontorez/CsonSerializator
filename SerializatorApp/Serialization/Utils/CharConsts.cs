@@ -12,7 +12,5 @@ namespace SerializatorApp.Serialization.Utils
             Comma = ',', Dot = '.', Semicolon = ';', Equal = '=', Space = ' ',
             AtSign = '@', Underscore = '_',
             Minus = '-';
-
-        public static readonly IReadOnlyList<char> AnyEndChars = new char[] { Comma, EndedBrace, Semicolon };
     }
 }

@@ -21,7 +21,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
             return result;
         }
 
-        public bool IsCanConvertable(CsonReader cson)
+        public bool IsCanConvert(CsonReader cson)
         {
             char currentChar = cson.CurrentChar;
             if (!(char.IsDigit(currentChar) || currentChar == CharConsts.Minus || currentChar == CharConsts.Dot))

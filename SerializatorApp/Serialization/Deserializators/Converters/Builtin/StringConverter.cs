@@ -19,6 +19,6 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin
             return result;
         }
 
-        public bool IsCanConvertable(CsonReader cson) => cson.StartsWith(CharConsts.DoubleQuote);
+        public bool IsCanConvert(CsonReader cson) => cson.StartsWith(CharConsts.DoubleQuote);
     }
 }

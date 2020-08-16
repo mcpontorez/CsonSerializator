@@ -10,7 +10,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
 
         public int ConvertToConcrete(CsonReader cson)
         {
-            string value = cson.TakeWhile(c => char.IsDigit(c) || c == '-');
+            string value = cson.TakeWhile(c => char.IsDigit(c) || c == CharConsts.Minus);
             return int.Parse(value);
         }
 
