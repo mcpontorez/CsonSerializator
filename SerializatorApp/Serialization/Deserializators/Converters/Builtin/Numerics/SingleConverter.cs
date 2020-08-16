@@ -11,7 +11,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
         private const char _valueEndCharUpperCase = 'F', _valueEndCharLowerCase = 'f';
         private static readonly IReadOnlyList<char> _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
 
-        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).SuperCast<TResult>();
+        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).WildCast<TResult>();
 
         public float ConvertToConcrete(CsonReader cson)
         {

@@ -28,6 +28,8 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
             }
             if (typeof(IList).GetTypeInfo().IsAssignableFrom(type))
                 return ConvertList<TResult>(type, cson, typeResolver);
+
+            return ConvertGenericCollection<TResult>(type, cson, typeResolver);
         }
 
         private TResult ConvertArray<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
@@ -44,13 +46,11 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
                 resultArray.SetValue(items[i], i);
             }
 
-            return resultArray.SuperCast<TResult>();
+            return resultArray.WildCast<TResult>();
         }
 
         private TResult ConvertList<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
         {
-            var m = type.GetMethod(StringConsts.Add)
-
             IList resultList = (IList)Activator.CreateInstance(type);
 
             IEnumerator<object> enumerator = ConvertEnumerable<object>(cson, typeResolver);
@@ -58,19 +58,22 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
             while (enumerator.MoveNext())
                 resultList.Add(enumerator.Current);
 
-            return resultList.SuperCast<TResult>();
+            return resultList.WildCast<TResult>();
         }
 
-        private TResult ConvertCollection<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
+        private TResult ConvertGenericCollection<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
         {
-            IList resultList = (IList)Activator.CreateInstance(type);
+            object resultCollection = Activator.CreateInstance(type);
+
+            var methodInfo = type.GetMethod(StringConsts.Add, BindingFlags.Public | BindingFlags.Instance);
 
             IEnumerator<object> enumerator = ConvertEnumerable<object>(cson, typeResolver);
 
+            var itemContainer = new object[1];
             while (enumerator.MoveNext())
-                resultList.Add(enumerator.Current);
+                methodInfo.Invoke(resultCollection, itemContainer.SetValue(0, enumerator.Current));
 
-            return resultList.SuperCast<TResult>();
+            return resultCollection.WildCast<TResult>();
         }
 
         private IEnumerator<TItem> ConvertEnumerable<TItem>(CsonReader cson, ITypeResolver typeResolver)

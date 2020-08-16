@@ -6,7 +6,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
 {
     public class Int32Converter : IBuiltinTypeConverter
     {
-        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).SuperCast<TResult>();
+        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).WildCast<TResult>();
 
         public int ConvertToConcrete(CsonReader cson)
         {
