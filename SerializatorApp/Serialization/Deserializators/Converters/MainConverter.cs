@@ -25,7 +25,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
 
             TResult result = _converterResolver.Convert<TResult>(csonReader, typeResolver);
 
-            csonReader.Skip(CharConsts.Semicolon);
+            csonReader.SkipWhileSeparators().Skip(CharConsts.Semicolon);
 
             return result;
         }

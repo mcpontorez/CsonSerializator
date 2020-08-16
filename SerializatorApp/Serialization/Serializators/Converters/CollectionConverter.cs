@@ -31,6 +31,6 @@ namespace SerializatorApp.Serialization.Serializators.Converters
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
 
-        public bool IsConvertable(TypeInfo type) => typeof(ICollection<>).GetTypeInfo().IsAssignableFrom(type) || typeof(ICollection).GetTypeInfo().IsAssignableFrom(type);
+        public bool IsConvertable(TypeInfo type) => typeof(ICollection<>).GetTypeInfo().IsAssignableFrom(type) || typeof(IList).GetTypeInfo().IsAssignableFrom(type);
     }
 }

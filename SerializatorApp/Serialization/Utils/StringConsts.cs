@@ -9,5 +9,6 @@ namespace SerializatorApp.Serialization.Utils
     public static class StringConsts
     {
         public const string Using = "using ", New = "new ", Null = "null";
+        public const string Add = "Add";
     }
 }

@@ -15,7 +15,7 @@ namespace SerializatorApp.Serialization.Serializators.Converters
             TypeInfo sourceType = source.GetType().GetTypeInfo();
 
             writer.AddNew().AddType(sourceType).AddLine().AddBeginedBrace().AddTabLevel();
-            var sourceFields = sourceType.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToArray();
+            var sourceFields = sourceType.GetFields(BindingFlags.Public | BindingFlags.Instance).Where(f => !f.IsInitOnly).ToArray();
 
             for (int i = 0; i < sourceFields.Length; i++)
             {

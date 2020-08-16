@@ -67,6 +67,7 @@
     <Compile Include="Serialization\Deserializators\Converters\Customs\CustomTypeConverterCollection.cs" />
     <Compile Include="Serialization\Deserializators\Converters\Customs\ICustomTypeConverter.cs" />
     <Compile Include="Serialization\Deserializators\Converters\Customs\CustomTypeConverterResolver.cs" />
+    <Compile Include="Serialization\Deserializators\Converters\Customs\CollectionConverter.cs" />
     <Compile Include="Serialization\Deserializators\Converters\ICanConvertValue.cs" />
     <Compile Include="Serialization\Deserializators\Converters\IConverterResolver.cs" />
     <Compile Include="Serialization\Deserializators\Converters\TypeResolver.cs" />

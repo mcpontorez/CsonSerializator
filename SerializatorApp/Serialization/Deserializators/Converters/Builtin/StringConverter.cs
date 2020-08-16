@@ -9,7 +9,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin
     {
         public Type ConcreteType { get; } = typeof(string);
 
-        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).Cast<TResult>();
+        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).SuperCast<TResult>();
 
         public string ConvertToConcrete(CsonReader cson)
         {

@@ -16,13 +16,20 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
 
         public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
         {
-            Dictionary<string, FieldInfo> resultFieldInfos = type.GetFields().Where(f => !f.IsStatic && !f.IsInitOnly).ToDictionary(f => f.Name);
+            Dictionary<string, FieldInfo> resultFieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.Instance).Where(f => !f.IsInitOnly).ToDictionary(f => f.Name);
 
             object resultValue = Activator.CreateInstance(type);
 
-            cson.SkipWhileSeparators().Skip(CharConsts.BeginedBrace).SkipWhileSeparators();
-            while (cson.CurrentChar != CharConsts.EndedBrace)
+            cson.Skip(CharConsts.BeginedBrace);
+
+            bool index = false;
+            while (!cson.SkipWhileSeparators().TrySkip(CharConsts.EndedBrace))
             {
+                if (index && cson.Skip(CharConsts.Comma).SkipWhileSeparators().TrySkip(CharConsts.EndedBrace))
+                    break;
+                else
+                    index = true;
+
                 cson.SkipIfNeeds(CharConsts.AtSign);
                 string memberName = cson.TakeWhile(IsMemberNameChar);
                 FieldInfo fieldInfo = resultFieldInfos[memberName];
@@ -31,10 +38,8 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Customs
                 cson.SkipWhileSeparators().Skip(CharConsts.Equal).SkipWhileSeparators();
                 object fieldValue = _mainConverterResolver.Convert<object>(cson, typeResolver);
                 fieldInfo.SetValue(resultValue, fieldValue);
-
-                cson.SkipWhileSeparators().SkipIfNeeds(CharConsts.Comma).SkipWhileSeparators();
             }
-            cson.SkipOne().SkipWhileSeparators();
+
             return (TResult)resultValue;
         }
 
