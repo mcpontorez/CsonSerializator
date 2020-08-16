@@ -9,6 +9,6 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
 
         public TResult Convert<TResult>(CsonReader cson) => _converterCollection.Get(cson).Convert<TResult>(cson);
         //rewrite to fast IsCanConvertable
-        public bool IsCanConvertable(CsonReader cson) => _converterCollection.Contains(cson);
+        public bool IsCanConvert(CsonReader cson) => _converterCollection.Contains(cson);
     }
 }

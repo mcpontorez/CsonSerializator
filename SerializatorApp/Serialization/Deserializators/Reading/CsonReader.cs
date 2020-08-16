@@ -16,6 +16,8 @@ namespace SerializatorApp.Serialization.Deserializators.Reading
 
         public int Lenght => Target.Length - Index;
 
+        public int GetTrueLenght(int preferLenght) => preferLenght < Lenght ? preferLenght : Lenght;
+
         public char CurrentChar => this[0];
 
         public string Buffer => Substring(0);
@@ -135,6 +137,22 @@ namespace SerializatorApp.Serialization.Deserializators.Reading
         public bool StartsWith(string value) => IndexOf(value) == 0;
 
         public bool StartsWith(char value) => CurrentChar == value;
+
+        public int StartsCount(Func<char, bool> predicate, int startIndex, int count)
+        {
+            int lenght = (count <= Lenght) ? count : Lenght;
+            int result = 0;
+            for (int i = startIndex; i < lenght; i++)
+            {
+                char c = this[i];
+                if (!predicate(c))
+                {
+                    result = i;
+                    break;
+                }
+            }
+            return result;
+        }
 
         public int IndexOf(char value) => IndexOf(value, 0);
         public int IndexOf(char value, int startIndex) => Target.IndexOf(value, Index + startIndex) - Index;

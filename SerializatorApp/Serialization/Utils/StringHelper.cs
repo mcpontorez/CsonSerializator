@@ -122,6 +122,7 @@ namespace SerializatorApp.Serialization.Utils
         //TODO: заинлайнить
         public static bool IsSeparatorOrAnyEndChar(this char c) => 
             IsSeparator(c) || c == CharConsts.Comma || c == CharConsts.EndedBrace || c == CharConsts.EndedSquareBracket || c == CharConsts.Semicolon;
+        public static bool IsNotSeparatorOrAnyEndChar(this char c) => !IsSeparatorOrAnyEndChar(c);
 
         //TODO: заинлайнить
         public static bool IsSeparator(this char c) => char.IsSeparator(c) || char.IsControl(c);

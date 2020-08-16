@@ -6,6 +6,8 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
 {
     public class Int32Converter : IBuiltinTypeConverter
     {
+        private const int minValueLenght = 11, maxValueLenght = 10;
+
         public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).WildCast<TResult>();
 
         public int ConvertToConcrete(CsonReader cson)
@@ -14,18 +16,18 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
             return int.Parse(value);
         }
 
-        public bool IsCanConvertable(CsonReader cson)
+        public bool IsCanConvert(CsonReader cson)
         {
             char currentChar = cson.CurrentChar;
             if (!(char.IsDigit(currentChar) || currentChar == CharConsts.Minus))
                 return false;
-            int endIndex = cson.IndexOfAny(CharConsts.e);
-            if (endIndex > 12)
-                return false;
-            for (int i = 1; i < endIndex; i++)
+
+            int count = cson.GetTrueLenght(minValueLenght);
+            for (int i = 1; i < count; i++)
             {
-                if (!char.IsDigit(cson[i]))
-                    return false;
+                char c = cson[i];
+                if (!char.IsDigit(c) && c.IsSeparatorOrAnyEndChar())
+                    return true;
             }
             return true;
         }
