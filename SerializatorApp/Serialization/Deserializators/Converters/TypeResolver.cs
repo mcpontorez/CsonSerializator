@@ -3,6 +3,7 @@ using SerializatorApp.Serialization.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -90,7 +91,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             {
                 type = GetFromCacheGenericCLRNameTypes(typeData.GetCLRGenericTypeName());
                 //TODO: replace linq on non-linq
-                Type[] typeParams = typeData.Params.Select(td => MakeType(td)).ToArray();
+                Type[] typeParams = typeData.TypeParams.Select(td => MakeType(td)).ToArray();
                 type = type.MakeGenericType(typeParams);
             }
             else
@@ -99,9 +100,11 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             //TODO: set type to cache
             if (typeData.IsArray)
             {
-                foreach (var item in typeData.ArrayParams)
+                ArrayParam arrayParams = typeData.ArrayParams;
+                type = type.MakeArrayType(arrayParams.Dimension);
+                for (int i = 0; i < arrayParams.ArrayOfArrayCount; i++)
                 {
-                    type = type.MakeArrayType(item.Dimension);
+                    type = type.MakeArrayType();
                 }
             }
             return type;
@@ -141,31 +144,17 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
         private static bool IsTypeNameChar(char value) => char.IsLetterOrDigit(value) || value == CharConsts.Dot || value == '_';
     }
 
-    public sealed class ArrayData
+    public struct ArrayParam
     {
-        public static IReadOnlyList<ArrayData> EmptyArrayDatas = new ArrayData[0];
-
-        private readonly static IReadOnlyList<ArrayData> _arrayDatas;
-
-        static ArrayData()
+        public readonly int Dimension;
+        public int ArrayOfArrayCount { get; private set; }
+        public ArrayParam(int dimension)
         {
-            ArrayData[] arrayDatas = new ArrayData[33];
-            for (int i = 1; i < arrayDatas.Length; i++)
-            {
-                arrayDatas[i] = new ArrayData(i);
-            }
-            _arrayDatas = arrayDatas;
+            Dimension = dimension;
+            ArrayOfArrayCount = 0;
         }
 
-        public static ArrayData GetInstance(int dimension)
-        {
-            if (dimension < 1 || dimension > 32)
-                throw new ArgumentOutOfRangeException(nameof(dimension), dimension, $"Array {nameof(dimension)} must be minimum 1 and maximum 32");
-            return _arrayDatas[dimension];
-        }
-
-        public readonly int Dimension = 1;
-        private ArrayData(int dimension) => Dimension = dimension;
+        public void AddArrayOfArrayCount() => ArrayOfArrayCount++;
     }
 
     public sealed class TypeData
@@ -177,11 +166,10 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
         public bool IsArray { get; private set; }
 
         //TODO: replace on few fields
-        private readonly List<TypeData> _params;
-        public IReadOnlyList<TypeData> Params { get; }
+        private readonly List<TypeData> _typeParams;
+        public IReadOnlyList<TypeData> TypeParams { get; }
 
-        private List<ArrayData> _arrayParams;
-        public IReadOnlyCollection<ArrayData> ArrayParams { get; private set; }
+        public ArrayParam ArrayParams { get; private set; }
 
         public TypeData(string typeName, bool isGeneric) : this(isGeneric)
         {
@@ -194,30 +182,28 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             IsGeneric = isGeneric;
             if (IsGeneric)
             {
-                _params = new List<TypeData>(2);
-                Params = _params;
+                _typeParams = new List<TypeData>(2);
+                TypeParams = _typeParams;
             }
             else
-                Params = Array.Empty<TypeData>();
+                TypeParams = Array.Empty<TypeData>();
         }
 
-        public void AddParam(TypeData value) => _params.Add(value);
+        public void AddParam(TypeData value) => _typeParams.Add(value);
 
         public void AddArrayParam(int dimension)
         {
-            IsArray = true;
-            if (_arrayParams == null)
+            if (!IsArray)
             {
-                //TODO: replace on static array[1] whith 1 or 2 dimensions
-                _arrayParams = new List<ArrayData>();
-                ArrayParams = _arrayParams;
+                IsArray = true;
+                ArrayParams = new ArrayParam(dimension);
             }
             else if (dimension > 1)
                 throw new ArgumentException("Array of arrays cannot be multidimensional!", nameof(dimension));
-
-            _arrayParams.Add(ArrayData.GetInstance(dimension));
+            else
+                ArrayParams.AddArrayOfArrayCount();
         }
 
-        public string GetCLRGenericTypeName() => $"{TypeName}`{Params.Count}";
+        public string GetCLRGenericTypeName() => $"{TypeName}`{TypeParams.Count}";
     }
 }
