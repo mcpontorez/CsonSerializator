@@ -113,7 +113,7 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
         private TypeData ConvertFromRawName(CsonReader cson)
         {
             string typeName = cson.TakeWhile(IsTypeNameChar);
-            bool isGeneric = cson.CurrentChar == CharConsts.BeginedAngleBracket;
+            bool isGeneric = cson.TrySkip(CharConsts.BeginedAngleBracket);
 
             TypeData typeData = new TypeData(typeName, isGeneric);
 
@@ -121,10 +121,8 @@ namespace SerializatorApp.Serialization.Deserializators.Converters
             {
                 do
                 {
-                    //skip BeginedAngleBracket or Comma
-                    cson.SkipOne();
                     typeData.AddParam(ConvertFromRawName(cson));
-                } while (cson.CurrentChar == CharConsts.Comma);
+                } while (cson.TrySkip(CharConsts.Comma));
 
                 cson.Skip(CharConsts.EndedAngleBracket);
             }

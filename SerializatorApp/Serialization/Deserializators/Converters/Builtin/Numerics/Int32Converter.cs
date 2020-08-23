@@ -26,8 +26,8 @@ namespace SerializatorApp.Serialization.Deserializators.Converters.Builtin.Numer
             for (int i = 1; i < count; i++)
             {
                 char c = cson[i];
-                if (!char.IsDigit(c) && c.IsSeparatorOrAnyEndChar())
-                    return true;
+                if (!char.IsDigit(c))
+                    return c.IsSeparatorOrAnyEndChar();
             }
             return true;
         }

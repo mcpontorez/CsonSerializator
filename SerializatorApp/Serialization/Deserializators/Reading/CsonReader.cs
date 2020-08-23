@@ -20,6 +20,8 @@ namespace SerializatorApp.Serialization.Deserializators.Reading
 
         public char CurrentChar => this[0];
 
+        public bool IsNotEnded => Lenght > 0;
+
         public string Buffer => Substring(0);
         public CsonReader(string target)
         {
@@ -86,7 +88,7 @@ namespace SerializatorApp.Serialization.Deserializators.Reading
 
         public bool TrySkip(char value)
         {
-            bool result = CurrentChar == value;
+            bool result = IsNotEnded && CurrentChar == value;
             if (result)
                 SkipOne();
             return result;
