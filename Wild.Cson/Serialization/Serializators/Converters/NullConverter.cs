@@ -9,7 +9,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 {
     public class NullConverter : IConcreteValueConverter
     {
-        public void Convert(object source, ICsonWriter writer)
+        public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
             writer.AddNull();
             return;

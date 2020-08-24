@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Wild.Cson.Serialization.Utils;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {
@@ -12,7 +13,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
         public CollectionConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
 
-        public void Convert(object source, ICsonWriter writer)
+        public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
             TypeInfo sourceType = source.GetType().GetTypeInfo();
 
@@ -22,10 +23,10 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             foreach (var item in (IEnumerable)source)
             {
                 if (index)
-                    writer.AddComma().AddSpace();
+                    writer.AddComma();
                 else index = true;
                 writer.AddLine();
-                _converterResolver.Convert(item, writer);
+                _converterResolver.Convert(item, writer, typeMemberService);
             }
 
             writer.RemoveTabLevel().AddLine().AddEndedBrace();

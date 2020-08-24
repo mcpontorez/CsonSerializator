@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Wild.Cson.Serialization.Utils;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {
@@ -13,7 +14,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
         {
             ICsonWriter csonWriter = new CsonWriter();
 
-            _converter.Convert(source, csonWriter);
+            _converter.Convert(source, csonWriter, new TypeMemberService());
 
             string cson = csonWriter.GetString();
             return cson;

@@ -1,7 +1,7 @@
 ﻿using Wild.Cson.Serialization.Utils;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Wild.Cson.Serialization.Serializators.Writing
 {
@@ -50,7 +50,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
                     namespaceCounts.Add(@namespace, item.Value);
             }
 
-            Dictionary<string, int> typeNameCounts = new Dictionary<string, int>();
+            string[] namespaces = namespaceCounts.OrderBy(nc => nc.Value).Select(nc => nc.Key).ToArray();
 
             foreach (var item in _typeCounts)
             {
@@ -61,7 +61,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
                     isWritingFullName = TypeHelper.Exists(type.Name);
                     if (!isWritingFullName)
                     {
-                        foreach (var @namespace in namespaceCounts.Keys)
+                        foreach (var @namespace in namespaces)
                         {
                             if (type.Namespace != @namespace)
                             {
@@ -76,7 +76,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
                 isWritesFullNames.Add(type, isWritingFullName);
             }
 
-            return new TypesData(namespaceCounts.Keys, isWritesFullNames);
+            return new TypesData(namespaces, isWritesFullNames);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Wild.Cson.Serialization.Utils;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {
@@ -13,7 +14,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
         public DictionaryConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
 
-        public void Convert(object source, ICsonWriter writer)
+        public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
             TypeInfo sourceType = source.GetType().GetTypeInfo();
 
@@ -25,13 +26,13 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             while (enumerator.MoveNext())
             {
                 if (index)
-                    writer.AddComma().AddSpace();
+                    writer.AddComma();
                 else index = true;
 
                 writer.AddLine().AddBeginedSquareBracket();
-                _converterResolver.Convert(enumerator.Key, writer);
+                _converterResolver.Convert(enumerator.Key, writer, typeMemberService);
                 writer.AddEndedSquareBracket().AddSpace().AddEqual().AddSpace();
-                _converterResolver.Convert(enumerator.Value, writer);
+                _converterResolver.Convert(enumerator.Value, writer, typeMemberService);
             }
 
             writer.RemoveTabLevel().AddLine().AddEndedBrace();

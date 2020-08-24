@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Wild.Cson.Serialization.Serializators.Writing;
+using Wild.Cson.Serialization.Utils;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {
@@ -21,16 +22,16 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             _converterCollection = new ConverterCollection(new DictionaryConverter(this), new CollectionConverter(this), new ObjectConverter(this));
         }
 
-        public void Convert(object source, ICsonWriter writer)
+        public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
             IConverterBase converter = _concreteValueConverterCollection.Get(source);
             if (converter == null)
             {
                 TypeInfo type = source.GetType().GetTypeInfo();
-                (_concreteTypeConverterCollection.Get(type) ?? _converterCollection.Get(type)).Convert(source, writer);
+                (_concreteTypeConverterCollection.Get(type) ?? _converterCollection.Get(type)).Convert(source, writer, typeMemberService);
             }
             else
-                converter.Convert(source, writer);
+                converter.Convert(source, writer, typeMemberService);
         }
 
         public bool IsConvertable(TypeInfo type) => _concreteTypeConverterCollection.Contains(type) || _converterCollection.Contains(type);
