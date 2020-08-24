@@ -1,7 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,17 +13,30 @@ using Wild.Cson.Serialization;
 
 namespace SerializatorApp
 {
-    public class CsonBenchmark
+    public class SerializationUtilsBenchmark
     {
         [Benchmark()]
-        public void Serialization()
+        public void SerializationCson()
         {
             CsonUtil.To(TestData.Instance);
         }
+
         [Benchmark()]
-        public void Deserialization()
+        public void SerializationJson()
+        {
+            JsonConvert.SerializeObject(TestData.Instance, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
+        }
+
+        [Benchmark()]
+        public void DeserializationCson()
         {
             CsonUtil.From<DoublePerson>(TestData.InstanceCson);
+        }
+
+        [Benchmark()]
+        public void DeserializationJson()
+        {
+            JsonConvert.DeserializeObject<object>(TestData.InstanceJson);
         }
     }
 
@@ -45,8 +57,8 @@ namespace SerializatorApp
             //Console.WriteLine(Equals(TestData.Instance, desDoublePerson));
             //Console.WriteLine(cson == cson2);
 
-            BenchmarkRunner.Run<CsonBenchmark>();
-
+            Console.WriteLine(TestData.InstanceCson);
+            BenchmarkRunner.Run<SerializationUtilsBenchmark>();
             Console.Read();
         }
     }

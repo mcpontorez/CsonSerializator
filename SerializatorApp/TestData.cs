@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace SerializatorApp.Super
         public object @object = "lalala";
 
         public override bool Equals(object obj) => Equals(obj as Person);
-        public bool Equals(Person obj) => base.Equals(obj) || Equals(SuperId, obj.SuperId) && Equals(SuperName, obj.SuperName) && Equals(@object, obj.@object);
+        public bool Equals(Person obj) => obj != null && (base.Equals(obj) || Equals(SuperId, obj.SuperId) && Equals(SuperName, obj.SuperName) && Equals(@object, obj.@object));
     }
 }
 
@@ -29,7 +30,7 @@ namespace SerializatorApp
         public Size Size;
 
         public override bool Equals(object obj) => Equals(obj as Person);
-        public bool Equals(Person obj) => base.Equals(obj) || Equals(Id, obj.Id) && Equals(Name, obj.Name) && Size.Equals(obj.Size);
+        public bool Equals(Person obj) => obj != null && (base.Equals(obj) || Equals(Id, obj.Id) && Equals(Name, obj.Name) && Size.Equals(obj.Size));
     }
 
     public class DoublePerson
@@ -43,13 +44,14 @@ namespace SerializatorApp
         public string Description;
 
         public override bool Equals(object obj) => Equals(obj as DoublePerson);
-        public bool Equals(DoublePerson obj) => base.Equals(obj) || Equals(SuperPerson, obj.SuperPerson) && Equals(SimplePerson, obj.SimplePerson) && Equals(Description, obj.Description);
+        public bool Equals(DoublePerson obj) => obj != null && (base.Equals(obj) || Equals(SuperPerson, obj.SuperPerson) && Equals(SimplePerson, obj.SimplePerson) && Equals(Description, obj.Description));
     }
 
     public static class TestData
     {
         public static readonly DoublePerson Instance;
         public static readonly string InstanceCson;
+        public static readonly string InstanceJson;
 
         static TestData()
         {
@@ -70,6 +72,7 @@ namespace SerializatorApp
 
             Instance = doublePerson;
             InstanceCson = CsonUtil.To(doublePerson);
+            InstanceJson = JsonConvert.SerializeObject(doublePerson, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
         }
     }
 }
