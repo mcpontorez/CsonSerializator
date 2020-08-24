@@ -80,8 +80,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
                 return;
             }
             int endIndex = typeName.LastIndexOf('`');
-            for (int i = 0; i < endIndex; i++)
-                stringBuilder.Append(typeName[i]);
+            stringBuilder.Append(typeName, 0, endIndex);
         }
     }
 
