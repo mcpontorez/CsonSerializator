@@ -60,49 +60,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\BuiltinTypeConverterCollection.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\BuiltinTypeConverterResolver.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\IBuiltinTypeConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\ConverterResolverCollection.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Customs\DictionaryConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Customs\CustomTypeConverterCollection.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Customs\ICustomTypeConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Customs\CustomTypeConverterResolver.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Customs\CollectionConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\ICanConvertValue.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\IConverterResolver.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\TypeResolver.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\UsingConverter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\DictionaryConverter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\ConverterCollection.cs" />
-    <Compile Include="Serialization\Serializators\Converters\CollectionConverter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\NullConverter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\SingleConverter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\Int32Converter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\StringConverter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\ConverterResolver.cs" />
-    <Compile Include="Serialization\Serializators\Converters\ObjectConverter.cs" />
-    <Compile Include="Serialization\Serializators\Converters\IConverterBase.cs" />
-    <Compile Include="Serialization\Serializators\Converters\MainConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\MainConverterResolver.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\MainConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\Numerics\SingleConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\Numerics\Int32Converter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\Numerics\NumericConverterResolver.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\NullConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Builtin\StringConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Converters\Customs\ObjectConverter.cs" />
-    <Compile Include="Serialization\Deserializators\Reading\CsonReader.cs" />
-    <Compile Include="Serialization\Serializators\Writing\ICsonWriter.cs" />
-    <Compile Include="Serialization\Serializators\Writing\CsonWriter.cs" />
-    <Compile Include="Serialization\Serializators\Writing\TypeService.cs" />
-    <Compile Include="Serialization\Utils\HashSetExtensions.cs" />
-    <Compile Include="Serialization\Utils\CollectionExtensions.cs" />
-    <Compile Include="Serialization\Utils\ObjectExtensions.cs" />
-    <Compile Include="Serialization\Utils\CharConsts.cs" />
-    <Compile Include="Serialization\Utils\StringConsts.cs" />
-    <Compile Include="Serialization\Utils\StringHelper.cs" />
-    <Compile Include="Serialization\Utils\TypeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -119,6 +76,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Wild.Cson\Wild.Cson.csproj">
+      <Project>{489e4021-5a0a-4720-a82f-126b3c029406}</Project>
+      <Name>Wild.Cson</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,4 @@
-﻿using SerializatorApp.Serialization.Deserializators;
-using SerializatorApp.Serialization.Serializators;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace SerializatorApp.Super
 {
     public class Person
@@ -39,7 +38,7 @@ namespace SerializatorApp
     {
         public Person[] Persons;
         public List<Person> PersonList;
-        public List<Super.Person>[] SuperPersonLists = new List<Super.Person>[] { new List<Super.Person>() { new Super.Person() } };
+        public List<Super.Person>[] SuperPersonLists = new List<Super.Person>[] { new List<Super.Person>() { new Super.Person() }, new List<Super.Person> { new Super.Person { SuperId = 0.034F } } };
         public Dictionary<string, Size> SizeDictionary = new Dictionary<string, Size> { ["s"] = new Size(), ["a"] = new Size() { x = 999.043F } };
         public Super.Person SuperPerson;
         public Person SimplePerson;
@@ -63,11 +62,11 @@ namespace SerializatorApp
             DoublePerson doublePerson = new DoublePerson { Persons = new Person[]{ new Person() }, PersonList = new List<Person> { new Person() },
                 SuperPerson = new Super.Person { SuperId = 99, SuperName = "SuperBoris" }, SimplePerson = simplePerson };
 
-            Serialization.Serializators.Converters.MainConverter converter = new Serialization.Serializators.Converters.MainConverter();
+            var converter = new Wild.Cson.Serialization.Serializators.Converters.MainConverter();
             string cson = converter.Convert(doublePerson);
             Console.WriteLine(cson);
 
-            Serialization.Deserializators.Converters.MainConverter deserializator = new Serialization.Deserializators.Converters.MainConverter();
+            var deserializator = new Wild.Cson.Serialization.Deserializators.Converters.MainConverter();
             DoublePerson desDoublePerson = deserializator.Convert<DoublePerson>(cson);
 
             string cson2 = converter.Convert(desDoublePerson);
