@@ -15,11 +15,6 @@ namespace SerializatorApp
 {
     public class SerializationUtilsBenchmark
     {
-        [Benchmark()]
-        public void SerializationCson()
-        {
-            CsonUtil.To(TestData.Instance);
-        }
 
         [Benchmark()]
         public void SerializationJson()
@@ -28,16 +23,22 @@ namespace SerializatorApp
         }
 
         [Benchmark()]
-        public void DeserializationCson()
+        public void SerializationCson()
         {
-            CsonUtil.From<DoublePerson>(TestData.InstanceCson);
+            CsonUtil.To(TestData.Instance);
         }
 
-        [Benchmark()]
-        public void DeserializationJson()
-        {
-            JsonConvert.DeserializeObject<object>(TestData.InstanceJson);
-        }
+        //[Benchmark()]
+        //public void DeserializationJson()
+        //{
+        //    JsonConvert.DeserializeObject<object>(TestData.InstanceJson);
+        //}
+
+        //[Benchmark()]
+        //public void DeserializationCson()
+        //{
+        //    CsonUtil.From<DoublePerson>(TestData.InstanceCson);
+        //}
     }
 
     class Program
@@ -59,6 +60,13 @@ namespace SerializatorApp
 
             Console.WriteLine(TestData.InstanceCson);
             BenchmarkRunner.Run<SerializationUtilsBenchmark>();
+
+            //var b = new SerializationUtilsBenchmark();
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    b.SerializationCson();
+            //}
+            Console.WriteLine(AppDomain.CurrentDomain.GetAssemblies().Count(a => a.IsDynamic));
             Console.Read();
         }
     }
