@@ -66,7 +66,7 @@ namespace SerializatorApp
             //{
             //    b.SerializationCson();
             //}
-            Console.WriteLine(AppDomain.CurrentDomain.GetAssemblies().Count(a => a.IsDynamic));
+            Console.WriteLine(AppDomain.CurrentDomain.GetAssemblies().Length);
             Console.Read();
         }
     }

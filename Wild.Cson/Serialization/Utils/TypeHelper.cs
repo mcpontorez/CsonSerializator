@@ -17,7 +17,7 @@ namespace Wild.Cson.Serialization.Utils
 
     public static class TypeHelper
     {
-        private static IReadOnlyList<TypeData> _allTypes;
+        private static IReadOnlyList<IReadOnlyList<TypeData>> _allTypes;
 
         public static Type Get(string name)
         {
@@ -40,7 +40,7 @@ namespace Wild.Cson.Serialization.Utils
         {
             if(_allTypes == null)
             {
-                List<TypeData> allTypes = new List<TypeData>();
+                List<List<TypeData>> countNameTypeDataPairs = new List<List<TypeData>>(30);
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     if (assembly.IsDynamic)
@@ -48,19 +48,27 @@ namespace Wild.Cson.Serialization.Utils
                     Type[] types = assembly.GetExportedTypes();
                     foreach (var typeItem in types)
                     {
-                        allTypes.Add(new TypeData(typeItem.Name, typeItem.Namespace, typeItem.FullName));
+                        TypeData typeData = new TypeData(typeItem.Name, typeItem.Namespace, typeItem.FullName);
+                        int index = typeData.Name.Length;
+                        while (index >= countNameTypeDataPairs.Count)
+                        {
+                            countNameTypeDataPairs.Add(new List<TypeData>());
+                        }
+                        countNameTypeDataPairs[index].Add(typeData);
                     }
                 }
-                _allTypes = allTypes;
+                _allTypes = countNameTypeDataPairs;
             }
 
-            if (type.Namespace == null)
+            string typeName = type.Name, typeNamespace = type.Namespace;
+            if (typeNamespace == null)
                 return false;
 
-            string typeName = type.Name, typeNamespace = type.Namespace;
-            for (int i = 0; i < _allTypes.Count; i++)
+            var typeDatas = _allTypes[typeName.Length];
+
+            for (int i = 0; i < typeDatas.Count; i++)
             {
-                TypeData typeItem = _allTypes[i];
+                TypeData typeItem = typeDatas[i];
 
                 if (typeItem.Name == typeName && typeItem.Namespace != typeNamespace)
                 {
