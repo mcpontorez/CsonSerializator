@@ -9,7 +9,7 @@ namespace Wild.Cson.Serialization.Utils
             BeginedAngleBracket = '<', EndedAngleBracket = '>',
             BeginedSquareBracket = '[', EndedSquareBracket = ']',
             Quote = '\'', DoubleQuote = '"',
-            Comma = ',', Dot = '.', Semicolon = ';', Equal = '=', Space = ' ',
+            Comma = ',', Dot = '.', Semicolon = ';', Equal = '=', Space = ' ', Tab = '\t',
             AtSign = '@', Underscore = '_',
             Minus = '-';
     }

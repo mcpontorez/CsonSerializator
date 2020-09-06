@@ -1,7 +1,6 @@
 ﻿using Wild.Cson.Serialization.Utils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -9,7 +8,6 @@ namespace Wild.Cson.Serialization.Serializators.Writing
 {
     internal interface IStringPart
     {
-        string ToString();
     }
     internal interface ISecondStringPart : IStringPart { }
     internal class StringContainer : IStringPart
@@ -17,8 +15,6 @@ namespace Wild.Cson.Serialization.Serializators.Writing
         public static readonly StringContainer Null = new StringContainer(StringConsts.Null), New = new StringContainer(StringConsts.New);
         public readonly string Value;
         public StringContainer(string value) => Value = value;
-
-        public override string ToString() => Value;
     }
 
     internal class CharContainer : IStringPart
@@ -32,36 +28,29 @@ namespace Wild.Cson.Serialization.Serializators.Writing
             AtSign = new CharContainer(CharConsts.AtSign);
         public readonly char Value;
         public CharContainer(char value) => Value = value;
-
-        public override string ToString() => Value.ToString();
     }
 
     internal class TabLevelContainer : ISecondStringPart
     {
-        public static readonly char Tab = '\t';
-
         public static readonly TabLevelContainer OneTab = new TabLevelContainer(1), MinusOneTab = new TabLevelContainer(-1);
 
         public readonly int Value;
         public TabLevelContainer(int value) => Value = value;
-
-        public override string ToString()
-        {
-            char[] result = new char[Value];
-            for (int i = 0; i < Value; i++)
-                result[i] = Tab;
-            return new string(result);
-        }
     }
 
     internal class SecondStringContainer : ISecondStringPart
     {
-        public static readonly SecondStringContainer NewLine = new SecondStringContainer(Environment.NewLine), Space = new SecondStringContainer(CharConsts.Space.ToString());
+        public static readonly SecondStringContainer NewLine = new SecondStringContainer(Environment.NewLine);
 
         public readonly string Value;
         private SecondStringContainer(string value) => Value = value;
+    }
+    internal class SecondCharContainer : ISecondStringPart
+    {
+        public static readonly SecondCharContainer Space = new SecondCharContainer(CharConsts.Space);
 
-        public override string ToString() => Value;
+        public readonly char Value;
+        private SecondCharContainer(char value) => Value = value;
     }
 
     internal class TypeContainer : IStringPart
@@ -69,8 +58,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
         public readonly TypeInfo Value;
         public TypeContainer(TypeInfo value) => Value = value;
 
-        public override string ToString() => Value.ToString();
-        public void ToString(StringBuilder stringBuilder, bool isFullTypeName)
+        public void AppendString(StringBuilder stringBuilder, bool isFullTypeName)
         {
             string typeName = isFullTypeName ? Value.FullName : Value.Name;
             
@@ -152,7 +140,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
         }
 
         public ICsonWriter AddLine() => Add(SecondStringContainer.NewLine);
-        public ICsonWriter AddSpace() => Add(SecondStringContainer.Space);
+        public ICsonWriter AddSpace() => Add(SecondCharContainer.Space);
 
         public ICsonWriter AddTabLevel(int value) => Add(new TabLevelContainer(value));
 
@@ -186,12 +174,15 @@ namespace Wild.Cson.Serialization.Serializators.Writing
                         stringBuilder.Append(s.Value);
                         break;
                     case TypeContainer tc:
-                        tc.ToString(stringBuilder, typesData.IsWritesFullNames[tc.Value]);
+                        tc.AppendString(stringBuilder, typesData.IsWritesFullNames[tc.Value]);
+                        break;
+                    case SecondCharContainer scc:
+                        stringBuilder.Append(scc.Value);
                         break;
                     case SecondStringContainer ssc:
                         stringBuilder.Append(ssc.Value);
                         if(ssc == SecondStringContainer.NewLine)
-                            stringBuilder.Append(TabLevelContainer.Tab, tabLevel);
+                            stringBuilder.Append(CharConsts.Tab, tabLevel);
                         break;
                     case TabLevelContainer tlc:
                         tabLevel += tlc.Value;
