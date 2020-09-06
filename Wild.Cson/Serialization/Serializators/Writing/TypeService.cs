@@ -56,7 +56,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
             {
                 Type type = item.Key;
                 bool isWritingFullName = false;
-                isWritingFullName = TypeHelper.Exists(namespaces, type);
+                isWritingFullName = TypeHelper.HasManyNamespaces(namespaces, type);
 
                 isWritesFullNames.Add(type, isWritingFullName);
             }

@@ -17,7 +17,7 @@ namespace Wild.Cson.Serialization.Utils
 
     public static class TypeHelper
     {
-        private static IReadOnlyList<IReadOnlyList<TypeData>> _allTypes;
+        private static IReadOnlyList<IReadOnlyList<TypeData>> _countNameTypeDataPairs;
 
         public static Type Get(string name)
         {
@@ -36,35 +36,17 @@ namespace Wild.Cson.Serialization.Utils
 
         public static bool Exists(string name) => Get(name) != null;
 
-        public static bool Exists(IEnumerable<string> namespaces, Type type)
+        public static bool HasManyNamespaces(IEnumerable<string> namespaces, Type type)
         {
-            if(_allTypes == null)
-            {
-                List<List<TypeData>> countNameTypeDataPairs = new List<List<TypeData>>(30);
-                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    if (assembly.IsDynamic)
-                        continue;
-                    Type[] types = assembly.GetExportedTypes();
-                    foreach (var typeItem in types)
-                    {
-                        TypeData typeData = new TypeData(typeItem.Name, typeItem.Namespace, typeItem.FullName);
-                        int index = typeData.Name.Length;
-                        while (index >= countNameTypeDataPairs.Count)
-                        {
-                            countNameTypeDataPairs.Add(new List<TypeData>());
-                        }
-                        countNameTypeDataPairs[index].Add(typeData);
-                    }
-                }
-                _allTypes = countNameTypeDataPairs;
-            }
+            SetTypes();
 
             string typeName = type.Name, typeNamespace = type.Namespace;
             if (typeNamespace == null)
                 return false;
 
-            var typeDatas = _allTypes[typeName.Length];
+            var typeDatas = _countNameTypeDataPairs[typeName.Length];
+            if (typeDatas == null)
+                throw new Exception("Unknown type!");
 
             for (int i = 0; i < typeDatas.Count; i++)
             {
@@ -83,6 +65,37 @@ namespace Wild.Cson.Serialization.Utils
             }
 
             return false;
+        }
+
+        private static void SetTypes()
+        {
+            if (_countNameTypeDataPairs == null)
+            {
+                List<List<TypeData>> countNameTypeDataPairs = new List<List<TypeData>>(30);
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (assembly.IsDynamic)
+                        continue;
+                    Type[] types = assembly.GetExportedTypes();
+                    foreach (var typeItem in types)
+                    {
+                        TypeData typeData = new TypeData(typeItem.Name, typeItem.Namespace, typeItem.FullName);
+                        int index = typeData.Name.Length;
+                        while (index >= countNameTypeDataPairs.Count)
+                        {
+                            countNameTypeDataPairs.Add(null);
+                        }
+                        List<TypeData> currentTypeDatas = countNameTypeDataPairs[index];
+                        if (currentTypeDatas == null)
+                        {
+                            currentTypeDatas = new List<TypeData>();
+                            countNameTypeDataPairs[index] = currentTypeDatas;
+                        }
+                        currentTypeDatas.Add(typeData);
+                    }
+                }
+                _countNameTypeDataPairs = countNameTypeDataPairs;
+            }
         }
     }
 }
