@@ -15,17 +15,16 @@ namespace SerializatorApp
 {
     public class SerializationUtilsBenchmark
     {
+        [Benchmark()]
+        public void SerializationCson()
+        {
+            CsonUtil.To(TestData.Instance);
+        }
 
         [Benchmark()]
         public void SerializationJson()
         {
             JsonConvert.SerializeObject(TestData.Instance, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
-        }
-
-        [Benchmark()]
-        public void SerializationCson()
-        {
-            CsonUtil.To(TestData.Instance);
         }
 
         //[Benchmark()]
@@ -66,7 +65,7 @@ namespace SerializatorApp
             //{
             //    b.SerializationCson();
             //}
-            Console.WriteLine(AppDomain.CurrentDomain.GetAssemblies().Length);
+
             Console.Read();
         }
     }

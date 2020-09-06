@@ -40,9 +40,11 @@ namespace Wild.Cson.Serialization.Utils
         {
             SetTypes();
 
-            string typeName = type.Name, typeNamespace = type.Namespace;
+            string typeNamespace = type.Namespace;
             if (typeNamespace == null)
                 return false;
+            string typeName = type.Name;
+            char typeNameFirstChar = typeName[0];
 
             var typeDatas = _countNameTypeDataPairs[typeName.Length];
             if (typeDatas == null)
@@ -52,7 +54,7 @@ namespace Wild.Cson.Serialization.Utils
             {
                 TypeData typeItem = typeDatas[i];
 
-                if (typeItem.Name == typeName && typeItem.Namespace != typeNamespace)
+                if (typeItem.Name[0] == typeNameFirstChar && typeItem.Name == typeName && typeItem.Namespace != typeNamespace)
                 {
                     if (typeItem.Namespace == null)
                         return true;
