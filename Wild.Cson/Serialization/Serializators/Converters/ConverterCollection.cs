@@ -20,20 +20,22 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
     public class ConverterCollection : IConverterCollection
     {
-        private IEnumerable<IConverter> _converters;
-        
-        public ConverterCollection(IEnumerable<IConverter> converters) => Init(converters);
+        private IConverter[] _converters;
 
-        public ConverterCollection(params IConverter[] converters) => Init(converters);
-
-        private void Init(IEnumerable<IConverter> converters)
-        {
-            _converters = converters;
-        }
+        public ConverterCollection(params IConverter[] converters) => _converters = converters;
 
         public bool Contains(Type type) => _converters.Any(c => c.IsConvertable(type));
 
-        public IConverter Get(Type type) => _converters.FirstOrDefault(c => c.IsConvertable(type));
+        public IConverter Get(Type type)
+        {
+            for (int i = 0; i < _converters.Length; i++)
+            {
+                var converter = _converters[i];
+                if (converter.IsConvertable(type))
+                    return converter;
+            }
+            return null;
+        }
     }
 
     public class ConcreteValueConverterCollection : IConcreteValueConverterCollection

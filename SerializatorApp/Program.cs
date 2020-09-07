@@ -13,6 +13,55 @@ using Wild.Cson.Serialization;
 
 namespace SerializatorApp
 {
+    public class AnyBenchmark
+    {
+        private static List<string> _list = new List<string>();
+        private static object _listAsObject = _list;
+        private static Type _listType = _list.GetType();
+
+        public bool _result1, _result2;
+
+        //[Benchmark()]
+        //public void IsType()
+        //{
+        //    _result1 = _list is IList;
+        //}
+
+        //[Benchmark()]
+        //public void AsObjectIsType()
+        //{
+        //    _result1 = _listAsObject is IList;
+        //}
+
+        //[Benchmark()]
+        //public void ReflectionIsType()
+        //{
+        //    _result2 = typeof(IList).IsAssignableFrom(_listType);
+        //}
+
+        [Benchmark()]
+        public void TestGetType()
+        {
+            _listType = _list.GetType();
+        }
+
+        [Benchmark()]
+        public void TestObjectGetType()
+        {
+            _listType = _listAsObject.GetType();
+        }
+
+        //private static object o = new Dictionary<string, List<DoublePerson>>();
+
+        //[Benchmark()]
+        //public void TestGetType()
+        //{
+        //    o.GetType();
+        //    o.GetType();
+        //    o.GetType();
+        //}
+    }
+
     public class SerializationUtilsBenchmark
     {
         [Benchmark()]
@@ -59,12 +108,13 @@ namespace SerializatorApp
 
             Console.WriteLine(TestData.InstanceCson);
             //BenchmarkRunner.Run<SerializationUtilsBenchmark>();
+            BenchmarkRunner.Run<AnyBenchmark>();
 
-            var b = new SerializationUtilsBenchmark();
-            for (int i = 0; i < 100000; i++)
-            {
-                b.SerializationCson();
-            }
+            //var b = new SerializationUtilsBenchmark();
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    b.SerializationCson();
+            //}
 
             Console.Read();
         }
