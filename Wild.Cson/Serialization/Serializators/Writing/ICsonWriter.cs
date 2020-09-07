@@ -22,7 +22,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
 
         ICsonWriter Add(object value);
 
-        ICsonWriter AddType(TypeInfo type);
+        ICsonWriter AddType(Type type);
 
         ICsonWriter AddLine();
         ICsonWriter AddSpace();

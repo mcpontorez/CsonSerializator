@@ -55,26 +55,49 @@ namespace Wild.Cson.Serialization.Serializators.Writing
 
     internal class TypeContainer : IStringPart
     {
-        public readonly TypeInfo Value;
-        public TypeContainer(TypeInfo value) => Value = value;
+        public readonly Type Value;
+
+        private bool _isReady = false;
+        private string _typeName;
+        private int _typeNameEndIndex = -1;
+
+        public TypeContainer(Type value) => Value = value;
 
         public void AppendString(StringBuilder stringBuilder, bool isFullTypeName)
         {
-            string typeName = isFullTypeName ? Value.FullName : Value.Name;
-            
-            if (!Value.IsGenericType)
+            if (!_isReady)
             {
-                stringBuilder.Append(typeName);
-                return;
+                _isReady = true;
+                _typeName = isFullTypeName ? Value.FullName : Value.Name;
+                _typeNameEndIndex = _typeName.LastIndexOf('`');
             }
-            int endIndex = typeName.LastIndexOf('`');
-            stringBuilder.Append(typeName, 0, endIndex);
+
+            if (_typeNameEndIndex < 0)
+                stringBuilder.Append(_typeName);
+            else
+                stringBuilder.Append(_typeName, 0, _typeNameEndIndex);
+        }
+    }
+
+    internal class TypeContainerFactory
+    {
+        private Dictionary<Type, TypeContainer> _typeContainers = new Dictionary<Type, TypeContainer>();
+            
+        public TypeContainer GetTypeContainer(Type type)
+        {
+            if (_typeContainers.TryGetValue(type, out TypeContainer typeContainer))
+                return typeContainer;
+            typeContainer = new TypeContainer(type);
+            _typeContainers.Add(type, typeContainer);
+            return typeContainer;
         }
     }
 
     public sealed class CsonWriter : ICsonWriter
     {
         private ITypeService _typeService = new TypeService();
+
+        private TypeContainerFactory _typeContainerFactory = new TypeContainerFactory();
 
         private List<IStringPart> _stringParts = new List<IStringPart>();
 
@@ -116,16 +139,21 @@ namespace Wild.Cson.Serialization.Serializators.Writing
 
         public ICsonWriter Add(object value) => Add(value.ToString());
 
-        public ICsonWriter AddType(TypeInfo type)
+        public ICsonWriter AddType(Type type)
         {
             if (type.IsArray)
-                return AddType(type.GetElementType().GetTypeInfo()).AddBeginedSquareBracket().AddEndedSquareBracket();
-
-            _typeService.Add(type);
-            Add(new TypeContainer(type));
+                return AddType(type.GetElementType()).AddBeginedSquareBracket().AddEndedSquareBracket();
 
             if (!type.IsGenericType)
-                return this;
+            {
+                _typeService.Add(type);
+                return Add(_typeContainerFactory.GetTypeContainer(type));
+            }
+
+            Type genericTypeDefinition = type.GetGenericTypeDefinition();
+
+            _typeService.Add(genericTypeDefinition);
+            Add(_typeContainerFactory.GetTypeContainer(genericTypeDefinition));
 
             AddBeginedAngleBracket();
             Type[] genericTypeArguments = type.GenericTypeArguments;
@@ -133,7 +161,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
             {
                 if (i > 0)
                     AddComma().AddSpace();
-                AddType(genericTypeArguments[i].GetTypeInfo());
+                AddType(genericTypeArguments[i]);
             }
             AddEndedAngleBracket();
             return this;

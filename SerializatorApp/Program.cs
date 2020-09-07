@@ -58,13 +58,13 @@ namespace SerializatorApp
             //Console.WriteLine(cson == cson2);
 
             Console.WriteLine(TestData.InstanceCson);
-            BenchmarkRunner.Run<SerializationUtilsBenchmark>();
+            //BenchmarkRunner.Run<SerializationUtilsBenchmark>();
 
-            //var b = new SerializationUtilsBenchmark();
-            //for (int i = 0; i < 10000; i++)
-            //{
-            //    b.SerializationCson();
-            //}
+            var b = new SerializationUtilsBenchmark();
+            for (int i = 0; i < 100000; i++)
+            {
+                b.SerializationCson();
+            }
 
             Console.Read();
         }
