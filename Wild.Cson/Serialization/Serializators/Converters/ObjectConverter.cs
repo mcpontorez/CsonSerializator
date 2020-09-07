@@ -9,8 +9,9 @@ namespace Wild.Cson.Serialization.Serializators.Converters
     public class ObjectConverter : IConverter
     {
         private readonly IConverterResolver _converterResolver;
-
         public ObjectConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
+        public bool IsConvertable(Type type) => true;
+        public bool IsConvertable(object source, Type type) => true;
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
@@ -30,7 +31,5 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             }
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
-
-        public bool IsConvertable(Type type) => true;
     }
 }

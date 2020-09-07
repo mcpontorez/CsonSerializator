@@ -107,11 +107,11 @@ namespace SerializatorApp
             //Console.WriteLine(cson == cson2);
 
             Console.WriteLine(TestData.InstanceCson);
-            //BenchmarkRunner.Run<SerializationUtilsBenchmark>();
-            BenchmarkRunner.Run<AnyBenchmark>();
+            BenchmarkRunner.Run<SerializationUtilsBenchmark>();
+            //BenchmarkRunner.Run<AnyBenchmark>();
 
             //var b = new SerializationUtilsBenchmark();
-            //for (int i = 0; i < 100000; i++)
+            //for (int i = 0; i < 10000; i++)
             //{
             //    b.SerializationCson();
             //}

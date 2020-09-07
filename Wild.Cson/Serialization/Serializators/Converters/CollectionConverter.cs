@@ -10,12 +10,13 @@ namespace Wild.Cson.Serialization.Serializators.Converters
     public class CollectionConverter : IConverter
     {
         private readonly IConverterResolver _converterResolver;
-
         public CollectionConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
+
+        public bool IsConvertable(object source, Type type) => source is IList || typeof(ICollection<>).IsAssignableFrom(type);
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
-            TypeInfo sourceType = source.GetType().GetTypeInfo();
+            Type sourceType = source.GetType();
 
             writer.AddNew().AddType(sourceType).AddLine().AddBeginedBrace().AddTabLevel();
 
@@ -31,7 +32,5 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
-
-        public bool IsConvertable(Type type) => typeof(ICollection<>).IsAssignableFrom(type) || typeof(IList).IsAssignableFrom(type);
     }
 }

@@ -6,16 +6,16 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 {
     public interface IConverterCollection
     {
-        bool Contains(Type type);
+        bool Contains(object source, Type type);
 
-        IConverter Get(Type type);
+        IConverter Get(object source, Type type);
     }
 
     public interface IConcreteValueConverterCollection
     {
-        bool Contains(object value);
+        bool Contains(object source);
 
-        IConcreteValueConverter Get(object value);
+        IConcreteValueConverter Get(object source);
     }
 
     public class ConverterCollection : IConverterCollection
@@ -24,14 +24,14 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
         public ConverterCollection(params IConverter[] converters) => _converters = converters;
 
-        public bool Contains(Type type) => _converters.Any(c => c.IsConvertable(type));
+        public bool Contains(object source, Type type) => _converters.Any(c => c.IsConvertable(source, type));
 
-        public IConverter Get(Type type)
+        public IConverter Get(object source, Type type)
         {
             for (int i = 0; i < _converters.Length; i++)
             {
                 var converter = _converters[i];
-                if (converter.IsConvertable(type))
+                if (converter.IsConvertable(source, type))
                     return converter;
             }
             return null;
@@ -51,9 +51,9 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             _converters = converters;
         }
 
-        public bool Contains(object value) => _converters.Any(c => c.IsConvertable(value));
+        public bool Contains(object source) => _converters.Any(c => c.IsConvertable(source));
 
-        public IConcreteValueConverter Get(object value) => _converters.FirstOrDefault(c => c.IsConvertable(value));
+        public IConcreteValueConverter Get(object source) => _converters.FirstOrDefault(c => c.IsConvertable(source));
     }
 
     public class ConcreteTypeConverterCollection : IConverterCollection
@@ -69,9 +69,10 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             _converters = converters.ToDictionary(c => c.ConcreteType);
         }
 
-        public bool Contains(Type type) => _converters.ContainsKey(type);
+        public bool Contains(object source, Type type) => _converters.ContainsKey(type);
 
-        public IConverter Get(Type type) => GetConcrete(type);
         public IConcreteTypeConverter GetConcrete(Type type) => _converters.TryGetValue(type, out var converter) ? converter : null;
+
+        public IConverter Get(object source, Type type) => (IConverter)GetConcrete(type);
     }
 }

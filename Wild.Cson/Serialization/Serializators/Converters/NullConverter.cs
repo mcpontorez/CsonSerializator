@@ -15,6 +15,8 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             return;
         }
 
-        public bool IsConvertable(object value) => value == null;
+        public bool IsConvertable(object source) => source == null;
+
+        public bool IsConvertable(object source, Type type) => IsConvertable(source);
     }
 }

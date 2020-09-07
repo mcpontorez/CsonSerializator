@@ -11,8 +11,9 @@ namespace Wild.Cson.Serialization.Serializators.Converters
     public class DictionaryConverter : IConverter
     {
         private readonly IConverterResolver _converterResolver;
-
         public DictionaryConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
+        public bool IsConvertable(Type type) => typeof(IDictionary).IsAssignableFrom(type);
+        public bool IsConvertable(object source, Type type) => source is IDictionary;
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
@@ -37,7 +38,5 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
-
-        public bool IsConvertable(Type type) => typeof(IDictionary).IsAssignableFrom(type);
     }
 }

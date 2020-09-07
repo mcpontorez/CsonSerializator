@@ -10,14 +10,14 @@ namespace Wild.Cson.Serialization.Serializators.Converters
         void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService);
     }
 
-    public interface IConcreteValueConverter : IConverterBase
-    {
-        bool IsConvertable(object value);
-    }
-
     public interface IConverter : IConverterBase
     {
-        bool IsConvertable(Type type);
+        bool IsConvertable(object source, Type type);
+    }
+
+    public interface IConcreteValueConverter : IConverter
+    {
+        bool IsConvertable(object source);
     }
 
     public interface IConcreteTypeConverter : IConverter

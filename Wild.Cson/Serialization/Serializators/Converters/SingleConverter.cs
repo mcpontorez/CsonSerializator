@@ -10,6 +10,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
     {
         public Type ConcreteType { get; } = typeof(float);
         public bool IsConvertable(Type type) => type == ConcreteType;
+        public bool IsConvertable(object source, Type type) => type == ConcreteType;
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService) => writer.Add($"{((float)source).ToString(CultureInfo.InvariantCulture)}F");
     }
