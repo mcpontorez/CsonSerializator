@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Wild.Cson.Serialization.Utils;
+using System;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {
@@ -13,7 +14,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
-            TypeInfo sourceType = source.GetType().GetTypeInfo();
+            Type sourceType = source.GetType();
 
             writer.AddNew().AddType(sourceType).AddLine().AddBeginedBrace().AddTabLevel();
             var sourceFields = typeMemberService.GetSerializableMembers(sourceType);
@@ -30,6 +31,6 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
 
-        public bool IsConvertable(TypeInfo type) => true;
+        public bool IsConvertable(Type type) => true;
     }
 }

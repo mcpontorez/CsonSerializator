@@ -7,8 +7,8 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 {
     public class StringConverter : IConcreteTypeConverter
     {
-        public bool IsConvertable(TypeInfo type) => type == ConcreteType;
-        public TypeInfo ConcreteType { get; } = typeof(string).GetTypeInfo();
+        public bool IsConvertable(Type type) => type == ConcreteType;
+        public Type ConcreteType { get; } = typeof(string);
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService) => writer.Add($"\"{source}\"");
     }

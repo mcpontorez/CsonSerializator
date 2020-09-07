@@ -32,6 +32,6 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
 
-        public bool IsConvertable(TypeInfo type) => typeof(ICollection<>).GetTypeInfo().IsAssignableFrom(type) || typeof(IList).GetTypeInfo().IsAssignableFrom(type);
+        public bool IsConvertable(Type type) => typeof(ICollection<>).IsAssignableFrom(type) || typeof(IList).IsAssignableFrom(type);
     }
 }

@@ -27,14 +27,15 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             IConverterBase converter = _concreteValueConverterCollection.Get(source);
             if (converter == null)
             {
-                TypeInfo type = source.GetType().GetTypeInfo();
-                (_concreteTypeConverterCollection.Get(type) ?? _converterCollection.Get(type)).Convert(source, writer, typeMemberService);
+                Type type = source.GetType();
+                converter = _concreteTypeConverterCollection.Get(type);
+                if(converter == null)
+                    converter = _converterCollection.Get(type);
             }
-            else
-                converter.Convert(source, writer, typeMemberService);
+            converter.Convert(source, writer, typeMemberService);
         }
 
-        public bool IsConvertable(TypeInfo type) => _concreteTypeConverterCollection.Contains(type) || _converterCollection.Contains(type);
+        public bool IsConvertable(Type type) => _concreteTypeConverterCollection.Contains(type) || _converterCollection.Contains(type);
 
         public bool IsConvertable(object value) => _concreteValueConverterCollection.Contains(value);
     }

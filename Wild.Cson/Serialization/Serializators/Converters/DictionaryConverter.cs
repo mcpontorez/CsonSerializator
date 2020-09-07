@@ -16,7 +16,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
-            TypeInfo sourceType = source.GetType().GetTypeInfo();
+            Type sourceType = source.GetType();
 
             writer.AddNew().AddType(sourceType).AddLine().AddBeginedBrace().AddTabLevel();
 
@@ -38,6 +38,6 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
 
-        public bool IsConvertable(TypeInfo type) => typeof(IDictionary).GetTypeInfo().IsAssignableFrom(type);
+        public bool IsConvertable(Type type) => typeof(IDictionary).IsAssignableFrom(type);
     }
 }

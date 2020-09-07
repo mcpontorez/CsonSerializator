@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {
     public interface IConverterCollection
     {
-        bool Contains(TypeInfo type);
+        bool Contains(Type type);
 
-        IConverter Get(TypeInfo type);
+        IConverter Get(Type type);
     }
 
     public interface IConcreteValueConverterCollection
@@ -32,9 +31,9 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             _converters = converters;
         }
 
-        public bool Contains(TypeInfo type) => _converters.Any(c => c.IsConvertable(type));
+        public bool Contains(Type type) => _converters.Any(c => c.IsConvertable(type));
 
-        public IConverter Get(TypeInfo type) => _converters.FirstOrDefault(c => c.IsConvertable(type));
+        public IConverter Get(Type type) => _converters.FirstOrDefault(c => c.IsConvertable(type));
     }
 
     public class ConcreteValueConverterCollection : IConcreteValueConverterCollection
@@ -57,7 +56,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
     public class ConcreteTypeConverterCollection : IConverterCollection
     {
-        private IDictionary<TypeInfo, IConcreteTypeConverter> _converters;
+        private IDictionary<Type, IConcreteTypeConverter> _converters;
 
         public ConcreteTypeConverterCollection(IEnumerable<IConcreteTypeConverter> converters) => Init(converters);
 
@@ -68,9 +67,9 @@ namespace Wild.Cson.Serialization.Serializators.Converters
             _converters = converters.ToDictionary(c => c.ConcreteType);
         }
 
-        public bool Contains(TypeInfo type) => _converters.ContainsKey(type);
+        public bool Contains(Type type) => _converters.ContainsKey(type);
 
-        public IConverter Get(TypeInfo type) => GetConcrete(type);
-        public IConcreteTypeConverter GetConcrete(TypeInfo type) => _converters.TryGetValue(type, out var converter) ? converter : null;
+        public IConverter Get(Type type) => GetConcrete(type);
+        public IConcreteTypeConverter GetConcrete(Type type) => _converters.TryGetValue(type, out var converter) ? converter : null;
     }
 }

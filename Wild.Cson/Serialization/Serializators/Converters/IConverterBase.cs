@@ -17,11 +17,11 @@ namespace Wild.Cson.Serialization.Serializators.Converters
 
     public interface IConverter : IConverterBase
     {
-        bool IsConvertable(TypeInfo type);
+        bool IsConvertable(Type type);
     }
 
     public interface IConcreteTypeConverter : IConverter
     {
-        TypeInfo ConcreteType { get; }
+        Type ConcreteType { get; }
     }
 }
