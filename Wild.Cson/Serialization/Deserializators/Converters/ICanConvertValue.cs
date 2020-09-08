@@ -9,6 +9,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
 {
     public interface ICanConvertValue
     {
-        bool IsCanConvert(CsonReader cson);
+        bool IsConvertable(CsonReader cson);
     }
 }

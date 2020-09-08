@@ -13,18 +13,18 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
         public DictionaryConverter(IConverterResolver mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
 
-        public bool IsCanConvertable(Type type) => typeof(IDictionary).GetTypeInfo().IsAssignableFrom(type);
+        public bool IsConvertable(Type type) => typeof(IDictionary).GetTypeInfo().IsAssignableFrom(type);
 
-        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
+        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
-            return ConvertDictionary<TResult>(type, cson, typeResolver);
+            return ConvertDictionary<TResult>(type, cson, typeResolver, typeMemberService);
         }
 
-        private TResult ConvertDictionary<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
+        private TResult ConvertDictionary<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             IDictionary resultDictionary = (IDictionary)Activator.CreateInstance(type);
 
-            IEnumerator<KeyValuePair<object, object>> enumerator = ConvertDictionaryEnumerable<object, object>(cson, typeResolver);
+            IEnumerator<KeyValuePair<object, object>> enumerator = ConvertDictionaryEnumerable<object, object>(cson, typeResolver, typeMemberService);
 
             while (enumerator.MoveNext())
             {
@@ -35,7 +35,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
             return resultDictionary.WildCast<TResult>();
         }
 
-        private IEnumerator<KeyValuePair<TKey, TValue>> ConvertDictionaryEnumerable<TKey, TValue>(CsonReader cson, ITypeResolver typeResolver)
+        private IEnumerator<KeyValuePair<TKey, TValue>> ConvertDictionaryEnumerable<TKey, TValue>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             cson.Skip(CharConsts.BeginedBrace);
 
@@ -48,9 +48,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
                     index = true;
 
                 cson.Skip(CharConsts.BeginedSquareBracket).SkipWhileSeparators();
-                TKey key = _mainConverterResolver.Convert<TKey>(cson, typeResolver);
+                TKey key = _mainConverterResolver.Convert<TKey>(cson, typeResolver, typeMemberService);
                 cson.Skip(CharConsts.EndedSquareBracket).SkipWhileSeparators().Skip(CharConsts.Equal).SkipWhileSeparators();
-                TValue value = _mainConverterResolver.Convert<TValue>(cson, typeResolver);
+                TValue value = _mainConverterResolver.Convert<TValue>(cson, typeResolver, typeMemberService);
 
                 yield return new KeyValuePair<TKey, TValue>(key, value);
             }

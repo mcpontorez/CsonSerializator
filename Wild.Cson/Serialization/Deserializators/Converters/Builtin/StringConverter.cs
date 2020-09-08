@@ -19,6 +19,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
             return result;
         }
 
-        public bool IsCanConvert(CsonReader cson) => cson.StartsWith(CharConsts.DoubleQuote);
+        public bool IsConvertable(CsonReader cson) => cson.StartsWith(CharConsts.DoubleQuote);
     }
 }

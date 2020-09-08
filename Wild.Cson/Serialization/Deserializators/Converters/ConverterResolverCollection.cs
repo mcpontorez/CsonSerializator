@@ -21,8 +21,8 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
 
         public ConverterResolverCollection(params IConverterResolver[] converters) : this((IEnumerable<IConverterResolver>)converters) { }
 
-        public bool Contains(CsonReader cson) => _converterResolvers.Any(c => c.IsCanConvert(cson));
+        public bool Contains(CsonReader cson) => _converterResolvers.Any(c => c.IsConvertable(cson));
 
-        public IConverterResolver Get(CsonReader cson) => _converterResolvers.FirstOrDefault(c => c.IsCanConvert(cson));
+        public IConverterResolver Get(CsonReader cson) => _converterResolvers.FirstOrDefault(c => c.IsConvertable(cson));
     }
 }

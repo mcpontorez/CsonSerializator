@@ -13,9 +13,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
         public ObjectConverter(IConverterResolver mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
 
-        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver)
+        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
-            Dictionary<string, FieldInfo> resultFieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.Instance).Where(f => !f.IsInitOnly).ToDictionary(f => f.Name);
+            Dictionary<string, FieldInfo> resultFieldInfos = typeMemberService.GetSerializableMembers(type).ToDictionary(f => f.Name);
 
             object resultValue = Activator.CreateInstance(type);
 
@@ -35,14 +35,14 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
                 resultFieldInfos.Remove(memberName);
 
                 cson.SkipWhileSeparators().Skip(CharConsts.Equal).SkipWhileSeparators();
-                object fieldValue = _mainConverterResolver.Convert<object>(cson, typeResolver);
+                object fieldValue = _mainConverterResolver.Convert<object>(cson, typeResolver, typeMemberService);
                 fieldInfo.SetValue(resultValue, fieldValue);
             }
 
             return (TResult)resultValue;
         }
 
-        public bool IsCanConvertable(Type type) => true;
+        public bool IsConvertable(Type type) => true;
 
         private static bool IsMemberNameChar(char value) => char.IsLetterOrDigit(value) || value == CharConsts.Underscore;
     }

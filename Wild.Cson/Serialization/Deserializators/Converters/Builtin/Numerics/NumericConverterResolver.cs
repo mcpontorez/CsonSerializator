@@ -9,6 +9,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
 
         public TResult Convert<TResult>(CsonReader cson) => _converterCollection.Get(cson).Convert<TResult>(cson);
         //rewrite to fast IsCanConvertable
-        public bool IsCanConvert(CsonReader cson) => _converterCollection.Contains(cson);
+        public bool IsConvertable(CsonReader cson) => _converterCollection.Contains(cson);
     }
 }

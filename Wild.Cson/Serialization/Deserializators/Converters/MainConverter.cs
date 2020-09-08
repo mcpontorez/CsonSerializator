@@ -23,7 +23,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
                 typeResolver = new TypeResolver(_usingConverter.Convert(csonReader));
             else typeResolver = TypeResolver.InstanceWhithoutUsings;
 
-            TResult result = _converterResolver.Convert<TResult>(csonReader, typeResolver);
+            ITypeMemberService typeMemberService = new TypeMemberService();
+
+            TResult result = _converterResolver.Convert<TResult>(csonReader, typeResolver, typeMemberService);
 
             csonReader.SkipWhileSeparators().Skip(CharConsts.Semicolon);
 
