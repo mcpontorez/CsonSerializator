@@ -15,11 +15,11 @@ namespace SerializatorApp
 {
     public class AnyBenchmark
     {
-        private static List<string> _list = new List<string>();
-        private static object _listAsObject = _list;
-        private static Type _listType = _list.GetType();
+        //private static List<string> _list = new List<string>();
+        //private static object _listAsObject = _list;
+        //private static Type _listType = _list.GetType();
 
-        public bool _result1, _result2;
+        //public bool _result1, _result2;
 
         //[Benchmark()]
         //public void IsType()
@@ -39,16 +39,31 @@ namespace SerializatorApp
         //    _result2 = typeof(IList).IsAssignableFrom(_listType);
         //}
 
-        [Benchmark()]
-        public void TestGetType()
+        //[Benchmark()]
+        //public void TestGetType()
+        //{
+        //    _listType = _list.GetType();
+        //}
+
+        //[Benchmark()]
+        //public void TestObjectGetType()
+        //{
+        //    _listType = _listAsObject.GetType();
+        //}
+
+        public static string Str1 = "geewdWQE", Str2 = "teewdWQE";
+        public static bool Result;
+
+        [Benchmark]
+        public void RavnoFirstItemStr()
         {
-            _listType = _list.GetType();
+            Result = Str1[0] == Str2[0] && Str1 == Str2;
         }
 
-        [Benchmark()]
-        public void TestObjectGetType()
+        [Benchmark]
+        public void RavnoStr()
         {
-            _listType = _listAsObject.GetType();
+            Result = Str1 == Str2;
         }
 
         //private static object o = new Dictionary<string, List<DoublePerson>>();
@@ -62,15 +77,16 @@ namespace SerializatorApp
         //}
     }
 
+    [MemoryDiagnoser]
     public class SerializationUtilsBenchmark
     {
-        [Benchmark()]
+        [Benchmark]
         public void SerializationCson()
         {
             CsonUtil.To(TestData.Instance);
         }
 
-        [Benchmark()]
+        [Benchmark(Baseline = true)]
         public void SerializationJson()
         {
             JsonConvert.SerializeObject(TestData.Instance, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });

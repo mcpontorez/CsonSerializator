@@ -11,7 +11,7 @@ namespace Wild.Cson.Serialization.Serializators.Converters
         private readonly IConverterResolver _converterResolver;
         public CollectionConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
 
-        public bool IsConvertable(object source, Type type) => source is IList || typeof(ICollection<>).IsAssignableFrom(type);
+        public bool IsConvertable(object source, Type type) => source is IEnumerable && (source is IList || typeof(ICollection<>).IsAssignableFrom(type));
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {

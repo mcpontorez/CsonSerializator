@@ -8,7 +8,7 @@ namespace Wild.Cson.Serialization.Utils
         public const char BeginedBrace = '{', EndedBrace = '}',
             BeginedAngleBracket = '<', EndedAngleBracket = '>',
             BeginedSquareBracket = '[', EndedSquareBracket = ']',
-            Quote = '\'', DoubleQuote = '"',
+            Quote = '\'', DoubleQuote = '"', Acute = '`',
             Comma = ',', Dot = '.', Semicolon = ';', Equal = '=', Space = ' ', Tab = '\t',
             AtSign = '@', Underscore = '_',
             Minus = '-';

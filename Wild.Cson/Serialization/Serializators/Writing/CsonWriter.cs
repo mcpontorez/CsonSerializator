@@ -68,8 +68,16 @@ namespace Wild.Cson.Serialization.Serializators.Writing
             if (!_isReady)
             {
                 _isReady = true;
-                _typeName = isFullTypeName ? Value.FullName : Value.Name;
-                _typeNameEndIndex = _typeName.LastIndexOf('`');
+                if(isFullTypeName)
+                {
+                    _typeName = Value.FullName;
+                    _typeNameEndIndex = _typeName.IndexOf(CharConsts.Acute);
+                }
+                else
+                {
+                    _typeName = Value.Name;
+                    _typeNameEndIndex = _typeName.LastIndexOf(CharConsts.Acute);
+                }
             }
 
             if (_typeNameEndIndex < 0)
@@ -79,7 +87,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
         }
     }
 
-    internal class TypeContainerFactory
+    internal class TypeContainerService
     {
         private Dictionary<Type, TypeContainer> _typeContainers = new Dictionary<Type, TypeContainer>();
             
@@ -97,7 +105,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
     {
         private ITypeService _typeService = new TypeService();
 
-        private TypeContainerFactory _typeContainerFactory = new TypeContainerFactory();
+        private TypeContainerService _typeContainerService = new TypeContainerService();
 
         private List<IStringPart> _stringParts = new List<IStringPart>();
 
@@ -147,13 +155,13 @@ namespace Wild.Cson.Serialization.Serializators.Writing
             if (!type.IsGenericType)
             {
                 _typeService.Add(type);
-                return Add(_typeContainerFactory.GetTypeContainer(type));
+                return Add(_typeContainerService.GetTypeContainer(type));
             }
 
             Type genericTypeDefinition = type.GetGenericTypeDefinition();
 
             _typeService.Add(genericTypeDefinition);
-            Add(_typeContainerFactory.GetTypeContainer(genericTypeDefinition));
+            Add(_typeContainerService.GetTypeContainer(genericTypeDefinition));
 
             AddBeginedAngleBracket();
             Type[] genericTypeArguments = type.GenericTypeArguments;

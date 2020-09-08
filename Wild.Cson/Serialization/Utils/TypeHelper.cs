@@ -17,7 +17,7 @@ namespace Wild.Cson.Serialization.Utils
 
     public static class TypeHelper
     {
-        private static IReadOnlyList<IReadOnlyList<TypeData>> _countNameTypeDataPairs;
+        private static List<Dictionary<string, List<TypeData>>> _countNameTypeDataPairs;
 
         public static Type Get(string name)
         {
@@ -41,22 +41,21 @@ namespace Wild.Cson.Serialization.Utils
             SetTypes();
 
             string typeNamespace = type.Namespace;
-            if (typeNamespace == null)
+            if (ReferenceEquals(typeNamespace, null))
                 return false;
             string typeName = type.Name;
-            char typeNameFirstChar = typeName[0];
 
-            var typeDatas = _countNameTypeDataPairs[typeName.Length];
-            if (typeDatas == null)
+            var nameTypeDatas = _countNameTypeDataPairs[typeName.Length];
+            if (ReferenceEquals(nameTypeDatas, null) || !nameTypeDatas.TryGetValue(typeName, out List<TypeData> typeDatas))
                 throw new Exception("Unknown type!");
 
             for (int i = 0; i < typeDatas.Count; i++)
             {
                 TypeData typeItem = typeDatas[i];
 
-                if (typeItem.Name[0] == typeNameFirstChar && typeItem.Name == typeName && typeItem.Namespace != typeNamespace)
+                if (!ReferenceEquals(typeItem.Namespace, typeNamespace))
                 {
-                    if (typeItem.Namespace == null)
+                    if (ReferenceEquals(typeItem.Namespace, null))
                         return true;
                     foreach (var @namespace in namespaces)
                     {
@@ -73,7 +72,7 @@ namespace Wild.Cson.Serialization.Utils
         {
             if (_countNameTypeDataPairs == null)
             {
-                List<List<TypeData>> countNameTypeDataPairs = new List<List<TypeData>>(30);
+                var countNameTypeDataPairs = new List<Dictionary<string, List<TypeData>>>(30);
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     if (assembly.IsDynamic)
@@ -87,11 +86,18 @@ namespace Wild.Cson.Serialization.Utils
                         {
                             countNameTypeDataPairs.Add(null);
                         }
-                        List<TypeData> currentTypeDatas = countNameTypeDataPairs[index];
-                        if (currentTypeDatas == null)
+                        Dictionary<string, List<TypeData>> currentNameTypeDatas = countNameTypeDataPairs[index];
+                        if (currentNameTypeDatas == null)
+                        {
+                            currentNameTypeDatas = new Dictionary<string, List<TypeData>>();
+                            countNameTypeDataPairs[index] = currentNameTypeDatas;
+                        }
+                        if(currentNameTypeDatas.TryGetValue(typeData.Name, out List<TypeData> currentTypeDatas))
+                        { }
+                        else
                         {
                             currentTypeDatas = new List<TypeData>();
-                            countNameTypeDataPairs[index] = currentTypeDatas;
+                            currentNameTypeDatas.Add(typeData.Name, currentTypeDatas);
                         }
                         currentTypeDatas.Add(typeData);
                     }
