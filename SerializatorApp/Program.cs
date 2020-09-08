@@ -92,17 +92,17 @@ namespace SerializatorApp
             JsonConvert.SerializeObject(TestData.Instance, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
         }
 
-        //[Benchmark()]
-        //public void DeserializationJson()
-        //{
-        //    JsonConvert.DeserializeObject<object>(TestData.InstanceJson);
-        //}
+        [Benchmark()]
+        public void DeserializationJson()
+        {
+            JsonConvert.DeserializeObject<object>(TestData.InstanceJson);
+        }
 
-        //[Benchmark()]
-        //public void DeserializationCson()
-        //{
-        //    CsonUtil.From<DoublePerson>(TestData.InstanceCson);
-        //}
+        [Benchmark()]
+        public void DeserializationCson()
+        {
+            CsonUtil.From<DoublePerson>(TestData.InstanceCson);
+        }
     }
 
     class Program
@@ -129,7 +129,7 @@ namespace SerializatorApp
             //var b = new SerializationUtilsBenchmark();
             //for (int i = 0; i < 10000; i++)
             //{
-            //    b.SerializationCson();
+            //    b.DeserializationCson();
             //}
 
             Console.Read();

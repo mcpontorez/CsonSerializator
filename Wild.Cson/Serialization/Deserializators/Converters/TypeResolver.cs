@@ -34,14 +34,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
         {
             Type result = TypeHelper.Get(typeName);
             if (result == null)
-            {
-                foreach (var item in _usings)
-                {
-                    result = TypeHelper.Get($"{item}.{typeName}");
-                    if (result != null)
-                        break;
-                }
-            }
+                result = TypeHelper.Get(_usings, typeName);
             return result;
         }
 
