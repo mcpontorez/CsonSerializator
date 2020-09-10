@@ -107,7 +107,18 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             return this;
         }
 
-        public CsonReader SkipWhileSeparators() => SkipWhile(StringHelper.IsSeparator);
+        public CsonReader SkipWhileSeparators()
+        {
+            int endIndex = Index;
+            for (; endIndex < Target.Length; endIndex++)
+            {
+                char @char = Target[endIndex];
+                if (!@char.IsSeparator())
+                    break;
+            }
+            Index = endIndex;
+            return this;
+        }
 
         public CsonReader SkipUntil(Func<char, bool> predicate) => SkipWhile(c => !predicate(c));
 
