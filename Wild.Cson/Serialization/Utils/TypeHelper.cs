@@ -35,7 +35,7 @@ namespace Wild.Cson.Serialization.Utils
 
             var nameTypeDatas = _countNameTypeDataPairs[typeName.Length];
             if (ReferenceEquals(nameTypeDatas, null) || !nameTypeDatas.TryGetValue(typeName, out List<TypeData> typeDatas))
-                throw new Exception("Unknown type!");
+                throw new KeyNotFoundException($"{typeFullName} is unknown type!");
 
             for (int i = 0; i < typeDatas.Count; i++)
             {
@@ -44,7 +44,6 @@ namespace Wild.Cson.Serialization.Utils
                 if (typeItem.Namespace == typeNamespace)
                     return typeItem.Type;
             }
-
             return null;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Wild.Cson.Serialization.Utils
 {
@@ -119,32 +120,29 @@ namespace Wild.Cson.Serialization.Utils
             }
             return _keywords[index].Contains(value);
         }
-        //TODO: заинлайнить
+
         public static bool IsSeparatorOrAnyEndChar(this char c) => 
             IsSeparator(c) || c == CharConsts.Comma || c == CharConsts.EndedBrace || c == CharConsts.EndedSquareBracket || c == CharConsts.Semicolon;
         public static bool IsNotSeparatorOrAnyEndChar(this char c) => !IsSeparatorOrAnyEndChar(c);
 
-        //TODO: заинлайнить
         public static bool IsSeparator(this char c) => char.IsSeparator(c) || char.IsControl(c);
 
         public static string RemoveSeparators(this string source)
         {
-            //TODO: навернуть массив в стеке
-            char[] chars = new char[source.Length];
+            int sourceLenght = source.Length;
             int index = 0;
-            foreach (var c in source)
+            Span<char> chars = sourceLenght < 128 ? stackalloc char[source.Length] : new char[source.Length];
+            for (int i = 0; i < sourceLenght; i++)
             {
-                if (!IsSeparator(c))
-                {
-                    chars[index] = c;
-                    index++;
-                }
+                char item = source[i];
+                if (!item.IsSeparator())
+                    chars[index++] = item;
             }
             int count = index;
-            if (count == source.Length)
-                return source;
+            if (count != sourceLenght)
+                return chars.Slice(0, count).ToString();
             else
-                return new string(chars, 0, count);
+                return source;
         }
 
         public static bool LastContains(this string source, char c) => source.LastIndexOf(c) != -1;
