@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Wild.Cson.Serialization.Utils
+namespace Wild.Cson.Serialization.Serializators.Utils
 {
     public interface ITypeMemberService
     {

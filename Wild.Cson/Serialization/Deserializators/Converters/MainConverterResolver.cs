@@ -2,7 +2,7 @@
 using Wild.Cson.Serialization.Deserializators.Converters.Customs;
 using Wild.Cson.Serialization.Deserializators.Reading;
 using System;
-using Wild.Cson.Serialization.Utils;
+using Wild.Cson.Serialization.Deserializators.Utils;
 
 namespace Wild.Cson.Serialization.Deserializators.Converters
 {

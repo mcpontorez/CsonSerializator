@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Wild.Cson.Serialization.Utils;
+using Wild.Cson.Serialization.Serializators.Utils;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {

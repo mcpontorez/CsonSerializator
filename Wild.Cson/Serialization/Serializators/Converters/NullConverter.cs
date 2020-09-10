@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Wild.Cson.Serialization.Serializators.Utils;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
 {

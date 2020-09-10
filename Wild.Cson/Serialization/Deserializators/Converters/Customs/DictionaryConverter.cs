@@ -4,6 +4,7 @@ using System.Reflection;
 using Wild.Cson.Serialization.Utils;
 using Wild.Cson.Serialization.Deserializators.Reading;
 using System.Collections;
+using Wild.Cson.Serialization.Deserializators.Utils;
 
 namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 {

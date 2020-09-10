@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Wild.Cson.Serialization.Serializators.Utils;
 using Wild.Cson.Serialization.Serializators.Writing;
 using Wild.Cson.Serialization.Utils;
 

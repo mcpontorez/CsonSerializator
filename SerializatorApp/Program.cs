@@ -80,19 +80,19 @@ namespace SerializatorApp
     [MemoryDiagnoser]
     public class SerializationUtilsBenchmark
     {
-        //[Benchmark]
-        //public void SerializationCson()
-        //{
-        //    CsonUtil.To(TestData.Instance);
-        //}
-
-        //[Benchmark(Baseline = true)]
-        //public void SerializationJson()
-        //{
-        //    JsonConvert.SerializeObject(TestData.Instance, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
-        //}
+        [Benchmark]
+        public void SerializationCson()
+        {
+            CsonUtil.To(TestData.Instance);
+        }
 
         [Benchmark(Baseline = true)]
+        public void SerializationJson()
+        {
+            JsonConvert.SerializeObject(TestData.Instance, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
+        }
+
+        [Benchmark]
         public void DeserializationJson()
         {
             JsonConvert.DeserializeObject<object>(TestData.InstanceJson);

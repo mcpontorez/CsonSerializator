@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Wild.Cson.Serialization.Utils;
 using Wild.Cson.Serialization.Deserializators.Reading;
+using Wild.Cson.Serialization.Deserializators.Utils;
 
 namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 {
@@ -15,7 +16,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
         public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
-            Dictionary<string, FieldInfo> resultFieldInfos = typeMemberService.GetSerializableMembers(type).ToDictionary(f => f.Name);
+            IFieldInfoDictionary resultFieldInfos = typeMemberService.GetSerializableMemberDictionary(type);
 
             object resultValue = Activator.CreateInstance(type);
 
@@ -31,8 +32,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
                 cson.SkipIfNeeds(CharConsts.AtSign);
                 string memberName = cson.TakeWhile(IsMemberNameChar);
-                FieldInfo fieldInfo = resultFieldInfos[memberName];
-                resultFieldInfos.Remove(memberName);
+                FieldInfo fieldInfo = resultFieldInfos.GetAndRemove(memberName);
 
                 cson.SkipWhileSeparators().Skip(CharConsts.Equal).SkipWhileSeparators();
                 object fieldValue = _mainConverterResolver.Convert<object>(cson, typeResolver, typeMemberService);
