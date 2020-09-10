@@ -171,7 +171,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
         }
 
         public int IndexOf(string value) => IndexOf(value, 0);
-        public int IndexOf(string value, int startIndex) => Target.IndexOf(value, Index + startIndex) - Index;
+        public int IndexOf(string value, int startIndex) => Target.IndexOf(value, Index + startIndex, StringComparison.Ordinal) - Index;
 
         public override string ToString() => Buffer;
     }
