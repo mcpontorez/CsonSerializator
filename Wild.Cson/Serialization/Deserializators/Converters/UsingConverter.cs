@@ -25,7 +25,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
         
         private string ConvertUsing(CsonReader cson)
         {
-            string result = cson.SkipStartsWith(_startString).SkipWhileSeparators().TakeWhile(c => char.IsLetterOrDigit(c) || c == CharConsts.Dot);
+            string result = cson.SkipStartsWith(_startString).SkipWhileSeparators().TakeUntilSeparatorsOr(CharConsts.Semicolon);
             cson.SkipWhileSeparators().Skip(CharConsts.Semicolon);
             return result;
         }
