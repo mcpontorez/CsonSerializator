@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Reflection;
 using Wild.Cson.Serialization.Utils;
 using Wild.Cson.Serialization.Deserializators.Reading;
@@ -31,7 +29,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
                     index = true;
 
                 cson.SkipIfNeeds(CharConsts.AtSign);
-                string memberName = cson.TakeWhile(IsMemberNameChar);
+                string memberName = cson.TakeUntilSeparatorsOr(CharConsts.Equal);
                 FieldInfo fieldInfo = resultFieldInfos.GetAndRemove(memberName);
 
                 cson.SkipWhileSeparators().Skip(CharConsts.Equal).SkipWhileSeparators();
@@ -43,7 +41,5 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
         }
 
         public bool IsConvertable(Type type) => true;
-
-        private static bool IsMemberNameChar(char value) => char.IsLetterOrDigit(value) || value == CharConsts.Underscore;
     }
 }

@@ -86,6 +86,18 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             Index = endIndex;
             return Target.Substring(startIndex, endIndex - startIndex);
         }
+        public string TakeUntilSeparatorsOr(char value)
+        {
+            int startIndex = Index, endIndex = startIndex;
+            for (; endIndex < Target.Length; endIndex++)
+            {
+                char @char = Target[endIndex];
+                if (@char == value || @char.IsSeparator())
+                    break;
+            }
+            Index = endIndex;
+            return Target.Substring(startIndex, endIndex - startIndex);
+        }
 
         public CsonReader Skip(int count)
         {
