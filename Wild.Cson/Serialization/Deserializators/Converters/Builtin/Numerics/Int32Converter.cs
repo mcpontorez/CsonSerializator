@@ -7,19 +7,13 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
     public class Int32Converter : IBuiltinTypeConverter
     {
         private const int minValueLenght = 11, maxValueLenght = 10;
+        private static Func<char, bool> IsConvertableFunc = IsConvertable;
 
-        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).WildCast<TResult>();
-
-        public int ConvertToConcrete(CsonReader cson)
-        {
-            string value = cson.TakeWhile(c => char.IsDigit(c) || c == CharConsts.Minus);
-            return int.Parse(value);
-        }
-
+        private static bool IsConvertable(char c) => char.IsDigit(c) || c == CharConsts.Minus;
         public bool IsConvertable(CsonReader cson)
         {
             char currentChar = cson.CurrentChar;
-            if (!(char.IsDigit(currentChar) || currentChar == CharConsts.Minus))
+            if (!(IsConvertable(currentChar)))
                 return false;
 
             int count = cson.GetTrueLenght(minValueLenght);
@@ -31,5 +25,34 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
             }
             return true;
         }
+
+        public TResult Convert<TResult>(CsonReader cson) => UltraConvertToConcrete(cson).WildCast<TResult>();
+
+        public int ConvertToConcrete(CsonReader cson)
+        {
+            string value = cson.TakeWhile(IsConvertableFunc);
+            return int.Parse(value);
+        }
+
+        private static int UltraConvertToConcrete(CsonReader cson)
+        {
+            int sign = 1, value = 0;
+            if (cson.CurrentChar == CharConsts.Minus)
+            {
+                sign = -1;
+                cson.SkipWhileSeparators();
+            }
+            char currentChar;
+            while (cson.IsNotEnded && char.IsDigit(currentChar = cson.CurrentChar))
+            {
+                value *= 10;
+                value += Convert(currentChar);
+                cson.AddIndex();
+            }
+            value *= sign;
+
+            return value;
+        }
+        private static int Convert(char digit) => digit - 48;
     }
 }

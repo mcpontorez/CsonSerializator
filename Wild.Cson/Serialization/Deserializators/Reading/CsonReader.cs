@@ -9,7 +9,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
 {
     public class CsonReader
     {
-        public int Index = 0;
+        public int Index { get; private set; } = 0;
         public readonly string Target = null;
 
         public char this[int index] => Target[Index + index];
@@ -34,7 +34,21 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             Index = index;
         }
 
-        public string Substring(int index) => Substring(0, Lenght);
+        public void AddIndex(int value) => Index += value;
+        public void AddIndex() => AddIndex(1);
+        public bool TryAddIndex(int value)
+        {
+            if (Lenght > value)
+            {
+                AddIndex(value);
+                return true;
+            }
+            return false;
+        }
+
+        public void TryAddIndex() => TryAddIndex(1);
+
+        public string Substring(int index) => Substring(index, Lenght);
         public string Substring(int index, int count) => Target.Substring(Index + index, count);
 
         public string Take(int count)
@@ -75,7 +89,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             if (CurrentChar == value)
                 SkipOne();
             else
-                throw new Exception($"{value} expected");
+                throw new Exception($"{value} expected!");
             return this;
         }
 

@@ -72,6 +72,7 @@ namespace SerializatorApp
 
             Instance = doublePerson;
             InstanceCson = CsonUtil.To(doublePerson);
+            Console.WriteLine(Instance.Equals(CsonUtil.From<DoublePerson>(InstanceCson)));
             InstanceJson = JsonConvert.SerializeObject(doublePerson, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
         }
     }

@@ -11,7 +11,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
         private const char _valueEndCharUpperCase = 'F', _valueEndCharLowerCase = 'f';
         private static readonly IReadOnlyList<char> _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
 
-        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).WildCast<TResult>();
+        public TResult Convert<TResult>(CsonReader cson) => UltraConvertToConcrete(cson).WildCast<TResult>();
 
         public float ConvertToConcrete(CsonReader cson)
         {
@@ -20,6 +20,40 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
             cson.SkipOne();
             return result;
         }
+
+        private static float UltraConvertToConcrete(CsonReader cson)
+        {
+            float sign = 1F, value = 0F;
+            if (cson.CurrentChar == CharConsts.Minus)
+            {
+                sign = -1F;
+                cson.SkipWhileSeparators();
+            }
+            char currentChar;
+            while (cson.IsNotEnded && char.IsDigit(currentChar = cson.CurrentChar))
+            {
+                value *= 10F;
+                value += Convert(currentChar);
+                cson.AddIndex();
+            }
+            value *= sign;
+
+            if(cson.TrySkip(CharConsts.Dot))
+            {
+                float multiplier = 1F;
+                while (cson.IsNotEnded && char.IsDigit(currentChar = cson.CurrentChar))
+                {
+                    multiplier *= 0.1F;
+                    value += Convert(currentChar) * multiplier;
+                    cson.AddIndex();
+                }
+            }
+
+            if (cson.IsNotEnded && (cson.CurrentChar == _valueEndCharUpperCase || cson.CurrentChar == _valueEndCharLowerCase))
+                cson.SkipOne();
+            return value;
+        }
+        private static float Convert(char digit) => digit - 48;
 
         public bool IsConvertable(CsonReader cson)
         {
