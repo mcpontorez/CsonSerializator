@@ -194,17 +194,10 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
 
         public int IndexOf(char value) => IndexOf(value, 0);
         public int IndexOf(char value, int startIndex) => Target.IndexOf(value, Index + startIndex) - Index;
-        public int IndexOfAny(IEnumerable<char> values)
-        {
-            int result = -1;
-            foreach (var item in values)
-            {
-                result = IndexOf(item);
-                if (result >= 0)
-                    break;
-            }
-            return result;
-        }
+        public int IndexOf(char value, int startIndex, int count) => 
+            Target.IndexOf(value, Index + startIndex, GetTrueLenght(count)) - Index;
+        public int IndexOfAny(char[] values, int startIndex, int count) => 
+            Target.IndexOfAny(values, Index + startIndex, GetTrueLenght(count)) - Index;
 
         public int IndexOf(string value) => IndexOf(value, 0);
         public int IndexOf(string value, int startIndex) => Target.IndexOf(value, Index + startIndex, StringComparison.Ordinal) - Index;

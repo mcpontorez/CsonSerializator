@@ -8,8 +8,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
 {
     public class SingleConverter : IBuiltinTypeConverter
     {
+        private const int _charCount = 15 + 1;
         private const char _valueEndCharUpperCase = 'F', _valueEndCharLowerCase = 'f';
-        private static readonly IReadOnlyList<char> _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
+        private static readonly char[] _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
 
         public TResult Convert<TResult>(CsonReader cson) => UltraConvertToConcrete(cson).WildCast<TResult>();
 
@@ -61,15 +62,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
             if (!(char.IsDigit(currentChar) || currentChar == CharConsts.Minus || currentChar == CharConsts.Dot))
                 return false;
 
-            int endIndex = cson.IndexOfAny(_valueEndChars);
+            int endIndex = cson.IndexOfAny(_valueEndChars, 1, _charCount);
 
-            for (int i = 1; i < endIndex; i++)
-            {
-                char c = cson[i];
-                if (!(char.IsDigit(c) || c == CharConsts.Dot))
-                    return false;
-            }
-            return true;
+            return endIndex > -1;
         }
 
         public bool IsCanConvertable(Type type) => type == typeof(float);
