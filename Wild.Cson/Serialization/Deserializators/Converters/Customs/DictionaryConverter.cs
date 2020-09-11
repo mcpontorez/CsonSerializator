@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Wild.Cson.Serialization.Utils;
 using Wild.Cson.Serialization.Deserializators.Reading;
 using System.Collections;
@@ -14,7 +13,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
         public DictionaryConverter(IConverterResolver mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
 
-        public bool IsConvertable(Type type) => typeof(IDictionary).GetTypeInfo().IsAssignableFrom(type);
+        public bool IsConvertable(Type type) => typeof(IDictionary).IsAssignableFrom(type);
 
         public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
