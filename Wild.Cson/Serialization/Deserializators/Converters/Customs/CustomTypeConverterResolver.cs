@@ -20,7 +20,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
         public TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             cson.SkipStartsWith(StringConsts.New).SkipWhileSeparators().SkipIfNeeds(CharConsts.AtSign);
-            string typeName = cson.TakeWhile(IsTypeNameChar);
+            string typeName = cson.TakeUntil(CharConsts.BeginedBrace);
             Type resultType = typeResolver.Convert(typeName);
 
             TResult result = _customTypeConverters.Get(resultType).Convert<TResult>(resultType, cson, typeResolver, typeMemberService);
@@ -29,7 +29,5 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
         }
 
         public bool IsConvertable(CsonReader cson) => cson.StartsWith(StringConsts.New);
-
-        private static bool IsTypeNameChar(char c) => c != CharConsts.BeginedBrace;
     }
 }

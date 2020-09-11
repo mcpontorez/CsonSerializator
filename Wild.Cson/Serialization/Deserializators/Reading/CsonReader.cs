@@ -74,7 +74,18 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
         public string TakeWhile(char value) => TakeWhile(c => c == value);
 
         public string TakeUntil(Func<char, bool> predicate) => TakeWhile(c => !predicate(c));
-        public string TakeUntil(char value) => TakeUntil(c => c == value);
+        public string TakeUntil(char c)
+        {
+            int startIndex = Index, endIndex = startIndex;
+            for (; endIndex < Target.Length; endIndex++)
+            {
+                char @char = Target[endIndex];
+                if (@char == c)
+                    break;
+            }
+            Index = endIndex;
+            return Target.Substring(startIndex, endIndex - startIndex);
+        }
 
         public CsonReader Skip(int count)
         {

@@ -13,9 +13,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
 
         public string ConvertToConcrete(CsonReader cson)
         {
-            cson.SkipOne();
+            cson.Skip(CharConsts.DoubleQuote);
             string result = cson.TakeUntil(CharConsts.DoubleQuote);
-            cson.SkipOne();
+            cson.Skip(CharConsts.DoubleQuote);
             return result;
         }
 
