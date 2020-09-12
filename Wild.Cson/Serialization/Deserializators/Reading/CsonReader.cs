@@ -109,7 +109,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
 
         public CsonReader Skip(char value)
         {
-            if (CurrentChar == value)
+            if (StartsWith(value))
                 SkipOne();
             else
                 throw new Exception($"{value} expected!");
@@ -118,7 +118,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
 
         public CsonReader SkipIfNeeds(char value)
         {
-            if (CurrentChar == value)
+            if (StartsWith(value))
                 SkipOne();
             return this;
         }
@@ -186,7 +186,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
 
         public bool StartsWith(string value) => IndexOf(value) == 0;
 
-        public bool StartsWith(char value) => CurrentChar == value;
+        public bool StartsWith(char value) => IsNotEnded && CurrentChar == value;
 
         public int StartsCount(Func<char, bool> predicate, int startIndex, int count)
         {
