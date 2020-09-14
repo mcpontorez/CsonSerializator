@@ -25,7 +25,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
         private static float UltraConvertToConcrete(CsonReader cson)
         {
             float sign = 1F, value = 0F;
-            if (cson.CurrentChar == CharConsts.Minus)
+            if (cson.TrySkip(CharConsts.Minus))
             {
                 sign = -1F;
                 cson.SkipWhileSeparators();
@@ -37,7 +37,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
                 value += Convert(currentChar);
                 cson.AddIndex();
             }
-            value *= sign;
 
             if(cson.TrySkip(CharConsts.Dot))
             {
@@ -50,8 +49,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
                 }
             }
 
-            if (cson.IsNotEnded && (cson.CurrentChar == _valueEndCharUpperCase || cson.CurrentChar == _valueEndCharLowerCase))
-                cson.SkipOne();
+            value *= sign;
+
+            cson.SkipAnyIfNeeds(_valueEndChars);
             return value;
         }
         private static float Convert(char digit) => digit - 48;

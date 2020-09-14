@@ -14,7 +14,8 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
         public CollectionConverter(IConverterResolver mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
 
-        public bool IsConvertable(Type type) => typeof(ICollection<>).GetTypeInfo().IsAssignableFrom(type) || typeof(IList).GetTypeInfo().IsAssignableFrom(type);
+        public bool IsConvertable(Type type) => typeof(IList).IsAssignableFrom(type)
+            || type.IsGenericType && !ReferenceEquals(type.GetInterface("System.Collections.Generic.ICollection`1"), null);
 
         public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {

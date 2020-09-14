@@ -101,7 +101,7 @@ namespace SerializatorApp
         [Benchmark()]
         public void DeserializationCson()
         {
-            CsonUtil.From<DoublePerson>(TestData.InstanceCson);
+            CsonUtil.From<AllDoublePersons>(TestData.InstanceCson);
         }
     }
 

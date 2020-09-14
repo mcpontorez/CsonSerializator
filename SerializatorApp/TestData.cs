@@ -36,9 +36,10 @@ namespace SerializatorApp
     public class DoublePerson
     {
         public Person[] Persons;
+        public HashSet<string> DescriptionHashSet;
         public List<Person> PersonList;
-        public List<Super.Person>[] SuperPersonLists = new List<Super.Person>[] { new List<Super.Person>() { new Super.Person() }, new List<Super.Person> { new Super.Person { SuperId = 0.034F } } };
-        public Dictionary<string, Size> SizeDictionary = new Dictionary<string, Size> { ["s"] = new Size(), ["a"] = new Size() { x = 999.043F } };
+        public List<Super.Person>[] SuperPersonLists;
+        public Dictionary<string, Size> SizeDictionary;
         public Super.Person SuperPerson;
         public Person SimplePerson;
         public string Description;
@@ -47,9 +48,14 @@ namespace SerializatorApp
         public bool Equals(DoublePerson obj) => obj != null && (base.Equals(obj) || Equals(SuperPerson, obj.SuperPerson) && Equals(SimplePerson, obj.SimplePerson) && Equals(Description, obj.Description));
     }
 
+    public class AllDoublePersons
+    {
+        public List<DoublePerson> DoublePersons;
+    }
+
     public static class TestData
     {
-        public static readonly DoublePerson Instance;
+        public static readonly AllDoublePersons Instance;
         public static readonly string InstanceCson;
         public static readonly string InstanceJson;
 
@@ -59,21 +65,25 @@ namespace SerializatorApp
             {
                 Id = 12,
                 Name = "Swamp thing",
-                Size = new Size { x = 10.2F, y = 15F }
+                Size = new Size { x = 10.2F, y = -.15F }
             };
 
             DoublePerson doublePerson = new DoublePerson
             {
                 Persons = Enumerable.Repeat(simplePerson, 5).ToArray(),
+                DescriptionHashSet = new HashSet<string> { "Super", "Duper", "super", "puper" },
                 PersonList = new List<Person> { new Person(), simplePerson },
-                SuperPerson = new Super.Person { SuperId = 99, SuperName = "SuperBoris" },
-                SimplePerson = simplePerson
+                SuperPersonLists = new List<Super.Person>[] { new List<Super.Person>() { new Super.Person() }, new List<Super.Person> { new Super.Person { SuperId = 0.034F } } },
+                SizeDictionary = new Dictionary<string, Size> { ["s"] = new Size(), ["a"] = new Size() { x = 999.043F } },
+                SuperPerson = new Super.Person { SuperId = 99, SuperName = "blet cat" },
+                SimplePerson = simplePerson,
             };
-
-            Instance = doublePerson;
-            InstanceCson = CsonUtil.To(doublePerson);
-            Console.WriteLine(Instance.Equals(CsonUtil.From<DoublePerson>(InstanceCson)));
-            InstanceJson = JsonConvert.SerializeObject(doublePerson, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
+            AllDoublePersons allDoublePersons = new AllDoublePersons { DoublePersons = Enumerable.Repeat(doublePerson, 20).ToList() };
+            Instance = allDoublePersons;
+            InstanceCson = CsonUtil.To(Instance);
+            AllDoublePersons desAllDoublePersons = CsonUtil.From<AllDoublePersons>(InstanceCson);
+            Console.WriteLine(Instance.Equals(desAllDoublePersons));
+            InstanceJson = JsonConvert.SerializeObject(Instance, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.All });
         }
     }
 }

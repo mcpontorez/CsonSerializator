@@ -131,11 +131,11 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             return result;
         }
 
-        public CsonReader SkipIfNeeds(IEnumerable<char> values)
+        public CsonReader SkipAnyIfNeeds(IReadOnlyList<char> values)
         {
-            foreach (var item in values)
+            for (int i = 0; i < values.Count; i++)
             {
-                if (CurrentChar == item)
+                if (StartsWith(values[i]))
                 {
                     SkipOne();
                     break;

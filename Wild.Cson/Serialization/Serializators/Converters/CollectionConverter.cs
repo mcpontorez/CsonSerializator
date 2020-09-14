@@ -1,8 +1,6 @@
 ﻿using Wild.Cson.Serialization.Serializators.Writing;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Wild.Cson.Serialization.Utils;
 using Wild.Cson.Serialization.Serializators.Utils;
 
 namespace Wild.Cson.Serialization.Serializators.Converters
@@ -12,7 +10,15 @@ namespace Wild.Cson.Serialization.Serializators.Converters
         private readonly IConverterResolver _converterResolver;
         public CollectionConverter(IConverterResolver converterResolver) => _converterResolver = converterResolver;
 
-        public bool IsConvertable(object source, Type type) => source is IEnumerable && (source is IList || typeof(ICollection<>).IsAssignableFrom(type));
+        public bool IsConvertable(object source, Type type)
+        {
+            if(source is IEnumerable)
+            {
+                return source is IList
+                    || type.IsGenericType && !ReferenceEquals(type.GetInterface("System.Collections.Generic.ICollection`1"), null);
+            }
+            return false;
+        }
 
         public void Convert(object source, ICsonWriter writer, ITypeMemberService typeMemberService)
         {
@@ -29,7 +35,6 @@ namespace Wild.Cson.Serialization.Serializators.Converters
                 writer.AddLine();
                 _converterResolver.Convert(item, writer, typeMemberService);
             }
-
             writer.RemoveTabLevel().AddLine().AddEndedBrace();
         }
     }
