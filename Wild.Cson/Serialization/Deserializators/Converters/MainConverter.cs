@@ -16,7 +16,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
 
         public TResult Convert<TResult>(string cson)
         {
-            CsonReader csonReader = new CsonReader(cson);
+            ICsonReader csonReader = new CsonReader(cson);
             csonReader.SkipWhileSeparators();
 
             ITypeResolver typeResolver;

@@ -5,6 +5,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
 {
     public interface IBuiltinTypeConverter : ICanConvertValue
     {
-        TResult Convert<TResult>(CsonReader cson);
+        TResult Convert<TResult>(ICsonReader cson);
     }
 }

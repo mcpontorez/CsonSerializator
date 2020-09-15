@@ -12,9 +12,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
         private const char _valueEndCharUpperCase = 'F', _valueEndCharLowerCase = 'f';
         private static readonly char[] _valueEndChars = new char[] { _valueEndCharUpperCase, _valueEndCharLowerCase };
 
-        public TResult Convert<TResult>(CsonReader cson) => UltraConvertToConcrete(cson).WildCast<TResult>();
+        public TResult Convert<TResult>(ICsonReader cson) => UltraConvertToConcrete(cson).WildCast<TResult>();
 
-        public float ConvertToConcrete(CsonReader cson)
+        public float ConvertToConcrete(ICsonReader cson)
         {
             string value = cson.TakeWhile(c => char.IsDigit(c) || c == CharConsts.Minus || c == CharConsts.Dot);
             float result = float.Parse(value, CultureInfo.InvariantCulture);
@@ -22,7 +22,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
             return result;
         }
 
-        private static float UltraConvertToConcrete(CsonReader cson)
+        private static float UltraConvertToConcrete(ICsonReader cson)
         {
             float sign = 1F, value = 0F;
             if (cson.TrySkip(CharConsts.Minus))
@@ -56,7 +56,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
         }
         private static float Convert(char digit) => digit - 48;
 
-        public bool IsConvertable(CsonReader cson)
+        public bool IsConvertable(ICsonReader cson)
         {
             char currentChar = cson.CurrentChar;
             if (!(char.IsDigit(currentChar) || currentChar == CharConsts.Minus || currentChar == CharConsts.Dot))

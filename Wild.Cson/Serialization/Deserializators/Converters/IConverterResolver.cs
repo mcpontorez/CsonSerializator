@@ -7,6 +7,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
 {
     public interface IConverterResolver : ICanConvertValue
     {
-        TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService);
+        TResult Convert<TResult>(ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService);
     }
 }

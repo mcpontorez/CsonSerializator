@@ -10,7 +10,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
         private static Func<char, bool> IsConvertableFunc = IsConvertable;
 
         private static bool IsConvertable(char c) => char.IsDigit(c) || c == CharConsts.Minus;
-        public bool IsConvertable(CsonReader cson)
+        public bool IsConvertable(ICsonReader cson)
         {
             char currentChar = cson.CurrentChar;
             if (!(IsConvertable(currentChar)))
@@ -26,15 +26,15 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin.Numerics
             return true;
         }
 
-        public TResult Convert<TResult>(CsonReader cson) => UltraConvertToConcrete(cson).WildCast<TResult>();
+        public TResult Convert<TResult>(ICsonReader cson) => UltraConvertToConcrete(cson).WildCast<TResult>();
 
-        public int ConvertToConcrete(CsonReader cson)
+        public int ConvertToConcrete(ICsonReader cson)
         {
             string value = cson.TakeWhile(IsConvertableFunc);
             return int.Parse(value);
         }
 
-        private static int UltraConvertToConcrete(CsonReader cson)
+        private static int UltraConvertToConcrete(ICsonReader cson)
         {
             int sign = 1, value = 0;
             if (cson.CurrentChar == CharConsts.Minus)

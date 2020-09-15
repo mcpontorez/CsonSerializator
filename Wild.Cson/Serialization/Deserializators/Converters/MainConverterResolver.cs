@@ -12,9 +12,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
 
         public MainConverterResolver() => _converterResolvers = new ConverterResolverCollection(new BuiltinTypeConverterResolver(), new CustomTypeConverterResolver(this));
 
-        public TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService) => 
+        public TResult Convert<TResult>(ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService) => 
             (_converterResolvers.Get(cson) ?? throw new Exception($"Not found converter at symbol:{cson.Index}, cson part:\"{cson.Substring(0, 20)}...\"")).Convert<TResult>(cson, typeResolver, typeMemberService);
 
-        public bool IsConvertable(CsonReader cson) => _converterResolvers.Contains(cson);
+        public bool IsConvertable(ICsonReader cson) => _converterResolvers.Contains(cson);
     }
 }

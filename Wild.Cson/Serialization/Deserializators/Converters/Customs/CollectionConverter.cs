@@ -17,7 +17,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
         public bool IsConvertable(Type type) => typeof(IList).IsAssignableFrom(type)
             || type.IsGenericType && !ReferenceEquals(type.GetInterface("System.Collections.Generic.ICollection`1"), null);
 
-        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        public TResult Convert<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             if (type.IsArray)
             {
@@ -32,7 +32,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
             return ConvertGenericCollection<TResult>(type, cson, typeResolver, typeMemberService);
         }
 
-        private TResult ConvertArray<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        private TResult ConvertArray<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             List<object> items = new List<object>();
             IEnumerator<object> enumerator = ConvertEnumerable<object>(cson, typeResolver, typeMemberService);
@@ -49,7 +49,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
             return resultArray.WildCast<TResult>();
         }
 
-        private TResult ConvertList<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        private TResult ConvertList<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             IList resultList = (IList)Activator.CreateInstance(type);
 
@@ -61,7 +61,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
             return resultList.WildCast<TResult>();
         }
 
-        private TResult ConvertGenericCollection<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        private TResult ConvertGenericCollection<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             object resultCollection = Activator.CreateInstance(type);
 
@@ -76,7 +76,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
             return resultCollection.WildCast<TResult>();
         }
 
-        private IEnumerator<TItem> ConvertEnumerable<TItem>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        private IEnumerator<TItem> ConvertEnumerable<TItem>(ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             cson.Skip(CharConsts.BeginedBrace);
 

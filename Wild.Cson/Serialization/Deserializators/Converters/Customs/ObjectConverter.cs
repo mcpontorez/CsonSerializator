@@ -12,7 +12,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
         public ObjectConverter(IConverterResolver mainConverterResolver) => _mainConverterResolver = mainConverterResolver;
 
-        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        public TResult Convert<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             IFieldInfoDictionary resultFieldInfos = typeMemberService.GetSerializableMemberDictionary(type);
 

@@ -10,7 +10,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
     {
         private const string _startString = "using";
 
-        public HashSet<string> Convert(CsonReader cson)
+        public HashSet<string> Convert(ICsonReader cson)
         {
             HashSet<string> result = new HashSet<string>();
 
@@ -23,14 +23,14 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
             return result;
         }
         
-        private string ConvertUsing(CsonReader cson)
+        private string ConvertUsing(ICsonReader cson)
         {
             string result = cson.SkipStartsWith(_startString).SkipWhileSeparators().TakeUntilSeparatorsOr(CharConsts.Semicolon);
             cson.SkipWhileSeparators().Skip(CharConsts.Semicolon);
             return result;
         }
 
-        public bool IsCanConvertable(CsonReader cson)
+        public bool IsCanConvertable(ICsonReader cson)
         {
             if (!cson.StartsWith(_startString))
                 return false;

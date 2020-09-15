@@ -9,8 +9,8 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
 {
     public interface IConverterResolverCollection
     {
-        bool Contains(CsonReader cson);
-        IConverterResolver Get(CsonReader cson);
+        bool Contains(ICsonReader cson);
+        IConverterResolver Get(ICsonReader cson);
     }
 
     public class ConverterResolverCollection : IConverterResolverCollection
@@ -21,8 +21,8 @@ namespace Wild.Cson.Serialization.Deserializators.Converters
 
         public ConverterResolverCollection(params IConverterResolver[] converters) : this((IEnumerable<IConverterResolver>)converters) { }
 
-        public bool Contains(CsonReader cson) => _converterResolvers.Any(c => c.IsConvertable(cson));
+        public bool Contains(ICsonReader cson) => _converterResolvers.Any(c => c.IsConvertable(cson));
 
-        public IConverterResolver Get(CsonReader cson) => _converterResolvers.FirstOrDefault(c => c.IsConvertable(cson));
+        public IConverterResolver Get(ICsonReader cson) => _converterResolvers.FirstOrDefault(c => c.IsConvertable(cson));
     }
 }

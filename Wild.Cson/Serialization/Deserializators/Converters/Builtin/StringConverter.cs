@@ -9,9 +9,9 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
     {
         public Type ConcreteType { get; } = typeof(string);
 
-        public TResult Convert<TResult>(CsonReader cson) => ConvertToConcrete(cson).WildCast<TResult>();
+        public TResult Convert<TResult>(ICsonReader cson) => ConvertToConcrete(cson).WildCast<TResult>();
 
-        public string ConvertToConcrete(CsonReader cson)
+        public string ConvertToConcrete(ICsonReader cson)
         {
             cson.Skip(CharConsts.DoubleQuote);
             string result = cson.TakeUntil(CharConsts.DoubleQuote);
@@ -19,6 +19,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
             return result;
         }
 
-        public bool IsConvertable(CsonReader cson) => cson.StartsWith(CharConsts.DoubleQuote);
+        public bool IsConvertable(ICsonReader cson) => cson.StartsWith(CharConsts.DoubleQuote);
     }
 }

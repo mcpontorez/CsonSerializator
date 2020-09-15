@@ -7,7 +7,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 {
     public interface ICustomTypeConverter
     {
-        TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService);
+        TResult Convert<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService);
         bool IsConvertable(Type type);
     }
 }

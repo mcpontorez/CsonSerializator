@@ -11,10 +11,10 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
     {
         private IBuiltinTypeConverterCollection _converters = new BuiltinTypeConverterCollection(new NullConverter(), new StringConverter(), new NumericConverterResolver());
 
-        public bool IsConvertable(CsonReader cson) => _converters.Contains(cson);
+        public bool IsConvertable(ICsonReader cson) => _converters.Contains(cson);
 
-        public TResult Convert<TResult>(CsonReader cson) => _converters.Get(cson).Convert<TResult>(cson);
+        public TResult Convert<TResult>(ICsonReader cson) => _converters.Get(cson).Convert<TResult>(cson);
 
-        public TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService) => Convert<TResult>(cson);
+        public TResult Convert<TResult>(ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService) => Convert<TResult>(cson);
     }
 }

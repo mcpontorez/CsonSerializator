@@ -1,13 +1,10 @@
 ﻿using Wild.Cson.Serialization.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Wild.Cson.Serialization.Deserializators.Reading
 {
-    public class CsonReader
+    public class CsonReader : ICsonReader
     {
         public int Index { get; private set; } = 0;
         public readonly string Target = null;
@@ -99,15 +96,15 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             return Target.Substring(startIndex, endIndex - startIndex);
         }
 
-        public CsonReader Skip(int count)
+        public ICsonReader Skip(int count)
         {
             Index += count;
             return this;
-        }        
+        }
 
-        public CsonReader SkipOne() => Skip(1);
+        public ICsonReader SkipOne() => Skip(1);
 
-        public CsonReader Skip(char value)
+        public ICsonReader Skip(char value)
         {
             if (StartsWith(value))
                 SkipOne();
@@ -116,7 +113,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             return this;
         }
 
-        public CsonReader SkipIfNeeds(char value)
+        public ICsonReader SkipIfNeeds(char value)
         {
             if (StartsWith(value))
                 SkipOne();
@@ -131,7 +128,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             return result;
         }
 
-        public CsonReader SkipAnyIfNeeds(IReadOnlyList<char> values)
+        public ICsonReader SkipAnyIfNeeds(IReadOnlyList<char> values)
         {
             for (int i = 0; i < values.Count; i++)
             {
@@ -144,7 +141,7 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             return this;
         }
 
-        public CsonReader SkipWhileSeparators()
+        public ICsonReader SkipWhileSeparators()
         {
             int endIndex = Index;
             for (; endIndex < Target.Length; endIndex++)
@@ -157,9 +154,9 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
             return this;
         }
 
-        public CsonReader SkipUntil(Func<char, bool> predicate) => SkipWhile(c => !predicate(c));
+        public ICsonReader SkipUntil(Func<char, bool> predicate) => SkipWhile(c => !predicate(c));
 
-        public CsonReader SkipWhile(Func<char, bool> predicate)
+        public ICsonReader SkipWhile(Func<char, bool> predicate)
         {
             int endIndex = Index;
             for (; endIndex < Target.Length; endIndex++)
@@ -179,10 +176,10 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
                 Skip(value.Length);
                 return true;
             }
-            return false;  
+            return false;
         }
 
-        public CsonReader SkipStartsWith(string value) => Skip(value.Length);
+        public ICsonReader SkipStartsWith(string value) => Skip(value.Length);
 
         public bool StartsWith(string value) => IndexOf(value) == 0;
 
@@ -206,9 +203,9 @@ namespace Wild.Cson.Serialization.Deserializators.Reading
 
         public int IndexOf(char value) => IndexOf(value, 0);
         public int IndexOf(char value, int startIndex) => Target.IndexOf(value, Index + startIndex) - Index;
-        public int IndexOf(char value, int startIndex, int count) => 
+        public int IndexOf(char value, int startIndex, int count) =>
             Target.IndexOf(value, Index + startIndex, GetTrueLenght(count)) - Index;
-        public int IndexOfAny(char[] values, int startIndex, int count) => 
+        public int IndexOfAny(char[] values, int startIndex, int count) =>
             Target.IndexOfAny(values, Index + startIndex, GetTrueLenght(count)) - Index;
 
         public int IndexOf(string value) => IndexOf(value, 0);

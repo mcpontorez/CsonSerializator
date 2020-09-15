@@ -15,12 +15,12 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
 
         public bool IsConvertable(Type type) => typeof(IDictionary).IsAssignableFrom(type);
 
-        public TResult Convert<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        public TResult Convert<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             return ConvertDictionary<TResult>(type, cson, typeResolver, typeMemberService);
         }
 
-        private TResult ConvertDictionary<TResult>(Type type, CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        private TResult ConvertDictionary<TResult>(Type type, ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             IDictionary resultDictionary = (IDictionary)Activator.CreateInstance(type);
 
@@ -35,7 +35,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
             return resultDictionary.WildCast<TResult>();
         }
 
-        private IEnumerator<KeyValuePair<TKey, TValue>> ConvertDictionaryEnumerable<TKey, TValue>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        private IEnumerator<KeyValuePair<TKey, TValue>> ConvertDictionaryEnumerable<TKey, TValue>(ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             cson.Skip(CharConsts.BeginedBrace);
 

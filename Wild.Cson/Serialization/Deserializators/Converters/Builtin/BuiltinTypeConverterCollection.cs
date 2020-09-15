@@ -7,8 +7,8 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
 {
     public interface IBuiltinTypeConverterCollection
     {
-        IBuiltinTypeConverter Get(CsonReader cson);
-        bool Contains(CsonReader cson);
+        IBuiltinTypeConverter Get(ICsonReader cson);
+        bool Contains(ICsonReader cson);
     }
 
     public class BuiltinTypeConverterCollection : IBuiltinTypeConverterCollection
@@ -19,8 +19,8 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
 
         public BuiltinTypeConverterCollection(params IBuiltinTypeConverter[] converters) : this((IEnumerable<IBuiltinTypeConverter>)converters) { }
 
-        public bool Contains(CsonReader cson) => _converters.Any(c => c.IsConvertable(cson));
+        public bool Contains(ICsonReader cson) => _converters.Any(c => c.IsConvertable(cson));
 
-        public IBuiltinTypeConverter Get(CsonReader cson) => _converters.FirstOrDefault(c => c.IsConvertable(cson));
+        public IBuiltinTypeConverter Get(ICsonReader cson) => _converters.FirstOrDefault(c => c.IsConvertable(cson));
     }
 }

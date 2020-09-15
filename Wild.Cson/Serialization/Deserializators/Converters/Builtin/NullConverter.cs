@@ -7,13 +7,13 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Builtin
 {
     public class NullConverter : IBuiltinTypeConverter
     {
-        public T Convert<T>(CsonReader cson)
+        public T Convert<T>(ICsonReader cson)
         {
             cson.SkipStartsWith(StringConsts.Null);
             return default;
         }
 
-        public bool IsConvertable(CsonReader cson)
+        public bool IsConvertable(ICsonReader cson)
         {
             if (!cson.StartsWith(StringConsts.Null))
                 return false;

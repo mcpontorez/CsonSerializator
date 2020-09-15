@@ -17,7 +17,7 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
                 new CustomTypeConverterCollection(new DictionaryConverter(_mainConverterResolver), new CollectionConverter(_mainConverterResolver), new ObjectConverter(_mainConverterResolver));
         }
 
-        public TResult Convert<TResult>(CsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
+        public TResult Convert<TResult>(ICsonReader cson, ITypeResolver typeResolver, ITypeMemberService typeMemberService)
         {
             cson.SkipStartsWith(StringConsts.New).SkipWhileSeparators().SkipIfNeeds(CharConsts.AtSign);
             string typeName = cson.TakeUntil(CharConsts.BeginedBrace);
@@ -28,6 +28,6 @@ namespace Wild.Cson.Serialization.Deserializators.Converters.Customs
             return result;
         }
 
-        public bool IsConvertable(CsonReader cson) => cson.StartsWith(StringConsts.New);
+        public bool IsConvertable(ICsonReader cson) => cson.StartsWith(StringConsts.New);
     }
 }
