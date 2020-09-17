@@ -88,7 +88,7 @@ namespace Wild.Cson.Serialization.Utils
             {
                 TypeData typeItem = typeDatas[i];
 
-                if (!ReferenceEquals(typeItem.Namespace, typeNamespace))
+                if (typeItem.Namespace != typeNamespace)
                 {
                     if (ReferenceEquals(typeItem.Namespace, null))
                         return true;
