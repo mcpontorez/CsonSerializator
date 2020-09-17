@@ -4,22 +4,84 @@ using System.Linq;
 
 namespace Wild.Cson.Tests.Datas
 {
-    public struct Size
+    public struct Size : IEquatable<Size>
     {
         public float X, Y;
+        public override bool Equals(object obj)
+        {
+            return obj is Size size && Equals(size);
+        }
+
+        public bool Equals(Size other)
+        {
+            bool result = Math.Abs(X - other.X) <= float.Epsilon &&
+                   Math.Abs(Y - other.Y) <= float.Epsilon;
+            return result;
+        }
+
+        public static bool operator ==(Size left, Size right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Size left, Size right)
+        {
+            return !(left == right);
+        }
     }
 
-    public class Person
+    public class Person : IEquatable<Person>
     {
         public int Id;
         public string Name;
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Person);
+        }
+
+        public bool Equals(Person other)
+        {
+            return other != null &&
+                   Id == other.Id &&
+                   Name == other.Name;
+        }
+
+        public static bool operator ==(Person left, Person right)
+        {
+            return EqualityComparer<Person>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(Person left, Person right)
+        {
+            return !(left == right);
+        }
     }
 
     public abstract class CommandBase { public virtual void Do() { } }
 
-    public abstract class CommandBase<TData> : CommandBase
+    public abstract class CommandBase<TData> : CommandBase, IEquatable<CommandBase<TData>>
     {
         public TData Data;
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as CommandBase<TData>);
+        }
+
+        public bool Equals(CommandBase<TData> other)
+        {
+            return other != null &&
+                   EqualityComparer<TData>.Default.Equals(Data, other.Data);
+        }
+
+        public static bool operator ==(CommandBase<TData> left, CommandBase<TData> right)
+        {
+            return EqualityComparer<CommandBase<TData>>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(CommandBase<TData> left, CommandBase<TData> right)
+        {
+            return !(left == right);
+        }
     }
 
     public class ObjectCommand : CommandBase<object> { };
@@ -28,11 +90,33 @@ namespace Wild.Cson.Tests.Datas
 }
 namespace Wild.Cson.Tests.Datas.Super
 {
-    public class Person
+    public class Person : IEquatable<Person>
     {
         public int Id;
         public string SuperName;
         public Size Size;
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Person);
+        }
+
+        public bool Equals(Person other)
+        {
+            return other != null &&
+                   Id == other.Id &&
+                   SuperName == other.SuperName &&
+                   Size.Equals(other.Size);
+        }
+
+        public static bool operator ==(Person left, Person right)
+        {
+            return EqualityComparer<Person>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(Person left, Person right)
+        {
+            return !(left == right);
+        }
     }
 
     public class PersonCommand : CommandBase<Person> { };
@@ -40,12 +124,32 @@ namespace Wild.Cson.Tests.Datas.Super
 
 namespace Wild.Cson.Tests.Datas
 {
-    public class CommandEnumerable
+    public class CommandEnumerable : IEquatable<CommandEnumerable>
     {
         public IEnumerable<CommandBase> Items;
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as CommandEnumerable);
+        }
+
+        public bool Equals(CommandEnumerable other)
+        {
+            return other != null &&
+                   EqualityComparer<IEnumerable<CommandBase>>.Default.Equals(Items, other.Items);
+        }
+
+        public static bool operator ==(CommandEnumerable left, CommandEnumerable right)
+        {
+            return EqualityComparer<CommandEnumerable>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(CommandEnumerable left, CommandEnumerable right)
+        {
+            return !(left == right);
+        }
     }
 
-    public static class DatasFactory
+    public static class DataFactory
     {
         public static Size GetSize() => new Size { X = -12.1F, Y = 0.1F };
         public static Person GetPerson() => new Person { Id = 12, Name = "Simple cat" };

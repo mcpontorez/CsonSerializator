@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Wild.Cson.Tests.Datas\Wild.Cson.Tests.Datas.csproj" />
     <ProjectReference Include="..\Wild.Cson\Wild.Cson.csproj" />
   </ItemGroup>
 
