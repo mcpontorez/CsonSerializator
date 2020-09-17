@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializatorApp", "SerializatorApp\SerializatorApp.csproj", "{8D423C5F-2AF3-4568-BDB0-F9AD6B2668B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wild.Cson", "Wild.Cson\Wild.Cson.csproj", "{489E4021-5A0A-4720-A82F-126B3C029406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wild.Cson", "Wild.Cson\Wild.Cson.csproj", "{489E4021-5A0A-4720-A82F-126B3C029406}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wild.Cson.Tests", "Wild.Cson.Tests\Wild.Cson.Tests.csproj", "{95882F62-EC0B-431D-B8A8-92D021EDFD59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wild.Cson.Tests.Datas", "Wild.Cson.Tests.Datas\Wild.Cson.Tests.Datas.csproj", "{2EC8944B-B800-4C6D-8030-B7CB0D6ED6E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{489E4021-5A0A-4720-A82F-126B3C029406}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{489E4021-5A0A-4720-A82F-126B3C029406}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{489E4021-5A0A-4720-A82F-126B3C029406}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95882F62-EC0B-431D-B8A8-92D021EDFD59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95882F62-EC0B-431D-B8A8-92D021EDFD59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95882F62-EC0B-431D-B8A8-92D021EDFD59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95882F62-EC0B-431D-B8A8-92D021EDFD59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EC8944B-B800-4C6D-8030-B7CB0D6ED6E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EC8944B-B800-4C6D-8030-B7CB0D6ED6E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EC8944B-B800-4C6D-8030-B7CB0D6ED6E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EC8944B-B800-4C6D-8030-B7CB0D6ED6E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
