@@ -227,7 +227,7 @@ namespace Wild.Cson.Serialization.Serializators.Writing
                         throw new ArgumentException();
                 }
             }
-            stringBuilder.Append(CharConsts.Semicolon);
+            //stringBuilder.Append(CharConsts.Semicolon);
             return stringBuilder.ToString();
         }
     }
