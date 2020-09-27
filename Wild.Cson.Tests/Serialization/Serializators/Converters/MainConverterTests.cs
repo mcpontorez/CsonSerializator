@@ -92,14 +92,26 @@ namespace Wild.Cson.Serialization.Serializators.Converters.Tests
         }
 
         [TestMethod()]
+        public void ConvertSystemObjectTest()
+        {
+            object input = new object(), expected = input;
+
+            string cson = _mainConverter.Convert(input);
+            TestContext.WriteLine(cson);
+            object actual = Evaluate(cson);
+
+            Assert.IsNotNull(actual);
+            Assert.AreSame(expected.GetType(), actual.GetType());
+        }
+
+        [TestMethod()]
         public void ConvertCommandListTest()
         {
             List<CommandBase> input = DataFactory.GetCommandList(), expected = input;
 
             string cson = _mainConverter.Convert(input);
             TestContext.WriteLine(cson);
-            var actual = 
-                CSharpScript.EvaluateAsync<List<CommandBase>>(cson, Microsoft.CodeAnalysis.Scripting.ScriptOptions.Default.AddReferences(typeof(CommandBase).Assembly)).Result;
+            var actual = Evaluate<List<CommandBase>>(cson);
 
             CollectionAssert.AreEqual(expected, actual);
         }
