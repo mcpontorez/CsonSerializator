@@ -7,9 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializatorApp", "Serializ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wild.Cson", "Wild.Cson\Wild.Cson.csproj", "{489E4021-5A0A-4720-A82F-126B3C029406}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wild.Cson.Tests", "Wild.Cson.Tests\Wild.Cson.Tests.csproj", "{95882F62-EC0B-431D-B8A8-92D021EDFD59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wild.Cson.Tests", "Wild.Cson.Tests\Wild.Cson.Tests.csproj", "{95882F62-EC0B-431D-B8A8-92D021EDFD59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wild.Cson.Tests.Datas", "Wild.Cson.Tests.Datas\Wild.Cson.Tests.Datas.csproj", "{2EC8944B-B800-4C6D-8030-B7CB0D6ED6E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wild.Cson.Tests.Datas", "Wild.Cson.Tests.Datas\Wild.Cson.Tests.Datas.csproj", "{2EC8944B-B800-4C6D-8030-B7CB0D6ED6E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readme", "Readme", "{73D19610-EC5F-4705-B722-8C80AEC30B98}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Desktop\image_2020-09-08_19-23-21.png = ..\..\..\..\Desktop\image_2020-09-08_19-23-21.png
+		..\..\..\..\Desktop\image_2020-09-15_02-07-43.png = ..\..\..\..\Desktop\image_2020-09-15_02-07-43.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
