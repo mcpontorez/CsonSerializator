@@ -1,4 +1,4 @@
-# CsonSerializatorApp
+# CSON Serializator
 For type native support!
 Fast. Simple. Clever
 
