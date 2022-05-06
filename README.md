@@ -6,7 +6,7 @@ Fast. Simple. Clever
 The project will eventually be finalized
 
 # C# Type and Syntax native support
-For easy reading, easy initialization, smaller file sizes, code interchangeability between compilation time and runtime
+For easy reading, easy initialization, smaller file size, code interchangeability between compilation time and runtime
 
 # Less allocation
 than NewtonJson
