@@ -2,11 +2,11 @@
 For type native support!
 Fast. Simple. Clever
 
-# C# Type and Syntax native support
-For easy reading, easy initialization, smaller file sizes, code interchangeability between compilation time and runtime
-
 # Early alpha
 The project will eventually be finalized
+
+# C# Type and Syntax native support
+For easy reading, easy initialization, smaller file sizes, code interchangeability between compilation time and runtime
 
 # Less allocation
 than NewtonJson
