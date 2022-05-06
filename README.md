@@ -11,3 +11,4 @@ The project will eventually be finalized
 # Less allocation
 than NewtonJson
 ![Image alt](https://github.com/mcpontorez/CsonSerializatorApp/raw/master/Readme/image_2020-09-08_19-23-21.png)
+![Image alt](https://github.com/mcpontorez/CsonSerializatorApp/raw/master/Readme/image_2020-09-15_02-07-43.png)
