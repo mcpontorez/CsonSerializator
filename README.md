@@ -2,7 +2,7 @@
 For type native support!
 Fast. Simple. Clever
 
-# Type native support
+# C# Type and Syntax native support
 For easy reading, easy initialization, smaller file sizes, code interchangeability between compilation time and runtime
 
 # Early alpha
